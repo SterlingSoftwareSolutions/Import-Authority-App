@@ -12,7 +12,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
 
-const LoginScreen = (props) => {
+const NewpasswordScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
@@ -22,22 +22,28 @@ const LoginScreen = (props) => {
         end={{ x: 1, y: 1 }}
       >
         <View style={styles.content}>
-          <Image style={styles.displayPic} source={require("../assets/displaypic.jpg")} />
-          <Image style={styles.logo} source={require("../assets/ImportAuthorityLogo.jpg")} />
+          <Image
+            style={styles.displayPic}
+            source={require("../assets/displaypic.jpg")}
+          />
+          <Image
+            style={styles.logo}
+            source={require("../assets/ImportAuthorityLogo.jpg")}
+          />
           <View style={styles.inputContainer}>
-            <TextInput style={styles.input} placeholder="Username or Email" />
-            
-            <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} />
-            <TouchableOpacity>
-              <Text style={styles.forgotPassword}>Forget password?</Text>
-            </TouchableOpacity>
+            <TextInput
+              style={styles.input}
+              placeholder="New Password"
+              secureTextEntry={true}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              secureTextEntry={true}
+            />
           </View>
         </View>
       </LinearGradient>
-      <TouchableOpacity style={styles.acceptTermsContainer}>
-        <View style={styles.checkbox} />
-        <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
-      </TouchableOpacity>
       <LinearGradient
         colors={["#8FBF45", "#079BB7"]}
         style={styles.buttonContainer}
@@ -45,7 +51,7 @@ const LoginScreen = (props) => {
         end={{ x: 1, y: 1 }}
       >
         <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.buttonText}>LOGIN</Text>
+          <Text style={styles.buttonText}>CONTINUE</Text>
         </TouchableOpacity>
       </LinearGradient>
       <View style={styles.footerContainer}>
@@ -55,7 +61,9 @@ const LoginScreen = (props) => {
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>Import Authority</Text>
           <Text style={styles.footerText}>All rights reserved</Text>
-          <Text style={styles.footerTextTerms}>Terms of use | Privacy Policy</Text>
+          <Text style={styles.footerTextTerms}>
+            Terms of use | Privacy Policy
+          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -65,26 +73,32 @@ const LoginScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:colors.white,
+    backgroundColor: colors.white,
   },
   gradient: {
     flex: 1,
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
   },
+  displayPic: {
+    height: "60%",
+    width: "100%",
+    borderBottomRightRadius: 70,
+    borderBottomLeftRadius: 70,
+  },
   displayPicContainer: {
     paddingBottom: 40,
     paddingHorizontal: 20,
-    paddingHorizontal:0
+    paddingHorizontal: 0,
   },
   displayPic: {
     height: "72%",
     width: "100%",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
-    paddingHorizontal:0
+    paddingHorizontal: 0,
   },
-  
+
   logo: {
     width: 170,
     height: 45,
@@ -95,7 +109,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginTop: 35,
-    paddingHorizontal:25
+    paddingHorizontal: 25,
   },
   input: {
     backgroundColor: "white",
@@ -103,13 +117,13 @@ const styles = StyleSheet.create({
     height: 41,
     marginBottom: 10,
     paddingHorizontal: 10,
-    fontSize:12,
+    fontSize: 12,
   },
   forgotPassword: {
     color: "white",
     textAlign: "right",
-    top:-4,
-    fontSize:12,
+    top: -4,
+    fontSize: 12,
   },
   acceptTermsContainer: {
     flexDirection: "row",
@@ -170,4 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default NewpasswordScreen;

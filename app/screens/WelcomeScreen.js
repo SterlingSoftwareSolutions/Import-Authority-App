@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import colors from "../config/colors";
 
 function WelcomeScreen(props) {
   return (
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   footerTextTerms: {
-    color: "#57C590",
+    color: colors.tertiary,
     fontSize: 10,
     textAlign: "center",
   },
