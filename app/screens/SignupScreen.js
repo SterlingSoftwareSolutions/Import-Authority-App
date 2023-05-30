@@ -10,9 +10,11 @@ import {
   Text,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import colors from "../config/colors";
 
-const SignupScreen = (props) => {
+import colors from "../config/colors";
+import CustomButton from "../components/CustomButton";
+
+const SignupScreen = ({navigation , onPress}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.gradient}>
@@ -20,8 +22,7 @@ const SignupScreen = (props) => {
           colors={["#8FBF45", "#079BB7"]}
           style={styles.gradientBackground}
           start={{ x: 0.5, y: 0.5 }}
-          end={{ x: 1, y: 1 }}
-        />
+          end={{ x: 1, y: 1 }}/>
         <View style={styles.displayPicWrapper}>
           <ImageBackground
             source={require("../assets/displaypic.jpg")}
@@ -80,16 +81,9 @@ const SignupScreen = (props) => {
         <View style={styles.checkbox} />
         <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
       </TouchableOpacity>
-      <LinearGradient
-        colors={["#8FBF45", "#079BB7"]}
-        style={styles.buttonContainer}
-        start={{ x: 0.1, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <TouchableOpacity style={styles.signupButton}>
-          <Text style={styles.buttonText}>SIGN UP</Text>
-        </TouchableOpacity>
-      </LinearGradient>
+      <CustomButton title="SIGN UP"  onPress={ () => navigation.navigate("Login")} />
+      <CustomButton title='Test'onPress={() => navigation.navigate('Signup')}/>
+
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           Already have an Account?{" "}
@@ -168,7 +162,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     width: "80%",
     alignItems: "center",
-    // backgroundColor: "rgba(255, 255, 255, 0.7)",
   },
   input: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -195,27 +188,6 @@ const styles = StyleSheet.create({
   },
   acceptTermsText: {
     fontSize: 10,
-  },
-  buttonContainer: {
-    width: "50%",
-    height: 41,
-    borderRadius: 15,
-    marginTop: 10,
-    alignItems: "center",
-    alignSelf: "center",
-  },
-  signupButton: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "transparent",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
   },
   footerContainer: {
     alignItems: "center",

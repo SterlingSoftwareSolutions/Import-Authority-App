@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
+import CustomButton from "../components/CustomButton";
 
 const FourdigitScreen = (props) => {
   return (
@@ -42,16 +43,7 @@ const FourdigitScreen = (props) => {
           </View>
         </View>
       </LinearGradient>
-      <LinearGradient
-        colors={["#8FBF45", "#079BB7"]}
-        style={styles.buttonContainer}
-        start={{ x: 0.1, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <TouchableOpacity style={styles.continueButton}>
-          <Text style={styles.buttonText}>CONTINUE</Text>
-        </TouchableOpacity>
-      </LinearGradient>
+      <CustomButton title="CONTINUE" />
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           Already have an Account?{" "}
@@ -122,7 +114,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 25,
-    paddingHorizontal:50,
+    paddingHorizontal: 50,
   },
   codeInput: {
     backgroundColor: colors.white,
@@ -132,28 +124,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingHorizontal: 20,
     textAlign: "center",
-  },
-  buttonContainer: {
-    width: "50%",
-    height: 41,
-    borderRadius: 15,
-    marginTop: 10,
-    alignItems: "center",
-    alignSelf: "center",
-    top: 10,
-  },
-  continueButton: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "transparent",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
   },
   footerContainer: {
     alignItems: "center",

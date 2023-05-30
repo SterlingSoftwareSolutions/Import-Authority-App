@@ -10,9 +10,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import colors from "../config/colors";
 
-const LoginScreen = (props) => {
+import colors from "../config/colors";
+import CustomButton from "../components/CustomButton";
+
+const LoginScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
@@ -38,16 +40,7 @@ const LoginScreen = (props) => {
         <View style={styles.checkbox} />
         <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
       </TouchableOpacity>
-      <LinearGradient
-        colors={["#8FBF45", "#079BB7"]}
-        style={styles.buttonContainer}
-        start={{ x: 0.1, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.buttonText}>LOGIN</Text>
-        </TouchableOpacity>
-      </LinearGradient>
+      <CustomButton title="LOGIN" />
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           Not a member? <Text style={styles.signupText}> SIGN UP</Text>
@@ -127,27 +120,6 @@ const styles = StyleSheet.create({
   },
   acceptTermsText: {
     fontSize: 10,
-  },
-  buttonContainer: {
-    width: "50%",
-    height: 41,
-    borderRadius: 15,
-    marginTop: 10,
-    alignItems: "center",
-    alignSelf: "center",
-  },
-  loginButton: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "transparent",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
   },
   footerContainer: {
     alignItems: "center",
