@@ -24,12 +24,22 @@ const LoginScreen = ({ navigation }) => {
         end={{ x: 1, y: 1 }}
       >
         <View style={styles.content}>
-          <Image style={styles.displayPic} source={require("../assets/displaypic.jpg")} />
-          <Image style={styles.logo} source={require("../assets/ImportAuthorityLogo.jpg")} />
+          <Image
+            style={styles.displayPic}
+            source={require("../assets/displaypic.jpg")}
+          />
+          <Image
+            style={styles.logo}
+            source={require("../assets/ImportAuthorityLogo.jpg")}
+          />
           <View style={styles.inputContainer}>
             <TextInput style={styles.input} placeholder="Username or Email" />
-            
-            <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} />
+
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry={true}
+            />
             <TouchableOpacity>
               <Text style={styles.forgotPassword}>Forget password?</Text>
             </TouchableOpacity>
@@ -42,13 +52,17 @@ const LoginScreen = ({ navigation }) => {
       </TouchableOpacity>
       <CustomButton title="LOGIN" />
       <View style={styles.footerContainer}>
+      <TouchableOpacity onPress={() => navigation.navigate("Signup")} >
         <Text style={styles.footerText}>
           Not a member? <Text style={styles.signupText}> SIGN UP</Text>
         </Text>
+        </TouchableOpacity>
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>Import Authority</Text>
           <Text style={styles.footerText}>All rights reserved</Text>
-          <Text style={styles.footerTextTerms}>Terms of use | Privacy Policy</Text>
+          <Text style={styles.footerTextTerms}>
+            Terms of use | Privacy Policy
+          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -58,7 +72,7 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:colors.white,
+    backgroundColor: colors.white,
   },
   gradient: {
     flex: 1,
@@ -68,16 +82,16 @@ const styles = StyleSheet.create({
   displayPicContainer: {
     paddingBottom: 40,
     paddingHorizontal: 20,
-    paddingHorizontal:0
+    paddingHorizontal: 0,
   },
   displayPic: {
     height: "72%",
     width: "100%",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
-    paddingHorizontal:0
+    paddingHorizontal: 0,
   },
-  
+
   logo: {
     width: 170,
     height: 45,
@@ -88,7 +102,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginTop: 35,
-    paddingHorizontal:25
+    paddingHorizontal: 25,
   },
   input: {
     backgroundColor: "white",
@@ -96,13 +110,13 @@ const styles = StyleSheet.create({
     height: 41,
     marginBottom: 10,
     paddingHorizontal: 10,
-    fontSize:12,
+    fontSize: 12,
   },
   forgotPassword: {
     color: "white",
     textAlign: "right",
-    top:-4,
-    fontSize:12,
+    top: -4,
+    fontSize: 12,
   },
   acceptTermsContainer: {
     flexDirection: "row",
@@ -133,7 +147,8 @@ const styles = StyleSheet.create({
   },
   signupText: {
     color: colors.primary,
-    fontSize: 12,
+    fontSize: 10,
+    textAlign: "center",
   },
   footerTextTerms: {
     color: colors.tertiary,

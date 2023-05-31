@@ -81,9 +81,7 @@ const SignupScreen = ({navigation , onPress}) => {
         <View style={styles.checkbox} />
         <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
       </TouchableOpacity>
-      <CustomButton title="SIGN UP"  onPress={ () => navigation.navigate("Login")} />
-      <CustomButton title='Test'onPress={() => navigation.navigate('Signup')}/>
-
+      <CustomButton title="SIGN UP"/>
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           Already have an Account?{" "}

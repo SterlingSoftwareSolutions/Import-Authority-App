@@ -4,7 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import colors from "../config/colors";
 
-function CustomButton({ title }) {
+function CustomButton({ title, onPress }) {
   return (
     <LinearGradient
       colors={[colors.primary, colors.secondary]}
@@ -12,12 +12,13 @@ function CustomButton({ title }) {
       start={{ x: 0.1, y: 0.5 }}
       end={{ x: 1, y: 1 }}
     >
-      <TouchableOpacity style={styles.buttonStyle}>
-        <Text style={styles.buttonText}> {title} </Text>
+      <TouchableOpacity style={styles.buttonStyle} onPress={onPress}>
+        <Text style={styles.buttonText}>{title}</Text>
       </TouchableOpacity>
     </LinearGradient>
   );
 }
+
 
 const styles = StyleSheet.create({
   buttonContainer: {

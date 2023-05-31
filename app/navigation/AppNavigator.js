@@ -10,9 +10,7 @@ import FourdigitScreen from "../screens/FourdigitScreen";
 import CreateNewAppButton from "../components/CreateNewAppButton";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import ForgotpasswordScreen from "../screens/ForgotpasswordScreen";
-import { color } from "react-native-elements/dist/helpers";
 import colors from "../config/colors";
-import ApplicationNavigator from "./ApplicationNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,7 +24,7 @@ const AppNavigator = () => (
   >
     <Tab.Screen
       name="Complete"
-      component={ApplicationNavigator}
+      component={FourdigitScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-check" color={color} size={size} />
@@ -35,7 +33,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Draft"
-      component={ApplicationNavigator}
+      component={FourdigitScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
@@ -48,7 +46,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Create"
-      component={ApplicationNavigator}
+      component={FourdigitScreen}
       options={({ navigation }) => ({
         tabBarButton: () => (
           <CreateNewAppButton onPress={() => navigation.navigate("Login")} />
@@ -65,7 +63,7 @@ const AppNavigator = () => (
 
     <Tab.Screen
       name="Pending"
-      component={ApplicationNavigator}
+      component={FourdigitScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-clock" color={color} size={size} />
