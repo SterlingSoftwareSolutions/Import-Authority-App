@@ -1,22 +1,35 @@
 import React from "react";
-import {
-  Image,
-  ImageBackground,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Yup from "yup";
+import Screen from "../components/Screen";
+import {
+  ErrorMessage,
+  AppForm,
+  AppFormField,
+  SubmitButton,
+} from "../components/forms";
 
+import authApi from "../api/auth";
 import colors from "../config/colors";
-import CustomButton from "../components/CustomButton";
+import { useState } from "react";
 
-const LoginScreen = ({ navigation }) => {
+const validationSchema = Yup.object().shape({
+  username: Yup.string().required().label("Username"),
+  password: Yup.string().required().min(8).label("Password"),
+});
+
+const LoginScreen = () => {
+  const [loginFailed, setLoginFailed] = useState(false);
+  const handleSubmit = async ({ username, password }) => {
+    const result = await authApi.login({ username, password });
+    if (!result.ok) return setLoginFailed(true);
+    setLoginFailed(false);
+    console.log(result.data);
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <Screen style={styles.container}>
       <LinearGradient
         colors={["#8FBF45", "#079BB7"]}
         style={styles.gradient}
@@ -32,30 +45,49 @@ const LoginScreen = ({ navigation }) => {
             style={styles.logo}
             source={require("../assets/ImportAuthorityLogo.jpg")}
           />
-          <View style={styles.inputContainer}>
-            <TextInput style={styles.input} placeholder="Username or Email" />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              secureTextEntry={true}
-            />
+          <View style={styles.formContainer}>
+            <AppForm
+              initialValues={{ username: "", password: "" }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <ErrorMessage
+                error="Invalid email and/or password."
+                visible={loginFailed}
+              />
+              <AppFormField
+                name="username"
+                placeholder="Email"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              <AppFormField
+                name="password"
+                placeholder="Password"
+                autoCapitalize="none"
+                autoCorrect={false}
+                secureTextEntry
+                textContentType="password"
+              />
+            <SubmitButton title="LOGIN" />
+            </AppForm>
             <TouchableOpacity>
               <Text style={styles.forgotPassword}>Forget password?</Text>
             </TouchableOpacity>
           </View>
         </View>
       </LinearGradient>
+
       <TouchableOpacity style={styles.acceptTermsContainer}>
         <View style={styles.checkbox} />
         <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
       </TouchableOpacity>
-      <CustomButton title="LOGIN" />
+
       <View style={styles.footerContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate("Signup")} >
-        <Text style={styles.footerText}>
-          Not a member? <Text style={styles.signupText}> SIGN UP</Text>
-        </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+          <Text style={styles.footerText}>
+            Not a member? <Text style={styles.signupText}> SIGN UP</Text>
+          </Text>
         </TouchableOpacity>
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>Import Authority</Text>
@@ -65,33 +97,31 @@ const LoginScreen = ({ navigation }) => {
           </Text>
         </View>
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
   },
   gradient: {
     flex: 1,
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
   },
-  displayPicContainer: {
-    paddingBottom: 40,
-    paddingHorizontal: 20,
-    paddingHorizontal: 0,
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   displayPic: {
-    height: "72%",
+    flex: 1,
+    height: "75%",
     width: "100%",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
-    paddingHorizontal: 0,
   },
-
   logo: {
     width: 170,
     height: 45,
@@ -100,17 +130,12 @@ const styles = StyleSheet.create({
     top: 50,
     alignSelf: "center",
   },
-  inputContainer: {
-    marginTop: 35,
+  formContainer: {
+    marginTop: 5,
     paddingHorizontal: 25,
-  },
-  input: {
-    backgroundColor: "white",
+    width: "80%",
+    height: "25%",
     borderRadius: 15,
-    height: 41,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    fontSize: 12,
   },
   forgotPassword: {
     color: "white",
