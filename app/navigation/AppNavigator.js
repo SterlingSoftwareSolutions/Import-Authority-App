@@ -11,6 +11,8 @@ import CreateNewAppButton from "../components/CreateNewAppButton";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import ForgotpasswordScreen from "../screens/ForgotpasswordScreen";
 import colors from "../config/colors";
+import UpdatePassword from "../screens/UpdatePasswordScreen";
+import UpdateProfileScreen from "../screens/UpdateProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +26,7 @@ const AppNavigator = () => (
   >
     <Tab.Screen
       name="Complete"
-      component={FourdigitScreen}
+      component={UpdateProfileScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-check" color={color} size={size} />
@@ -33,7 +35,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Draft"
-      component={FourdigitScreen}
+      component={UpdatePassword}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
@@ -63,7 +65,7 @@ const AppNavigator = () => (
 
     <Tab.Screen
       name="Pending"
-      component={FourdigitScreen}
+      component={SignupScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-clock" color={color} size={size} />

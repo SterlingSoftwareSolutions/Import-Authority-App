@@ -2,6 +2,8 @@ import React from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Yup from "yup";
+import { useContext } from "react";
+
 import Screen from "../components/Screen";
 import {
   ErrorMessage,
@@ -9,23 +11,31 @@ import {
   AppFormField,
   SubmitButton,
 } from "../components/forms";
-
 import authApi from "../api/auth";
 import colors from "../config/colors";
 import { useState } from "react";
+import AuthContext from "../auth/context";
+import authstorage from "../auth/storage";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label("Username"),
   password: Yup.string().required().min(8).label("Password"),
 });
 
-const LoginScreen = () => {
+function LoginScreen() {
+  const authContext = useContext(AuthContext);
   const [loginFailed, setLoginFailed] = useState(false);
+
   const handleSubmit = async ({ username, password }) => {
-    const result = await authApi.login({ username, password });
+    const result = await authApi.login(username, password);
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);
-    console.log(result.data);
+    const user = result.data.data.user;
+    // console.log(user);
+    authContext.setUser(user);
+    authstorage.storeToken(result.data);
+
+
   };
 
   return (
@@ -69,44 +79,37 @@ const LoginScreen = () => {
                 secureTextEntry
                 textContentType="password"
               />
-            <SubmitButton title="LOGIN" />
+              <TouchableOpacity>
+                <Text style={styles.forgotPassword}>Forget password?</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.acceptTermsContainer}>
+                <View style={styles.checkbox} />
+                <Text style={styles.acceptTermsText}>
+                  I Accept the Terms of Use
+                </Text>
+              </TouchableOpacity>
+              <SubmitButton title="LOGIN" />
             </AppForm>
-            <TouchableOpacity>
-              <Text style={styles.forgotPassword}>Forget password?</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </LinearGradient>
-
-      <TouchableOpacity style={styles.acceptTermsContainer}>
-        <View style={styles.checkbox} />
-        <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
-      </TouchableOpacity>
-
-      <View style={styles.footerContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-          <Text style={styles.footerText}>
-            Not a member? <Text style={styles.signupText}> SIGN UP</Text>
-          </Text>
-        </TouchableOpacity>
-        <View style={styles.footerContainer}>
-          <Text style={styles.footerText}>Import Authority</Text>
-          <Text style={styles.footerText}>All rights reserved</Text>
-          <Text style={styles.footerTextTerms}>
-            Terms of use | Privacy Policy
-          </Text>
-        </View>
+      <View style={styles.ssss}>
+        <Text style={styles.footerText}>Import Authority</Text>
+        <Text style={styles.footerText}>All rights reserved</Text>
+        <Text style={styles.footerTextTerms}>
+          Terms of use | Privacy Policy
+        </Text>
       </View>
     </Screen>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   gradient: {
-    flex: 1,
+    flex: 3.5,
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
   },
@@ -117,11 +120,16 @@ const styles = StyleSheet.create({
   },
   displayPic: {
     flex: 1,
-    height: "75%",
+    height: "70%",
     width: "100%",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
   },
+  ssss: {
+    flex: 0.5,
+    marginTop: 120,
+  },
+
   logo: {
     width: 170,
     height: 45,
@@ -131,24 +139,21 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   formContainer: {
-    marginTop: 5,
     paddingHorizontal: 25,
-    width: "80%",
+    width: "90%",
     height: "25%",
-    borderRadius: 15,
   },
   forgotPassword: {
-    color: "white",
+    color: colors.white,
     textAlign: "right",
-    top: -4,
     fontSize: 12,
+    paddingBottom: 10,
   },
   acceptTermsContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 20,
-    marginTop: 20,
     alignSelf: "center",
+    top: 8,
   },
   checkbox: {
     width: 11,
@@ -169,6 +174,12 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 10,
     textAlign: "center",
+  },
+  signupTextContainer: {
+    color: "black",
+    fontSize: 10,
+    textAlign: "center",
+    top: 10,
   },
   signupText: {
     color: colors.primary,

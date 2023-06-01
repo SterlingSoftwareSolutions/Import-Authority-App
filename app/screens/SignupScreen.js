@@ -13,8 +13,28 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import colors from "../config/colors";
 import CustomButton from "../components/CustomButton";
+import * as Yup from "yup";
+import {
+  ErrorMessage,
+  AppForm,
+  AppFormField,
+  SubmitButton,
+} from "../components/forms";
 
-const SignupScreen = ({navigation , onPress}) => {
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required().label("Name"),
+  businessname:Yup.string().required().label("Business Name"),
+  username:Yup.string().required().label("User Name"),
+  email: Yup.string().required().email().label("Email"),
+  password: Yup.string().required().min(8).label("Password"),
+  phone: Yup.string().required().matches(/^\d+$/, 'Phone number must be numeric').label("Phone"),
+  confirmPassword: Yup.string()
+    .required()
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .label("Confirm Password"),
+});
+
+const SignupScreen = ({ navigation, onPress }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.gradient}>
@@ -22,7 +42,8 @@ const SignupScreen = ({navigation , onPress}) => {
           colors={["#8FBF45", "#079BB7"]}
           style={styles.gradientBackground}
           start={{ x: 0.5, y: 0.5 }}
-          end={{ x: 1, y: 1 }}/>
+          end={{ x: 1, y: 1 }}
+        />
         <View style={styles.displayPicWrapper}>
           <ImageBackground
             source={require("../assets/displaypic.jpg")}
@@ -34,43 +55,59 @@ const SignupScreen = ({navigation , onPress}) => {
                 source={require("../assets/ImportAuthorityLogo.jpg")}
               />
               <View style={styles.overlay}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Name"
-                  placeholderTextColor={colors.primary} 
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Business Name"
-                  placeholderTextColor={colors.primary} 
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Username"
-                  placeholderTextColor={colors.primary}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Email"
-                  placeholderTextColor={colors.primary}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Mobile Number"
-                  placeholderTextColor={colors.primary}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Password"
-                  secureTextEntry={true}
-                  placeholderTextColor={colors.primary}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Confirm Password"
-                  secureTextEntry={true}
-                  placeholderTextColor={colors.primary}
-                />
+                <AppForm
+                  initialValues={{ name: "", businessname: "",username: "", email: "", password: "",  }}
+                  onSubmit={(values) => console.log(values)}
+                  validationSchema={validationSchema}
+                >
+                  <AppFormField
+                    autoCorrect={false}
+                    name="name"
+                    placeholder="Name"
+                  />
+                  {/* <AppFormField
+                    autoCorrect={false}
+                    name="businessname"
+                    placeholder="Business Name"
+                  /> */}
+                  <AppFormField
+                    autoCorrect={false}
+                    name="username"
+                    placeholder="User Name"
+                  />
+                  <AppFormField
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    name="email"
+                    placeholder="Email"
+                    textContentType="emailAddress"
+                  />
+                     {/* <AppFormField
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    name="phone"
+                    placeholder="Mobile Number"
+                    textContentType="emailAddress"
+                  /> */}
+                  <AppFormField
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    name="password"
+                    placeholder="Password"
+                    secureTextEntry
+                    textContentType="password"
+                  />
+                  <AppFormField
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    name="confirmPassword"
+                    placeholder="Confirm Password"
+                    secureTextEntry
+                    textContentType="password"
+                  />
+                  <SubmitButton title="SIGNUP" />
+                </AppForm>
               </View>
             </View>
             <View style={styles.overlay} />
@@ -81,7 +118,7 @@ const SignupScreen = ({navigation , onPress}) => {
         <View style={styles.checkbox} />
         <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
       </TouchableOpacity>
-      <CustomButton title="SIGN UP"/>
+      {/* <CustomButton title="SIGN UP" /> */}
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           Already have an Account?{" "}
@@ -101,7 +138,7 @@ const SignupScreen = ({navigation , onPress}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex:3,
     backgroundColor: colors.white,
   },
   gradient: {
@@ -119,7 +156,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
   },
   displayPicWrapper: {
-    flex: 1,
+    flex: 2,
     overflow: "hidden",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
@@ -134,16 +171,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
   },
-  overlay: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
   content: {
-    flex: 1,
+    flex: 2,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -155,10 +184,10 @@ const styles = StyleSheet.create({
     top: 50,
   },
   overlay: {
-    top: 100,
+    top: 120,
     paddingHorizontal: 10,
     borderRadius: 15,
-    width: "80%",
+    width: "90%",
     alignItems: "center",
   },
   input: {

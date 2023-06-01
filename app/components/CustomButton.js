@@ -23,9 +23,9 @@ function CustomButton({ title, onPress }) {
 const styles = StyleSheet.create({
   buttonContainer: {
     width: "50%",
-    height: 41,
+    height: 40,
     borderRadius: 15,
-    marginTop: 10,
+    marginTop: 15,
     alignItems: "center",
     alignSelf: "center",
   },
