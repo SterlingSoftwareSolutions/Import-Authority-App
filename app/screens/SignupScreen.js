@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
     .required()
     .matches(/^\d+$/, "Phone number must be numeric")
     .label("Phone"),
-  confirmPassword: Yup.string()
+    password_confirmation: Yup.string()
     .required()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .label("Confirm Password"),
@@ -93,7 +93,7 @@ function SignupScreen() {
                     phone: "",
                     email: "",
                     password: "",
-                    confirmPassword: "",
+                    password_confirmation: "",
                   }}
                   onSubmit={handleSubmit}
                   validationSchema={validationSchema}
@@ -140,7 +140,7 @@ function SignupScreen() {
                   <AppFormField
                     autoCapitalize="none"
                     autoCorrect={false}
-                    name="confirmPassword"
+                    name="password_confirmation"
                     placeholder="Confirm Password"
                     secureTextEntry
                     textContentType="password"
