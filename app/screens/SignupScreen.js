@@ -1,40 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ImageBackground,
   SafeAreaView,
   StyleSheet,
-  TextInput,
   View,
   Image,
   TouchableOpacity,
   Text,
 } from "react-native";
+import * as Yup from "yup";
 import { LinearGradient } from "expo-linear-gradient";
 
 import colors from "../config/colors";
-import CustomButton from "../components/CustomButton";
-import * as Yup from "yup";
 import {
   ErrorMessage,
   AppForm,
   AppFormField,
   SubmitButton,
 } from "../components/forms";
+import useApi from "../hooks/useApi";
+import usersApi from "../api/users";
+import authApi from "../api/auth";
+import useAuth from "../auth/useAuth";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
-  businessname:Yup.string().required().label("Business Name"),
-  username:Yup.string().required().label("User Name"),
+  businessname: Yup.string().required().label("Business Name"),
+  username: Yup.string().required().label("User Name"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(8).label("Password"),
-  phone: Yup.string().required().matches(/^\d+$/, 'Phone number must be numeric').label("Phone"),
+  phone: Yup.string()
+    .required()
+    .matches(/^\d+$/, "Phone number must be numeric")
+    .label("Phone"),
   confirmPassword: Yup.string()
     .required()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
     .label("Confirm Password"),
 });
 
-const SignupScreen = ({ navigation, onPress }) => {
+function SignupScreen() {
+  const registerApi = useApi(usersApi.register);
+  const loginApi = useApi(authApi.login);
+  const auth = useAuth();
+  const [error, setError] = useState();
+
+  const handleSubmit = async (userInfo) => {
+   
+    const result = await registerApi.request(userInfo);
+   console.log(result);
+    if (!result.ok) {
+      if (result.data) setError(result.data.error);
+      else {
+        setError("An unexpected error occurred.");
+        console.log(result);
+      }
+      return; 
+    }
+
+    const { data: authToken } = await loginApi.request(
+      userInfo.username,
+      userInfo.password
+    );
+    auth.logIn(authToken);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.gradient}>
@@ -56,20 +86,29 @@ const SignupScreen = ({ navigation, onPress }) => {
               />
               <View style={styles.overlay}>
                 <AppForm
-                  initialValues={{ name: "", businessname: "",username: "", email: "", password: "",  }}
-                  onSubmit={(values) => console.log(values)}
+                  initialValues={{
+                    name: "",
+                    businessname: "",
+                    username: "",
+                    phone: "",
+                    email: "",
+                    password: "",
+                    confirmPassword: "",
+                  }}
+                  onSubmit={handleSubmit}
                   validationSchema={validationSchema}
                 >
+                  <ErrorMessage error={error} visible={error} />
                   <AppFormField
                     autoCorrect={false}
                     name="name"
                     placeholder="Name"
                   />
-                  {/* <AppFormField
+                  <AppFormField
                     autoCorrect={false}
                     name="businessname"
                     placeholder="Business Name"
-                  /> */}
+                  />
                   <AppFormField
                     autoCorrect={false}
                     name="username"
@@ -83,13 +122,13 @@ const SignupScreen = ({ navigation, onPress }) => {
                     placeholder="Email"
                     textContentType="emailAddress"
                   />
-                     {/* <AppFormField
+                  <AppFormField
                     autoCapitalize="none"
                     autoCorrect={false}
                     name="phone"
                     placeholder="Mobile Number"
                     textContentType="emailAddress"
-                  /> */}
+                  />
                   <AppFormField
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -118,7 +157,6 @@ const SignupScreen = ({ navigation, onPress }) => {
         <View style={styles.checkbox} />
         <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
       </TouchableOpacity>
-      {/* <CustomButton title="SIGN UP" /> */}
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           Already have an Account?{" "}
@@ -134,11 +172,11 @@ const SignupScreen = ({ navigation, onPress }) => {
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    flex:3,
+    flex: 3,
     backgroundColor: colors.white,
   },
   gradient: {

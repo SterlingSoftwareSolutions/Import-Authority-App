@@ -11,17 +11,15 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
-import { useContext } from "react";
-import AuthContext from "../auth/context";
-import authstorage from "../auth/storage";
+import useAuth from "../auth/useAuth";
 
 function UpdateProfileScreen({ navigation }) {
-  const { user, setUser } = useContext(AuthContext);
+  const { user, logOut } = useAuth();
 
-  const handleLogout = () => {
-    setUser(null);
-    authstorage.removeToken();
-  };
+  // const handleLogout = () => {
+  //   setUser(null);
+  //   authstorage.removeToken();
+  // };
 
   return (
     <LinearGradient
@@ -84,14 +82,11 @@ function UpdateProfileScreen({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={{ ...styles.buttonContainer, marginBottom: 20 }}
-            onPress={() => {
-              handleLogout();
-            }}
+            onPress={() => logOut()}
           >
             <Text style={styles.buttonText}>LOGOUT</Text>
           </TouchableOpacity>
         </View>
-
         <StatusBar style="auto" />
       </SafeAreaView>
     </LinearGradient>
@@ -179,7 +174,7 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    marginLeft: 15, // Adjust the value as needed for the desired gap
+    marginLeft: 15, 
   },
 
   buttonPassword: {

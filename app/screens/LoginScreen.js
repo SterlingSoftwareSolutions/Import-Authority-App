@@ -2,7 +2,6 @@ import React from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Yup from "yup";
-import { useContext } from "react";
 
 import Screen from "../components/Screen";
 import {
@@ -14,8 +13,7 @@ import {
 import authApi from "../api/auth";
 import colors from "../config/colors";
 import { useState } from "react";
-import AuthContext from "../auth/context";
-import authstorage from "../auth/storage";
+import useAuth from "../auth/useAuth";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().label("Username"),
@@ -23,19 +21,14 @@ const validationSchema = Yup.object().shape({
 });
 
 function LoginScreen() {
-  const authContext = useContext(AuthContext);
+  const { logIn } = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
 
   const handleSubmit = async ({ username, password }) => {
-    const result = await authApi.login(username, password);
-    if (!result.ok) return setLoginFailed(true);
-    setLoginFailed(false);
-    const user = result.data.data.user;
-    // console.log(user);
-    authContext.setUser(user);
-    authstorage.storeToken(result.data);
-
-
+  const result = await authApi.login(username, password);
+  if (!result.ok) return setLoginFailed(true);
+  setLoginFailed(false);
+  logIn(result.data, result.data.data.user);
   };
 
   return (
