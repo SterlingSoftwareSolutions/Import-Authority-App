@@ -1,29 +1,35 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import WelcomeScreen from "./app/screens/WelcomeScreen";
-import LoginScreen from "./app/screens/LoginScreen";
-import SignupScreen from "./app/screens/SignupScreen";
-import ForgotpasswordScreen from "./app/screens/ForgotpasswordScreen";
-import FourdigitScreen from "./app/screens/FourdigitScreen";
-import NewpasswordScreen from "./app/screens/NewpasswordScreen";
-import CreateApplicationScreen from "./app/screens/CreateApplicationScreen";
-import CreateApplicationImageScreen from "./app/screens/CreateApplicationImageScreen";
-import CreateApplicationDocScreen from "./app/screens/CreateApplicationDocScreen";
-import Dashboard from "./app/screens/Dashboard";
-import PaymentHistoryScreen from "./app/screens/PaymentHistoryScreen";
-import PaymentScreen from "./app/screens/PaymentScreen";
-import PaymentSuccessScreen from "./app/screens/PaymentSuccessScreen";
-import TransactionScreen from "./app/screens/TransactionScreen";
-import UpdateInformationScreen from "./app/screens/UpdateInformationScreen";
-import ViewApplicationScreen from "./app/screens/ViewApplicationScreen";
-import UpdatePasswordScreen from "./app/screens/UpdatePasswordScreen";
-import AllApplicationScreen from "./app/screens/AllApplicationScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { AppLoading } from "expo";
 
-
+import { StyleSheet } from "react-native";
+import AppNavigator from "./app/navigation/AppNavigator";
+import navigationTheme from "./app/navigation/navigationTheme";
+import AuthNavigator from "./app/navigation/AuthNavigator";
+import { useState } from "react";
+import AuthContext from "./app/auth/context";
+import authstorage from "./app/auth/storage";
 
 export default function App() {
-  return < UpdateInformationScreen />;
+  const [user, setUser] = useState();
+  // const [isReady, setIsReady] = useState(false)
 
+  const restoreUser = async () => {
+    const user = await authstorage.getUser();
+    if (user) setUser(user);
+  };
+
+  // if (!isReady)
+  // return (
+  //   <AppLoading startAsync={restoreUser} onFinish={() => setIsReady(true)} />
+  // );
+
+  return (
+    <AuthContext.Provider value={{ user, setUser }}>
+      <NavigationContainer theme={navigationTheme}>
+        {user ? <AppNavigator /> : <AuthNavigator />}
+      </NavigationContainer>
+    </AuthContext.Provider>
+  );
 }
 
 const styles = StyleSheet.create({
