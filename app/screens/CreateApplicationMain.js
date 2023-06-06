@@ -9,7 +9,7 @@ import {
   Text,
   Image,
   Switch,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
@@ -19,22 +19,13 @@ import { SelectList } from "react-native-dropdown-select-list";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 
-
-
 const CreateApplicationMain = () => {
-
 
 
   const navigation = useNavigation();
   const progress1 = 1; // Set the progress value between 0 and 1
   const progress2 = 0;
   const progress3 = 0;
-
-  const x = 0.5; // Set the x-coordinate (between 0 and 1)
-  const y = 1; // Set the y-coordinate (between 0 and 1)
-
-  const blueColor = `rgba(128, 253, 128, ${x})`; // Calculate blue color with transparency based on x
-  const greenColor = `rgba(16, 188, 163, ${y})`; // Calculate green color with transparency based on y
 
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
@@ -56,20 +47,19 @@ const CreateApplicationMain = () => {
 
   const [selected, setSelected] = React.useState("");
 
-  { /Make/ }
+  // {
+  //   /Make/;
+  // }
 
   const data = [
     { key: "1", value: "Honda" },
     { key: "2", value: "Civic" },
   ];
 
-
-
-
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={[colors.secondary, colors.primary]} // Set the starting and ending colors for the gradient
+        colors={[colors.secondary, colors.primary]} 
         style={styles.background}
       >
         <View style={styles.header}>
@@ -85,7 +75,6 @@ const CreateApplicationMain = () => {
                   { width: 24, height: 24, tintColor: "#fff" },
                 ]}
               />
-
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => handleLogoutPress()}
@@ -98,7 +87,6 @@ const CreateApplicationMain = () => {
                   { width: 24, height: 24, tintColor: "#fff" },
                 ]}
               />
-
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => handleTransactionPress()}
@@ -111,7 +99,6 @@ const CreateApplicationMain = () => {
                   { width: 24, height: 24, tintColor: "#fff" },
                 ]}
               />
-
             </TouchableOpacity>
           </View>
         </View>
@@ -185,16 +172,15 @@ const CreateApplicationMain = () => {
             <Text style={styles.bottomText2}>Old Vehicle</Text>
           </View>
         </View>
-        </LinearGradient>
+      </LinearGradient>
 
-        <SafeAreaView style={styles.formContainer}>
-          <ScrollView contentContainerStyle={{ marginTop: 10 }}>
+      <SafeAreaView style={styles.formContainer}>
+        <ScrollView contentContainerStyle={{ marginTop: 10 }}>
           <TextInput
             style={[styles.input, styles.usernameInput, { marginTop: 10 }]}
             placeholder="Chassis/ Frame Number *"
             placeholderTextColor="#23A29F"
           />
-
 
           <TextInput
             style={[styles.input, styles.usernameInput]}
@@ -208,9 +194,9 @@ const CreateApplicationMain = () => {
               setSelected={(val) => setSelected(val)}
               data={data}
               save="value"
-              boxStyles={{ borderColor: 'white' }}
+              boxStyles={{ borderColor: "white" }}
               inputStyles={{ color: "#23A29F" }}
-              dropdownStyles={{ borderColor: 'white' }}
+              dropdownStyles={{ borderColor: "white" }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
           </View>
@@ -221,9 +207,9 @@ const CreateApplicationMain = () => {
               setSelected={(val) => setSelected(val)}
               data={data}
               save="value"
-              boxStyles={{ borderColor: 'white' }}
+              boxStyles={{ borderColor: "white" }}
               inputStyles={{ color: "#23A29F" }}
-              dropdownStyles={{ borderColor: 'white' }}
+              dropdownStyles={{ borderColor: "white" }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
           </View>
@@ -235,9 +221,9 @@ const CreateApplicationMain = () => {
                 setSelected={(val) => setSelected(val)}
                 data={data}
                 save="value"
-                boxStyles={{ width: 150, borderColor: 'white' }}
+                boxStyles={{ width: 150, borderColor: "white" }}
                 inputStyles={{ color: "#23A29F" }}
-                dropdownStyles={{ borderColor: 'white' }}
+                dropdownStyles={{ borderColor: "white" }}
                 dropdownTextStyles={{ color: "#23A29F" }}
               />
             </View>
@@ -249,9 +235,9 @@ const CreateApplicationMain = () => {
                 data={data}
                 save="value"
                 style={{ color: "blue" }}
-                boxStyles={{ width: 150, borderColor: 'white' }}
+                boxStyles={{ width: 150, borderColor: "white" }}
                 inputStyles={{ color: "#23A29F" }}
-                dropdownStyles={{ borderColor: 'white' }}
+                dropdownStyles={{ borderColor: "white" }}
                 dropdownTextStyles={{ color: "#23A29F" }}
               />
             </View>
@@ -263,10 +249,10 @@ const CreateApplicationMain = () => {
               setSelected={(val) => setSelected(val)}
               data={data}
               save="value"
-              boxStyles={{ borderColor: 'white' }}
+              boxStyles={{ borderColor: "white" }}
               style={{ color: "blue" }}
               inputStyles={{ color: "#23A29F" }}
-              dropdownStyles={{ borderColor: 'white' }}
+              dropdownStyles={{ borderColor: "white" }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
           </View>
@@ -278,9 +264,9 @@ const CreateApplicationMain = () => {
               data={data}
               save="value"
               style={{ color: "blue" }}
-              boxStyles={{ borderColor: 'white' }}
+              boxStyles={{ borderColor: "white" }}
               inputStyles={{ color: "#23A29F" }}
-              dropdownStyles={{ borderColor: 'white' }}
+              dropdownStyles={{ borderColor: "white" }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
           </View>
@@ -292,9 +278,9 @@ const CreateApplicationMain = () => {
               data={data}
               save="value"
               style={{ color: "blue" }}
-              boxStyles={{ borderColor: 'white' }}
+              boxStyles={{ borderColor: "white" }}
               inputStyles={{ color: "#23A29F" }}
-              dropdownStyles={{ borderColor: 'white' }}
+              dropdownStyles={{ borderColor: "white" }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
           </View>
@@ -305,10 +291,10 @@ const CreateApplicationMain = () => {
               setSelected={(val) => setSelected(val)}
               data={data}
               save="value"
-              boxStyles={{ borderColor: 'white' }}
+              boxStyles={{ borderColor: "white" }}
               style={{ color: "blue" }}
               inputStyles={{ color: "#23A29F" }}
-              dropdownStyles={{ borderColor: 'white' }}
+              dropdownStyles={{ borderColor: "white" }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
           </View>
@@ -319,10 +305,10 @@ const CreateApplicationMain = () => {
               setSelected={(val) => setSelected(val)}
               data={data}
               save="value"
-              boxStyles={{ borderColor: 'white' }}
+              boxStyles={{ borderColor: "white" }}
               style={{ color: "blue" }}
               inputStyles={{ color: "#23A29F" }}
-              dropdownStyles={{ borderColor: 'white' }}
+              dropdownStyles={{ borderColor: "white" }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
           </View>
@@ -347,20 +333,20 @@ const CreateApplicationMain = () => {
               end={{ x: 1, y: 1 }}
               style={styles.button}
             >
-              <TouchableOpacity onPress={() => navigation.navigate('CreateApplicationDocScreen')}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('CreateApplicationDocScreen')
+                }
+              >
                 <Text style={styles.buttonText}>Next</Text>
               </TouchableOpacity>
             </LinearGradient>
           </View>
-          </ScrollView>
-        </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
 
-
-        <StatusBar style="auto" />
-      
-
+      <StatusBar style="auto" />
     </View>
-
   );
 };
 const styles = StyleSheet.create({
@@ -403,7 +389,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 10,
     marginBottom: 10,
-
   },
 
   usernameInput: {

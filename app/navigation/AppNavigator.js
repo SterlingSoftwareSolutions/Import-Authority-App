@@ -22,6 +22,7 @@ import TransactionScreen from "../screens/TransactionScreen";
 import CreateApplicationImageScreen from "../screens/CreateApplicationImageScreen";
 import CreateApplicationMain from "../screens/CreateApplicationMain";
 import { NavigationContainer } from "@react-navigation/native";
+import CreateApplicationDocScreen from "../screens/CreateApplicationDocScreen";
 
 
 const Tab = createBottomTabNavigator();
@@ -44,9 +45,10 @@ const AppNavigator = () => (
         ),
       }}
     />
+   
     <Tab.Screen
-      name="Create"
-      component={CreateApplicationMain}
+      name="create"
+      component={ApplicationCreateNavigator}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-plus" color={color} size={size} />

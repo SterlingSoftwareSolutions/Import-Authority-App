@@ -14,7 +14,8 @@ import CreateApplicationMain from "../screens/CreateApplicationMain";
 
 const Stack = createStackNavigator();
 
-const ApplicationCreateNavigator = ({navigation}) => (
+const ApplicationCreateNavigator = () => {
+return(
   <Stack.Navigator>
       <Stack.Screen
       name="CreateApplicationMain"
@@ -51,7 +52,7 @@ const ApplicationCreateNavigator = ({navigation}) => (
       component={Dashboard}
       options={{ headerShown: false }}
     />
-  </Stack.Navigator>
-);
+  </Stack.Navigator>)
+};
 
 export default ApplicationCreateNavigator;
