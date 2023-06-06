@@ -2,7 +2,6 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ProgressBar } from 'react-native-paper';
 
  
  function TransactionScreen(props) {
@@ -52,7 +51,6 @@ import { ProgressBar } from 'react-native-paper';
 
       <View>
         <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#FFF', marginTop: 12 }}>Transaction</Text>
-
       </View>
 
 
@@ -185,19 +183,9 @@ import { ProgressBar } from 'react-native-paper';
     paddingHorizontal: 20,
     paddingTop: 20,
   },
-  iconContainer: {
-    flexDirection: 'row',
-
-  },
   icon: {
     marginLeft: 10,
-
   },
-  transaction: {
-    marginLeft: 15,
-
-  },
-
   data_and_searchicon: {
 
     justifyContent: 'space-around',

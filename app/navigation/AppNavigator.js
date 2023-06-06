@@ -2,6 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
+import navigationTheme from "./../navigation/navigationTheme";
 
 import LoginScreen from "../screens/LoginScreen";
 import SignupScreen from "../screens/SignupScreen";
@@ -13,10 +14,20 @@ import ForgotpasswordScreen from "../screens/ForgotpasswordScreen";
 import colors from "../config/colors";
 import UpdatePassword from "../screens/UpdatePasswordScreen";
 import UpdateProfileScreen from "../screens/UpdateProfileScreen";
+import Dashboard from "../screens/Dashboard";
+import CreateApplicationScreen from "../screens/CreateApplicationScreen";
+import ApplicationCreateNavigator from "../navigation/ApplicationCreateNavigator";
+import AllApplicationScreen from "../screens/AllApplicationScreen";
+import TransactionScreen from "../screens/TransactionScreen";
+import CreateApplicationImageScreen from "../screens/CreateApplicationImageScreen";
+import CreateApplicationMain from "../screens/CreateApplicationMain";
+import { NavigationContainer } from "@react-navigation/native";
+
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
+ // <NavigationContainer theme={navigationTheme}>
   <Tab.Navigator
     tabBarOptions={{
       style: styles.tabBar,
@@ -25,8 +36,26 @@ const AppNavigator = () => (
     }}
   >
     <Tab.Screen
+      name="Home"
+      component={Dashboard}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="home" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Create"
+      component={CreateApplicationMain}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="file-plus" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
       name="Complete"
-      component={UpdateProfileScreen}
+      component={AllApplicationScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-check" color={color} size={size} />
@@ -46,12 +75,12 @@ const AppNavigator = () => (
         ),
       }}
     />
-    <Tab.Screen
-      name="Create"
-      component={FourdigitScreen}
+    {/* <Tab.Screen
+      name="CreateApplication"
+      component={CreateApplicationScreen}
       options={({ navigation }) => ({
         tabBarButton: () => (
-          <CreateNewAppButton onPress={() => navigation.navigate("Login")} />
+          <CreateNewAppButton onPress={() => navigation.navigate("CreateApplication")} />
         ),
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
@@ -61,11 +90,10 @@ const AppNavigator = () => (
           />
         ),
       })}
-    />
-
+    /> */}
     <Tab.Screen
       name="Pending"
-      component={SignupScreen}
+      component={CreateApplicationMain}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-clock" color={color} size={size} />
@@ -74,7 +102,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Reject"
-      component={FourdigitScreen}
+      component={UpdateProfileScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
@@ -86,6 +114,7 @@ const AppNavigator = () => (
       }}
     />
   </Tab.Navigator>
+ // </NavigationContainer>
 );
 
 const styles = StyleSheet.create({

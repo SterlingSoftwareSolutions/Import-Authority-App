@@ -8,6 +8,13 @@ import AuthNavigator from "./app/navigation/AuthNavigator";
 import { useState } from "react";
 import AuthContext from "./app/auth/context";
 import authstorage from "./app/auth/storage";
+import ApplicationCreateNavigator from "./app/navigation/ApplicationCreateNavigator";
+import ApplicationListings from "./app/components/ApplicationListings";
+import Dashboard from "./app/screens/Dashboard";
+import CreateApplicationMain from "./app/screens/CreateApplicationMain";
+import SignupPage from "./app/screens/SignupPage";
+import Login from "./app/screens/Login";
+
 
 export default function App() {
   const [user, setUser] = useState();
@@ -29,8 +36,19 @@ export default function App() {
         {user ? <AppNavigator /> : <AuthNavigator />}
       </NavigationContainer>
     </AuthContext.Provider>
-  );
+  );
 }
+
+// export default function App() {
+//   return (
+//     <AuthContext.Provider value={{ user, setUser }}>
+//       <NavigationContainer theme={navigationTheme}>
+//         {user ? <AppNavigator /> : <AuthNavigator />}
+//       </NavigationContainer>
+//     </AuthContext.Provider>
+//   );
+// }
+
 
 const styles = StyleSheet.create({
   container: {

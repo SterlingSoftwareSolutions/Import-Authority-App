@@ -4,10 +4,13 @@ import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Imag
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProgressBar } from 'react-native-paper';
 import colors from '../config/colors';
+import { useNavigation } from "@react-navigation/native";
 
 function CreateApplicationImageScreen(props) {
+  const navigation = useNavigation();
+
  const progress1 = 1; // Set the progress value between 0 and 1
-  const progress2 = 1;
+  const progress2 = .5;
   const progress3 = 0;
 
 
@@ -87,21 +90,7 @@ function CreateApplicationImageScreen(props) {
 
 
         {/* <View style={styles.bottomContainer}> */}
-        <View style={styles.bottomContainer}>
-          <View style={styles.bottomRow}>
-            <Text style={styles.bottomText1}>SEVs / RAWs</Text>
 
-            <View style={styles.backgroundColorWrapper1}>
-              <Image source={require('../assets/car1.png')} style={styles.carIcon1} />
-            </View>
-          </View>
-          <View style={styles.bottomRow}>
-            <View style={styles.backgroundColorWrapper2}>
-              <Image source={require('../assets/car2.png')} style={styles.carIcon2} />
-            </View>
-            <Text style={styles.bottomText2}>Old Vehicle</Text>
-          </View>
-        </View>
 
         <View>
         <Text style={[styles.exteriortext, { marginTop: 60 }]}>Exterior Images</Text>
@@ -176,7 +165,7 @@ function CreateApplicationImageScreen(props) {
               end={{ x: 1, y: 1 }} // Define the end position (top-right)
               style={styles.button}
             >
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("StepTwoDocuments")}>
                 <Text style={styles.buttonText}>Next</Text>
               </TouchableOpacity>
             </LinearGradient>

@@ -48,7 +48,7 @@ function SignupScreen() {
   const handleSubmit = async (userInfo) => {
    
     const result = await registerApi.request(userInfo);
-   console.log(result);
+  //  console.log(result);
     if (!result.ok) {
       if (result.data) setError(result.data.error);
       else {
