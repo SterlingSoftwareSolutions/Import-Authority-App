@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ProgressBar } from 'react-native-paper';
 import colors from '../config/colors';
 import * as ImagePicker from 'expo-image-picker';
+import { Dialog, DialogTitle, DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
 
 
 const CreateApplicationImageScreen = (props) => {
@@ -26,11 +27,23 @@ const CreateApplicationImageScreen = (props) => {
   const handleSwitch2Toggle = () => {
     setSwitch2Value((prevValue) => !prevValue);
   };
-    const [images, setImages] = useState({})
+  const [images, setImages] = useState({})
+  const [key, setKey] = useState(null)
 
-  const selectImage = async (key) => {
+  const selectImage = (imageKey) => {
+    setKey(imageKey)
+    setImageSourceDialog(true);
+  }
+
+  const selectImageLaunch = async (camera = true) => {
     console.log(key)
-    const picker = await ImagePicker.launchImageLibraryAsync();
+    setImageSourceDialog(false);
+    var picker = null;
+    if (camera) {
+      picker = await ImagePicker.launchCameraAsync();
+    } else {
+      picker = await ImagePicker.launchImageLibraryAsync();
+    }
     if (!picker.canceled) {
       setImages(images => ({
         ...images,
@@ -53,10 +66,53 @@ const CreateApplicationImageScreen = (props) => {
     }
   };
 
+  { /Approval Type Switch / }
+  const [imageSourceDialog, setImageSourceDialog] = useState(false);
 
 
   return (
     <View style={styles.container}>
+      <Dialog
+        onDismiss={() => {
+          setImageSourceDialog(false);
+        }}
+        width={0.9}
+        visible={imageSourceDialog}
+        rounded
+        actionsBordered
+        dialogTitle={
+          <DialogTitle
+            title="Add an image using ..."
+            style={{
+              backgroundColor: '#F7F7F8',
+            }}
+            hasTitleBar={false}
+            align="left"
+          />
+        }
+        footer={
+          <DialogFooter>
+            <DialogButton
+              text="Camera"
+              bordered
+              onPress={() => {
+                setImageSourceDialog(false);
+                selectImageLaunch(true);
+              }}
+              key="button-1"
+            />
+            <DialogButton
+              text="Gallery"
+              bordered
+              onPress={() => {
+                setImageSourceDialog(false);
+                selectImageLaunch(false);
+              }}
+              key="button-2"
+            />
+          </DialogFooter>
+        }>
+      </Dialog>
       <LinearGradient
         colors={[colors.secondary, colors.primary]} // Set the starting and ending colors for the gradient
         style={styles.background}
@@ -65,15 +121,15 @@ const CreateApplicationImageScreen = (props) => {
           <View style={styles.iconContainer}>
             <TouchableOpacity onPress={() => handleNotificationPress()} style={styles.iconButton}>
               <Image source={require('../assets/bell.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-              {/* <Ionicons name="notifications" size={24} color="#fff" style={styles.icon} /> */}
+
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleLogoutPress()} style={styles.iconButton}>
               <Image source={require('../assets/money.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-              {/* <Ionicons name="log-out" size={24} color="#fff" style={styles.icon} /> */}
+
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleTransactionPress()} style={styles.iconButton}>
               <Image source={require('../assets/user.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-              {/* <Ionicons name="swap-horizontal" size={24} color="#fff" style={styles.icon} /> */}
+
             </TouchableOpacity>
           </View>
         </View>
@@ -114,22 +170,6 @@ const CreateApplicationImageScreen = (props) => {
         </View>
 
 
-        {/* <View style={styles.bottomContainer}> */}
-        <View style={styles.bottomContainer}>
-          <View style={styles.bottomRow}>
-            <Text style={styles.bottomText1}>SEVs / RAWs</Text>
-
-            <View style={styles.backgroundColorWrapper1}>
-              <Image source={require('../assets/car1.png')} style={styles.carIcon1} />
-            </View>
-          </View>
-          <View style={styles.bottomRow}>
-            <View style={styles.backgroundColorWrapper2}>
-              <Image source={require('../assets/car2.png')} style={styles.carIcon2} />
-            </View>
-            <Text style={styles.bottomText2}>Old Vehicle</Text>
-          </View>
-        </View>
 
         {/* Image selector  container */}
         <View>

@@ -8,16 +8,16 @@ import * as FileSystem from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker';
 
 function CreateApplicationDocScreen(props) {
-    const progress1 = 1; // Set the progress value between 0 and 1
+    const progress1 = 1;
     const progress2 = 1;
     const progress3 = 0;
 
 
-    const x = 0.5; // Set the x-coordinate (between 0 and 1)
-    const y = 1; // Set the y-coordinate (between 0 and 1)
+    const x = 0.5;
+    const y = 1;
 
-    const blueColor = `rgba(128, 253, 128, ${x})`; // Calculate blue color with transparency based on x
-    const greenColor = `rgba(16, 188, 163, ${y})`; // Calculate green color with transparency based on y
+    const blueColor = `rgba(128, 253, 128, ${x})`;
+    const greenColor = `rgba(16, 188, 163, ${y})`;
 
     const [progressText1, setProgressText1] = React.useState('');
     const [progressText2, setProgressText2] = React.useState('');
@@ -54,15 +54,15 @@ function CreateApplicationDocScreen(props) {
                     <View style={styles.iconContainer}>
                         <TouchableOpacity onPress={() => handleNotificationPress()} style={styles.iconButton}>
                             <Image source={require('../assets/bell.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-                            {/* <Ionicons name="notifications" size={24} color="#fff" style={styles.icon} /> */}
+
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => handleLogoutPress()} style={styles.iconButton}>
                             <Image source={require('../assets/money.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-                            {/* <Ionicons name="log-out" size={24} color="#fff" style={styles.icon} /> */}
+
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => handleTransactionPress()} style={styles.iconButton}>
                             <Image source={require('../assets/user.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-                            {/* <Ionicons name="swap-horizontal" size={24} color="#fff" style={styles.icon} /> */}
+
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -103,22 +103,6 @@ function CreateApplicationDocScreen(props) {
                 </View>
 
 
-                {/* <View style={styles.bottomContainer}> */}
-                <View style={styles.bottomContainer}>
-                    <View style={styles.bottomRow}>
-                        <Text style={styles.bottomText1}>SEVs / RAWs</Text>
-
-                        <View style={styles.backgroundColorWrapper1}>
-                            <Image source={require('../assets/car1.png')} style={styles.carIcon1} />
-                        </View>
-                    </View>
-                    <View style={styles.bottomRow}>
-                        <View style={styles.backgroundColorWrapper2}>
-                            <Image source={require('../assets/car2.png')} style={styles.carIcon2} />
-                        </View>
-                        <Text style={styles.bottomText2}>Old Vehicle</Text>
-                    </View>
-                </View>
 
                 <View>
                     <Text style={[styles.exteriortext, { marginTop: 60 }]}>Documents</Text>
@@ -126,24 +110,24 @@ function CreateApplicationDocScreen(props) {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                         <TouchableOpacity style={styles.cameraContainer}
                             onPress={() => {
-                                selectDocs('doc_invoice')
+                                selectDocs('doc_invoice');
                             }}>
-                            <Image source={require('../assets/document.png')} style={[styles.cameraIcon]} />
+                            <Image source={docs['doc_invoice'] ? require('../assets/doc_thumbnail.png') : require('../assets/doc_placeholder.png')} style={[styles.cameraIcon]} />
                             <Text style={styles.frText}>Invoice</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.cameraContainer}
                             onPress={() => {
-                                selectDocs('doc_invoice')
+                                selectDocs('doc_export_certificate');
                             }}>
-                            <Image source={require('../assets/document.png')} style={[styles.cameraIcon]} />
+                            <Image source={docs['doc_export_certificate'] ? require('../assets/doc_thumbnail.png') : require('../assets/doc_placeholder.png')} style={[styles.cameraIcon]} />
                             <Text style={styles.frText}>Export Certificate</Text>
                         </TouchableOpacity>
                     </View>
                     <SafeAreaView style={{ flexDirection: 'row', marginLeft: 46 }}>
                         <TouchableOpacity style={styles.cameraContainer} onPress={() => {
-                            selectDocs('doc_invoice')
+                            selectDocs('doc_auction_report');
                         }}>
-                            <Image source={require('../assets/document.png')} style={[styles.cameraIcon]} />
+                            <Image source={docs['doc_auction_report'] ? require('../assets/doc_thumbnail.png') : require('../assets/doc_placeholder.png')} style={[styles.cameraIcon]} />
                             <Text style={styles.frText}>Auction Report</Text>
                         </TouchableOpacity>
 
@@ -368,10 +352,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 50,
         height: 50,
-        tintColor: '#C9C9C9',
-
-
-
     },
 
 
