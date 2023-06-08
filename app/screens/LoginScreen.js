@@ -105,6 +105,8 @@ const styles = StyleSheet.create({
     flex: 3.5,
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
+    paddingBottom: 20,
+
   },
   content: {
     flex: 1,
@@ -123,12 +125,13 @@ const styles = StyleSheet.create({
     marginTop: 120,
   },
 
+
   logo: {
     width: 170,
     height: 45,
     resizeMode: "contain",
     position: "absolute",
-    top: 50,
+    marginTop: 50,
     alignSelf: "center",
   },
   formContainer: {
@@ -184,6 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textAlign: "center",
   },
+
 });
 
 export default LoginScreen;
