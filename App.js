@@ -8,11 +8,6 @@ import AuthNavigator from "./app/navigation/AuthNavigator";
 import { useState } from "react";
 import AuthContext from "./app/auth/context";
 import authstorage from "./app/auth/storage";
-import ApplicationCreateNavigator from "./app/navigation/ApplicationCreateNavigator";
-import ApplicationListings from "./app/components/ApplicationListings";
-import Dashboard from "./app/screens/Dashboard";
-import SignupPage from "./app/screens/SignupPage";
-import Login from "./app/screens/Login";
 
 export default function App() {
   const [user, setUser] = useState();
