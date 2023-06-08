@@ -1,12 +1,9 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch, ScrollView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ProgressBar } from 'react-native-paper';
-import colors from '../config/colors';
-import { SelectList } from "react-native-dropdown-select-list";
+import TopUserControlBg from '../components/TopUserControlBg';
 
-function PaymentHistoryScreen(props) {
+
+function Transaction(props) {
   const progress1 = 1; // Set the progress value between 0 and 1
   const progress2 = 1;
   const progress3 = 0;
@@ -29,72 +26,28 @@ function PaymentHistoryScreen(props) {
     setSwitch2Value((prevValue) => !prevValue);
   };
 
-
-  const [selected, setSelected] = React.useState("");
-
-  const datasortbyun_paid = [
-    { key: "1", value: "Paid" },
-    { key: "2", value: "Unpaid" },
-
-
-  ];
-
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={[colors.secondary, colors.primary]} // Set the starting and ending colors for the gradient
-        style={styles.background}
-      >
-        <View style={styles.header}>
-          <View style={styles.iconContainer}>
-            <TouchableOpacity onPress={() => handleNotificationPress()} style={styles.iconButton}>
-              <Image source={require('../assets/bell.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-              {/* <Ionicons name="notifications" size={24} color="#fff" style={styles.icon} /> */}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleLogoutPress()} style={styles.iconButton}>
-              <Image source={require('../assets/money.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-              {/* <Ionicons name="log-out" size={24} color="#fff" style={styles.icon} /> */}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleTransactionPress()} style={styles.iconButton}>
-              <Image source={require('../assets/user.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-              {/* <Ionicons name="swap-horizontal" size={24} color="#fff" style={styles.icon} /> */}
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={{ top: -12 }}>
+      <TopUserControlBg>
+      <View style={{ top: -12 }}>
           <Text style={{ textAlign: 'center', color: '#FA3E3E', fontSize: 29, fontWeight: 'bold' }}>$2900</Text>
-          <Text style={{ textAlign: 'center', color: '#C9C9C9', fontSize: 19, fontWeight: 'bold', top: -8 }}>Total Remaining</Text>
+          <Text style={{ textAlign: 'center', color: '#C9C9C9', fontSize: 19, fontWeight: 'bold' }}>Total Remaining</Text>
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', top: -18 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
           <Text style={{ color: '#FFFFFF', fontWeight: 'bold' }}>$9000</Text>
           <Text style={{ color: '#FFFFFF', fontWeight: 'bold' }}>$700</Text>
 
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', top: -22 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
           <Text style={{ textAlign: 'center', fontSize: 10, color: '#FFFFFF' }}>Total Amount</Text>
           <Text style={{ textAlign: 'center', fontSize: 10, color: '#FFFFFF' }}>Total Paid</Text>
         </View>
-
-        <StatusBar style="auto" />
-      </LinearGradient>
-
-
+      </TopUserControlBg>
+   
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 30 }}>
-
-        <SelectList
-          placeholder="Sort By Unpaid "
-          setSelected={(val) => setSelected(val)}
-          data={datasortbyun_paid}
-          save="value"
-          boxStyles={{ borderColor: '#DDF4E9' }}
-          inputStyles={{ color: "#23A29F" }}
-          dropdownStyles={{ borderColor: 'white' }}
-          dropdownTextStyles={{ color: "#23A29F" }}
-        />
-
+        <Text style={{ textAlign: 'left', fontSize: 15, color: '#000000', fontWeight: 600, top: 10 }}>Sort By Unpiad </Text>
         <Text style={{ textAlign: 'left', fontSize: 15, color: '#000000', fontWeight: 600, top: 10 }}>Remaining Payments: 2/5</Text>
       </View>
 
@@ -475,7 +428,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     backgroundColor: '#DCF3E8',
-
   },
   background: {
     left: 0,
@@ -484,10 +436,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     maxHeight: 130,
     borderRadius: 20,
-
   },
-
-
   header: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -496,17 +445,13 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flexDirection: 'row',
-
   },
   icon: {
     marginLeft: 10,
-
   },
-
   paymenthisorycontainer: {
     alignItems: 'center'
   },
-
   paymenthistorybox: {
     flexDirection: 'row',
     borderRadius: 10,
@@ -516,10 +461,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     justifyContent: 'space-between',
-    marginBottom: 10,
-
+    marginBottom: 10
   },
-
   paymenthistorybtn: {
     color: '#fff',
     backgroundColor: '#FF6D60',
@@ -531,4 +474,4 @@ const styles = StyleSheet.create({
   }
 
 });
-export default PaymentHistoryScreen;
+export default Transaction;

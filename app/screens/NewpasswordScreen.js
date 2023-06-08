@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
+import CustomButton from "../components/CustomButton";
 
 const NewpasswordScreen = (props) => {
   return (
@@ -44,16 +45,7 @@ const NewpasswordScreen = (props) => {
           </View>
         </View>
       </LinearGradient>
-      <LinearGradient
-        colors={["#8FBF45", "#079BB7"]}
-        style={styles.buttonContainer}
-        start={{ x: 0.1, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.buttonText}>CONTINUE</Text>
-        </TouchableOpacity>
-      </LinearGradient>
+      <CustomButton text='CONTINUE'alignSelf="center"/>
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           Not a member? <Text style={styles.signupText}> SIGN UP</Text>

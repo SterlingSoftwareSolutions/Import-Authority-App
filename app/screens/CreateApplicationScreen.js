@@ -19,7 +19,30 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { SelectList } from "react-native-dropdown-select-list";
 import colors from "../config/colors";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import React, { useState } from "react";
+import { StatusBar } from "expo-status-bar";
+import {
+  StyleSheet,
+  SafeAreaView,
+  TextInput,
+  View,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Text,
+  Image,
+  Switch,
+  ScrollView,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { ProgressBar } from "react-native-paper";
+import { SelectList } from "react-native-dropdown-select-list";
+import colors from "../config/colors";
+import * as Yup from "yup";
+import { Formik } from "formik";
+import client from "../api/client";
 
+const CreateApplicationScreen = () => {
+  const endpoint = "/applications";
 
 const CreateApplicationMain = () => {
 
@@ -491,13 +514,17 @@ const CreateApplicationMain = () => {
 
   );
 };
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-start",
     backgroundColor: "#DCF3E8",
+    justifyContent: "flex-start",
+    backgroundColor: "#DCF3E8",
   },
   background: {
+    position: "absolute",
     position: "absolute",
     left: 0,
     right: 0,
@@ -512,9 +539,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
     marginTop: 132,
+    width: "100%",
+    marginTop: 132,
   },
 
   label: {
+    color: "#fff",
     color: "#fff",
     fontSize: 16,
     marginBottom: 5,
@@ -522,6 +552,7 @@ const styles = StyleSheet.create({
 
   input: {
     borderRadius: 5,
+    paddingHorizontal: 20,
     paddingHorizontal: 20,
     paddingVertical: 10,
     color: 'black',
@@ -539,7 +570,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 10,
+    width: "100%",
     width: "100%",
   },
 
@@ -552,6 +587,7 @@ const styles = StyleSheet.create({
 
   smallInput: {
     flex: 1,
+    marginRight: 5,
     marginRight: 5,
   },
 
@@ -569,9 +605,13 @@ const styles = StyleSheet.create({
     width: "38%",
     alignItems: "center",
     justifyContent: "center",
+    width: "38%",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   buttonText: {
+    color: "#fff",
     color: "#fff",
   },
 
@@ -580,11 +620,13 @@ const styles = StyleSheet.create({
     width: 110,
     borderRadius: 5,
     marginLeft: 5,
+    marginLeft: 5,
   },
   progressBar2: {
     height: 8,
     width: 110,
     borderRadius: 5,
+    marginLeft: 8,
     marginLeft: 8,
   },
   progressBar3: {

@@ -3,8 +3,10 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProgressBar } from 'react-native-paper';
+import { useNavigation } from "@react-navigation/native";
 
 function PaymentSuccessScreen(props) {
+    const navigation = useNavigation();
     const progress1 = 1; // Set the progress value between 0 and 1
     const progress2 = 1;
     const progress3 = 1;
@@ -69,13 +71,15 @@ function PaymentSuccessScreen(props) {
                             style={styles.button}
                         >
 
-                            <TouchableOpacity>
+                            <TouchableOpacity  onPress={() => navigation.navigate("Dashboard")}>
                                 <Text style={{ ...styles.buttonText }}>Return to Dashboard</Text>
                             </TouchableOpacity>
 
                         </LinearGradient>
                     </View>
+                    <TouchableOpacity onPress={() => navigation.navigate("ViewTransactions")} >
                     <Text style={{ ...styles.buttonText, color: 'grey' }}>View Transactions</Text>
+                    </TouchableOpacity>
                 </View>
 
 
@@ -232,8 +236,7 @@ function PaymentSuccessScreen(props) {
                             end={{ x: 1, y: 1 }} // Define the end position (top-right)
                             style={styles.button}
                         >
-
-                            <TouchableOpacity>
+                            <TouchableOpacity  onPress={() => navigation.navigate("PaymentScreen")}>
                                 <Text style={{ ...styles.buttonText }}>Pay 1500</Text>
                             </TouchableOpacity>
 

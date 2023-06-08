@@ -8,9 +8,11 @@ import {
   View,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import colors from "../config/colors";
 
-function WelcomeScreen(props) {
+import colors from "../config/colors";
+import CustomButton from "../components/CustomButton";
+
+function WelcomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.bgcolor}>
       <LinearGradient
@@ -35,26 +37,10 @@ function WelcomeScreen(props) {
           import specialists.
         </Text>
       </LinearGradient>
-      <LinearGradient
-        colors={["#8FBF45", "#079BB7"]}
-        style={styles.buttonContainer}
-        start={{ x: 0.1, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <View style={styles.loginButton}>
-          <Text style={styles.buttonText}>LOGIN</Text>
-        </View>
-      </LinearGradient>
-      <LinearGradient
-        colors={["#8FBF45", "#079BB7"]}
-        style={styles.buttonContainer}
-        start={{ x: 0.1, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <View style={styles.signupButton}>
-          <Text style={styles.buttonText}>SIGNUP</Text>
-        </View>
-      </LinearGradient>
+      
+      <CustomButton title="LOGIN" alignSelf="center" onPress={() => navigation.navigate("Login")} />
+      <CustomButton title="SIGN UP" alignSelf="center" onPress={() => navigation.navigate("Signup")}/>
+
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>Import Authority</Text>
         <Text style={styles.footerText}>All rights reserved</Text>
@@ -81,35 +67,6 @@ const styles = StyleSheet.create({
     flex: 1,
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
-  },
-  buttonContainer: {
-    width: "50%",
-    height: 41,
-    borderRadius: 15,
-    marginTop: 10,
-    alignItems: "center",
-    alignSelf: "center",
-  },
-  loginButton: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "transparent",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  signupButton: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "transparent",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
   },
   logo: {
     width: 170,
@@ -139,7 +96,7 @@ const styles = StyleSheet.create({
   footerContainer: {
     alignItems: "center",
     marginTop: 10,
-    marginBottom:20
+    marginBottom: 20,
   },
   footerText: {
     color: "black",

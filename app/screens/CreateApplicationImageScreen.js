@@ -4,6 +4,7 @@ import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Imag
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProgressBar } from 'react-native-paper';
 import colors from '../config/colors';
+import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from 'expo-image-picker';
 import { Dialog, DialogTitle, DialogFooter, DialogButton, DialogContent } from 'react-native-popup-dialog';
 
@@ -12,6 +13,7 @@ const CreateApplicationImageScreen = (props) => {
   const progress1 = 1; // Set the progress value between 0 and 1
   const progress2 = 1;
   const progress3 = 0;
+
 
   const [progressText1, setProgressText1] = React.useState('');
   const [progressText2, setProgressText2] = React.useState('');
@@ -170,9 +172,10 @@ const CreateApplicationImageScreen = (props) => {
         </View>
 
 
-
+        {/* <View style={styles.bottomContainer}> */}
+        {/* <View style={styles.bottomContainer}> */}
+            <View style={styles.backgroundColorWrapper1}>
         {/* Image selector  container */}
-        <View>
           <Text style={[styles.exteriortext, { marginTop: 60 }]}>Exterior Images</Text>
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -293,7 +296,7 @@ const CreateApplicationImageScreen = (props) => {
               end={{ x: 1, y: 1 }} // Define the end position (top-right)
               style={styles.button}
             >
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("StepTwoDocuments")}>
                 <Text style={styles.buttonText}>Next</Text>
               </TouchableOpacity>
             </LinearGradient>
