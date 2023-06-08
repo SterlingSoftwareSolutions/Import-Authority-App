@@ -1,31 +1,23 @@
-import React from "react";
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  View,
-  TouchableOpacity,
-  Text,
-  Image,
-  Switch,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { ProgressBar } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { ProgressBar } from 'react-native-paper';
+import colors from '../config/colors';
+import * as FileSystem from 'expo-file-system';
+import * as DocumentPicker from 'expo-document-picker';
 
 function CreateApplicationDocScreen(props) {
-  const navigation = useNavigation();
+    const progress1 = 1;
+    const progress2 = 1;
+    const progress3 = 0;
 
-  const progress1 = 1; // Set the progress value between 0 and 1
-  const progress2 = 1;
-  const progress3 = 0;
 
-  const x = 0.5; // Set the x-coordinate (between 0 and 1)
-  const y = 1; // Set the y-coordinate (between 0 and 1)
+    const x = 0.5;
+    const y = 1;
 
-  const blueColor = `rgba(128, 253, 128, ${x})`; // Calculate blue color with transparency based on x
-  const greenColor = `rgba(16, 188, 163, ${y})`; // Calculate green color with transparency based on y
+    const blueColor = `rgba(128, 253, 128, ${x})`;
+    const greenColor = `rgba(16, 188, 163, ${y})`;
 
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
@@ -34,58 +26,46 @@ function CreateApplicationDocScreen(props) {
   const [switch1Value, setSwitch1Value] = React.useState(false);
   const [switch2Value, setSwitch2Value] = React.useState(false);
 
-  const handleSwitch1Toggle = () => {
-    setSwitch1Value((prevValue) => !prevValue);
-  };
-  return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={[blueColor, greenColor]} // Set the starting and ending colors for the gradient
-        style={styles.background}
-      >
-        <View style={styles.header}>
-          <View style={styles.iconContainer}>
-            <TouchableOpacity
-              onPress={() => handleNotificationPress()}
-              style={styles.iconButton}
+    const handleSwitch1Toggle = () => {
+        setSwitch1Value((prevValue) => !prevValue);
+    };
+
+    const [docs, setDocs] = useState({})
+
+    const selectDocs = async (key) => {
+
+        const picker = await DocumentPicker.getDocumentAsync();
+        if (!picker.canceled) {
+            setDocs(docs => ({
+                ...docs,
+                [key]: picker.uri
+            }));
+        }
+    };
+
+
+    return (
+        <View style={styles.container}>
+            <LinearGradient
+                colors={[blueColor, greenColor]} // Set the starting and ending colors for the gradient
+                style={styles.background}
             >
-              <Image
-                source={require("../assets/bell.png")}
-                style={[
-                  styles.icon,
-                  { width: 24, height: 24, tintColor: "#fff" },
-                ]}
-              />
-              {/* <Ionicons name="notifications" size={24} color="#fff" style={styles.icon} /> */}
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleLogoutPress()}
-              style={styles.iconButton}
-            >
-              <Image
-                source={require("../assets/money.png")}
-                style={[
-                  styles.icon,
-                  { width: 24, height: 24, tintColor: "#fff" },
-                ]}
-              />
-              {/* <Ionicons name="log-out" size={24} color="#fff" style={styles.icon} /> */}
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleTransactionPress()}
-              style={styles.iconButton}
-            >
-              <Image
-                source={require("../assets/user.png")}
-                style={[
-                  styles.icon,
-                  { width: 24, height: 24, tintColor: "#fff" },
-                ]}
-              />
-              {/* <Ionicons name="swap-horizontal" size={24} color="#fff" style={styles.icon} /> */}
-            </TouchableOpacity>
-          </View>
-        </View>
+                <View style={styles.header}>
+                    <View style={styles.iconContainer}>
+                        <TouchableOpacity onPress={() => handleNotificationPress()} style={styles.iconButton}>
+                            <Image source={require('../assets/bell.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
+
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleLogoutPress()} style={styles.iconButton}>
+                            <Image source={require('../assets/money.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
+
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => handleTransactionPress()} style={styles.iconButton}>
+                            <Image source={require('../assets/user.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
+
+                        </TouchableOpacity>
+                    </View>
+                </View>
 
         <View style={styles.progressContainer}>
           <View style={styles.progressBarWrapper}>
@@ -134,41 +114,39 @@ function CreateApplicationDocScreen(props) {
           </View>
         </View>
 
-        {/* <View style={styles.bottomContainer}> */}
+
 
         <View>
           <Text style={[styles.exteriortext, { marginTop: 60 }]}>
             Documents
           </Text>
 
-          <SafeAreaView
-            style={{ flexDirection: "row", justifyContent: "space-around" }}
-          >
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/document.png")}
-                style={[styles.cameraIcon]}
-              />
-              <Text style={styles.frText}>Invoice</Text>
-            </View>
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/document.png")}
-                style={[styles.cameraIcon]}
-              />
-              <Text style={styles.frText}>Export Certificate</Text>
-            </View>
-          </SafeAreaView>
-          <SafeAreaView style={{ flexDirection: "row", marginLeft: 46 }}>
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/document.png")}
-                style={[styles.cameraIcon]}
-              />
-              <Text style={styles.frText}>Auction Report</Text>
-            </View>
-          </SafeAreaView>
-        </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                        <TouchableOpacity style={styles.cameraContainer}
+                            onPress={() => {
+                                selectDocs('doc_invoice');
+                            }}>
+                            <Image source={docs['doc_invoice'] ? require('../assets/doc_thumbnail.png') : require('../assets/doc_placeholder.png')} style={[styles.cameraIcon]} />
+                            <Text style={styles.frText}>Invoice</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.cameraContainer}
+                            onPress={() => {
+                                selectDocs('doc_export_certificate');
+                            }}>
+                            <Image source={docs['doc_export_certificate'] ? require('../assets/doc_thumbnail.png') : require('../assets/doc_placeholder.png')} style={[styles.cameraIcon]} />
+                            <Text style={styles.frText}>Export Certificate</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <SafeAreaView style={{ flexDirection: 'row', marginLeft: 46 }}>
+                        <TouchableOpacity style={styles.cameraContainer} onPress={() => {
+                            selectDocs('doc_auction_report');
+                        }}>
+                            <Image source={docs['doc_auction_report'] ? require('../assets/doc_thumbnail.png') : require('../assets/doc_placeholder.png')} style={[styles.cameraIcon]} />
+                            <Text style={styles.frText}>Auction Report</Text>
+                        </TouchableOpacity>
+
+                    </SafeAreaView>
+                </View>
 
         <SafeAreaView style={styles.back_draft}>
           <View style={styles.buttonContainer}>
@@ -349,13 +327,12 @@ const styles = StyleSheet.create({
     color: "#079BB7",
   },
 
-  cameraIcon: {
-    marginTop: 10,
-    borderRadius: 10,
-    width: 50,
-    height: 50,
-    tintColor: "#C9C9C9",
-  },
+    cameraIcon: {
+        marginTop: 10,
+        borderRadius: 10,
+        width: 50,
+        height: 50,
+    },
 
   frText: {
     marginLeft: -2,

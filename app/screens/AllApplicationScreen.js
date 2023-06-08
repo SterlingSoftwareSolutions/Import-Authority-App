@@ -4,14 +4,12 @@ import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Imag
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProgressBar } from 'react-native-paper';
 import colors from '../config/colors';
-
+import { SelectList } from "react-native-dropdown-select-list";
 
 function AllApplicationScreen(props) {
     const progress1 = 1; // Set the progress value between 0 and 1
     const progress2 = 1;
     const progress3 = 0;
-
-
 
 
     const [progressText1, setProgressText1] = React.useState('');
@@ -28,6 +26,17 @@ function AllApplicationScreen(props) {
     const handleSwitch2Toggle = () => {
         setSwitch2Value((prevValue) => !prevValue);
     };
+
+    const [selected, setSelected] = React.useState("");
+
+    const dataallapplications = [
+      { key: "1", value: "Paid" }, 
+      { key: "2", value: "Completed" },
+      { key: "3", value: "Rejected" },
+      { key: "4", value: "Pending" },
+      { key: "5", value: "Draft" },
+     
+    ]; 
     return (
         <SafeAreaView style={styles.container}>
 
@@ -57,10 +66,39 @@ function AllApplicationScreen(props) {
                 </View>
 
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12, alignItems: 'center' }}>
-                    <Text style={{ backgroundColor: '#FFF', width: 90, height: 30, borderRadius: 4, fontSize: 12, fontWeight: 700, textAlignVertical: 'center' }}>Rejected</Text>
-                    <Text style={{ backgroundColor: '#FFF', width: 90, height: 30, borderRadius: 4, fontSize: 12, fontWeight: 700, textAlignVertical: 'center' }}>Make</Text>
-                    <Text style={{ backgroundColor: '#FFF', width: 90, height: 30, borderRadius: 4, fontSize: 12, fontWeight: 700, textAlignVertical: 'center' }}>Model</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12, alignItems: 'center' }}>
+             <SelectList
+              placeholder="All *"
+              setSelected={(val) => setSelected(val)}
+              data={dataallapplications}
+              save="value"
+              boxStyles={{ borderColor: 'white',backgroundColor: 'white'}}
+              inputStyles={{ color: "#000", fontWeight: '700' }}
+              dropdownStyles={{borderColor: 'white',backgroundColor: 'white' }}
+              dropdownTextStyles={{ color: "#000" }}
+            />
+            <SelectList
+              placeholder="Make"
+              setSelected={(val) => setSelected(val)}
+              data={dataallapplications}
+              save="value"
+              boxStyles={{ borderColor: 'white',backgroundColor: 'white'}}
+              inputStyles={{ color: "#000", fontWeight: '700' }}
+              dropdownStyles={{borderColor: 'white',backgroundColor: 'white' }}
+              dropdownTextStyles={{ color: "#000" }}
+            />
+
+             <SelectList
+              placeholder="Model"
+              setSelected={(val) => setSelected(val)}
+              data={dataallapplications}
+              save="value"
+              boxStyles={{ borderColor: 'white',backgroundColor: 'white'}}
+              inputStyles={{ color: "#000", fontWeight: '700' }}
+              dropdownStyles={{borderColor: 'white',backgroundColor: 'white' }}
+              dropdownTextStyles={{ color: "#000" }}
+            />
+                    
                     <TouchableOpacity onPress={() => handleTransactionPress()}>
                         <Image source={require('../assets/search.png')} style={[{ width: 32, height: 32, tintColor: '#fff' }]} />
                     </TouchableOpacity>
