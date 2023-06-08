@@ -8,6 +8,8 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
@@ -15,101 +17,103 @@ import colors from "../config/colors";
 const LoginScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={["#8FBF45", "#079BB7"]}
-        style={styles.gradient}
-        start={{ x: 0.5, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <View style={styles.content}>
-          <Image style={styles.displayPic} source={require("../assets/displaypic.jpg")} />
-          <Image style={styles.logo} source={require("../assets/ImportAuthorityLogo.jpg")} />
-          <View style={styles.inputContainer}>
-            <TextInput style={styles.input} placeholder="Username or Email" />
-            
-            <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} />
-            <TouchableOpacity>
-              <Text style={styles.forgotPassword}>Forget password?</Text>
-            </TouchableOpacity>
+      <ScrollView>
+        <LinearGradient
+          colors={["#8FBF45", "#079BB7"]}
+          style={styles.gradient}
+          start={{ x: 0.5, y: 0.5 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.content}>
+            <Image style={styles.displayPic} source={require("../assets/displaypic.jpg")} />
+            <Image style={styles.logo} source={require("../assets/ImportAuthorityLogo.jpg")} />
+            <View style={styles.inputContainer}>
+              <TextInput style={styles.input} placeholder="Username or Email" />
+              <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} />
+              <TouchableOpacity>
+                <Text style={styles.forgotPassword}>Forget password?</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </LinearGradient>
+        <TouchableOpacity style={styles.acceptTermsContainer}>
+          <View style={styles.checkbox} />
+          <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
+        </TouchableOpacity>
+        <LinearGradient
+          colors={["#8FBF45", "#079BB7"]}
+          style={styles.buttonContainer}
+          start={{ x: 0.1, y: 0.5 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <TouchableOpacity style={styles.loginButton}>
+            <Text style={styles.buttonText}>LOGIN</Text>
+          </TouchableOpacity>
+        </LinearGradient>
+        <View style={styles.footerContainer}>
+          <Text style={styles.footerText}>
+            Not a member? <Text style={styles.signupText}> SIGN UP</Text>
+          </Text>
+          <View style={styles.footerContainer}>
+            <Text style={styles.footerText}>Import Authority</Text>
+            <Text style={styles.footerText}>© 2023 ALL RIGHTS RESERVED</Text>
+            <Text style={styles.footerTextTerms}>Terms of use | Privacy Policy</Text>
           </View>
         </View>
-      </LinearGradient>
-      <TouchableOpacity style={styles.acceptTermsContainer}>
-        <View style={styles.checkbox} />
-        <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
-      </TouchableOpacity>
-      <LinearGradient
-        colors={["#8FBF45", "#079BB7"]}
-        style={styles.buttonContainer}
-        start={{ x: 0.1, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.buttonText}>LOGIN</Text>
-        </TouchableOpacity>
-      </LinearGradient>
-      <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>
-          Not a member? <Text style={styles.signupText}> SIGN UP</Text>
-        </Text>
-        <View style={styles.footerContainer}>
-          <Text style={styles.footerText}>Import Authority</Text>
-          <Text style={styles.footerText}>All rights reserved</Text>
-          <Text style={styles.footerTextTerms}>Terms of use | Privacy Policy</Text>
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:colors.white,
+    backgroundColor: colors.white,
   },
   gradient: {
-    flex: 1,
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
+    paddingBottom: 20,
+
   },
   displayPicContainer: {
     paddingBottom: 40,
     paddingHorizontal: 20,
-    paddingHorizontal:0
+    paddingHorizontal: 0
   },
   displayPic: {
-    height: "72%",
+    height:  450,
     width: "100%",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
-    paddingHorizontal:0
+    paddingHorizontal: 0
   },
-  
+
   logo: {
     width: 170,
     height: 45,
     resizeMode: "contain",
     position: "absolute",
-    top: 50,
+    marginTop: 50,
     alignSelf: "center",
   },
   inputContainer: {
-    marginTop: 35,
-    paddingHorizontal:25
+    marginTop: 10,
+    paddingHorizontal: 25
   },
   input: {
     backgroundColor: "white",
     borderRadius: 15,
     height: 41,
-    marginBottom: 10,
+    marginBottom: 5,
     paddingHorizontal: 10,
-    fontSize:12,
+    fontSize: 12,
   },
   forgotPassword: {
     color: "white",
     textAlign: "right",
-    top:-4,
-    fontSize:12,
+    fontSize: 12,
   },
   acceptTermsContainer: {
     flexDirection: "row",
@@ -168,6 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textAlign: "center",
   },
+
 });
 
 export default LoginScreen;

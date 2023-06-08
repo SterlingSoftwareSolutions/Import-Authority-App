@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   Text,
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
@@ -15,94 +16,95 @@ import colors from "../config/colors";
 const SignupScreen = (props) => {
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.gradient}>
+      <ScrollView>
+        <View style={styles.gradient}>
+          <LinearGradient
+            colors={["#8FBF45", "#079BB7"]}
+            style={styles.gradientBackground}
+            start={{ x: 0.5, y: 0.5 }}
+            end={{ x: 1, y: 1 }}
+          />
+          <View style={styles.displayPicWrapper}>
+            <View>
+              <View style={styles.content}>
+                <Image source={require("../assets/displaypic.jpg")}
+                  style={styles.displayPic} />
+                <Image
+                  style={styles.logo}
+                  source={require("../assets/ImportAuthorityLogo.jpg")}
+                />
+                <View style={styles.overlay}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Name"
+                    placeholderTextColor={colors.primary}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Business Name"
+                    placeholderTextColor={colors.primary}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Username"
+                    placeholderTextColor={colors.primary}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    placeholderTextColor={colors.primary}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Mobile Number"
+                    placeholderTextColor={colors.primary}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    placeholderTextColor={colors.primary}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Confirm Password"
+                    secureTextEntry={true}
+                    placeholderTextColor={colors.primary}
+                  />
+                </View>
+              </View>
+              <View style={styles.overlay} />
+            </View>
+          </View>
+        </View>
+        <TouchableOpacity style={styles.acceptTermsContainer}>
+          <View style={styles.checkbox} />
+          <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
+        </TouchableOpacity>
         <LinearGradient
           colors={["#8FBF45", "#079BB7"]}
-          style={styles.gradientBackground}
-          start={{ x: 0.5, y: 0.5 }}
+          style={styles.buttonContainer}
+          start={{ x: 0.1, y: 0.5 }}
           end={{ x: 1, y: 1 }}
-        />
-        <View style={styles.displayPicWrapper}>
-          <ImageBackground
-            source={require("../assets/displaypic.jpg")}
-            style={styles.displayPic}
-          >
-            <View style={styles.content}>
-              <Image
-                style={styles.logo}
-                source={require("../assets/ImportAuthorityLogo.jpg")}
-              />
-              <View style={styles.overlay}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Name"
-                  placeholderTextColor={colors.primary} 
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Business Name"
-                  placeholderTextColor={colors.primary} 
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Username"
-                  placeholderTextColor={colors.primary}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Email"
-                  placeholderTextColor={colors.primary}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Mobile Number"
-                  placeholderTextColor={colors.primary}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Password"
-                  secureTextEntry={true}
-                  placeholderTextColor={colors.primary}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Confirm Password"
-                  secureTextEntry={true}
-                  placeholderTextColor={colors.primary}
-                />
-              </View>
-            </View>
-            <View style={styles.overlay} />
-          </ImageBackground>
-        </View>
-      </View>
-      <TouchableOpacity style={styles.acceptTermsContainer}>
-        <View style={styles.checkbox} />
-        <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
-      </TouchableOpacity>
-      <LinearGradient
-        colors={["#8FBF45", "#079BB7"]}
-        style={styles.buttonContainer}
-        start={{ x: 0.1, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <TouchableOpacity style={styles.signupButton}>
-          <Text style={styles.buttonText}>SIGN UP</Text>
-        </TouchableOpacity>
-      </LinearGradient>
-      <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>
-          Already have an Account?{" "}
-          <Text style={styles.signupText}> LOGIN </Text>
-        </Text>
+        >
+          <TouchableOpacity style={styles.signupButton}>
+            <Text style={styles.buttonText}>SIGN UP</Text>
+          </TouchableOpacity>
+        </LinearGradient>
         <View style={styles.footerContainer}>
-          <Text style={styles.footerText}>Import Authority</Text>
-          <Text style={styles.footerText}>All rights reserved</Text>
-          <Text style={styles.footerTextTerms}>
-            Terms of use | Privacy Policy
+          <Text style={styles.footerText}>
+            Already have an Account?{" "}
+            <Text style={styles.signupText}> LOGIN </Text>
           </Text>
+          <View style={styles.footerContainer}>
+            <Text style={styles.footerText}>Import Authority</Text>
+            <Text style={styles.footerText}>All rights reserved</Text>
+            <Text style={styles.footerTextTerms}>
+              Terms of use | Privacy Policy
+            </Text>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -113,7 +115,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   gradient: {
-    flex: 1,
+    width: "100%",
+    height: 620,
+    borderBottomRightRadius: 30,
+    borderBottomLeftRadius: 30,
   },
   gradientBackground: {
     position: "absolute",
@@ -122,7 +127,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     width: "100%",
-    height: "100%",
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
   },
@@ -133,42 +137,30 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 70,
   },
   displayPic: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-    height: "80%",
+    position: 'absolute',
+    height: 450,
     width: "100%",
-    position: "relative",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
+    paddingHorizontal: 0
   },
   overlay: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)"
   },
   content: {
-    flex: 1,
     alignItems: "center",
-    justifyContent: "center",
   },
   logo: {
+    marginTop: 50,
+    marginBottom: 150,
     width: 170,
     height: 45,
     resizeMode: "contain",
-    position: "absolute",
-    top: 50,
   },
   overlay: {
-    top: 100,
     paddingHorizontal: 10,
     borderRadius: 15,
     width: "80%",
-    alignItems: "center",
-    // backgroundColor: "rgba(255, 255, 255, 0.7)",
   },
   input: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",
