@@ -11,24 +11,16 @@ import authstorage from "./app/auth/storage";
 import ApplicationCreateNavigator from "./app/navigation/ApplicationCreateNavigator";
 import ApplicationListings from "./app/components/ApplicationListings";
 import Dashboard from "./app/screens/Dashboard";
-import CreateApplicationMain from "./app/screens/CreateApplicationMain";
 import SignupPage from "./app/screens/SignupPage";
 import Login from "./app/screens/Login";
 
-
 export default function App() {
   const [user, setUser] = useState();
-  // const [isReady, setIsReady] = useState(false)
 
   const restoreUser = async () => {
     const user = await authstorage.getUser();
     if (user) setUser(user);
   };
-
-  // if (!isReady)
-  // return (
-  //   <AppLoading startAsync={restoreUser} onFinish={() => setIsReady(true)} />
-  // );
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
@@ -36,19 +28,8 @@ export default function App() {
         {user ? <AppNavigator /> : <AuthNavigator />}
       </NavigationContainer>
     </AuthContext.Provider>
-  );
+  );
 }
-
-// export default function App() {
-//   return (
-//     <AuthContext.Provider value={{ user, setUser }}>
-//       <NavigationContainer theme={navigationTheme}>
-//         {user ? <AppNavigator /> : <AuthNavigator />}
-//       </NavigationContainer>
-//     </AuthContext.Provider>
-//   );
-// }
-
 
 const styles = StyleSheet.create({
   container: {

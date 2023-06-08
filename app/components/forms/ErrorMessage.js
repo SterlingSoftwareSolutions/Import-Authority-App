@@ -10,7 +10,9 @@ function ErrorMessage({ error, visible }) {
 }
 
 const styles = StyleSheet.create({
-  error: { color: "red" },
+  error: {
+    color: "red",
+    fontSize: 13, // Adjust the font size as needed
+  },
 });
-
 export default ErrorMessage;

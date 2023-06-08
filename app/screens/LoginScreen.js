@@ -81,7 +81,7 @@ function LoginScreen() {
                   I Accept the Terms of Use
                 </Text>
               </TouchableOpacity>
-              <SubmitButton title="LOGIN" />
+              <SubmitButton title="LOGIN" alignSelf="center" />
             </AppForm>
           </View>
         </View>

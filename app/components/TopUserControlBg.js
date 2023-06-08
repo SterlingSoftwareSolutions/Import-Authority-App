@@ -2,9 +2,10 @@ import React from 'react';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from '../config/colors';
-
+import { useNavigation } from "@react-navigation/native";
 
 function TopUserControlBg({children}) {
+  const navigation = useNavigation();
     return (
         <LinearGradient style={{ paddingHorizontal: 20, paddingTop: 35, paddingBottom: 30, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}
       colors={[colors.secondary, colors.primary]}
@@ -15,12 +16,10 @@ function TopUserControlBg({children}) {
           <TouchableOpacity onPress={() => handleNotificationPress()} >
             <Image source={require('../assets/bell.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleTransactionPress()} >
+          <TouchableOpacity onPress={() =>
+                  navigation.navigate('Transaction')}>
             <Image source={require('../assets/money.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
           </TouchableOpacity>
-          {/* <TouchableOpacity onPress={() => handleUserPress()} >
-            <Image source={require('../assets/user.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-          </TouchableOpacity> */}
         </View>
       </View>      
       {children}

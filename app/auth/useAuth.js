@@ -16,7 +16,7 @@ export default useAuth = () => {
     authStorage.removeToken();
   };
 
-  return { user,logOut,logIn};
+  return {user,logOut,logIn};
 };
 
 //custom hook for business logic

@@ -43,10 +43,10 @@ function SignupScreen() {
   const registerApi = useApi(usersApi.register);
   const loginApi = useApi(authApi.login);
   const auth = useAuth();
+  const { user } = useAuth();
   const [error, setError] = useState();
 
   const handleSubmit = async (userInfo) => {
-   
     const result = await registerApi.request(userInfo);
   //  console.log(result);
     if (!result.ok) {
@@ -62,7 +62,7 @@ function SignupScreen() {
       userInfo.username,
       userInfo.password
     );
-    auth.logIn(authToken);
+    auth.logIn(authToken , user);
   };
 
   return (

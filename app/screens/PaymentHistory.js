@@ -4,8 +4,8 @@ import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Imag
 import { LinearGradient } from 'expo-linear-gradient';
 
  
- function TransactionScreen(props) {
-  const progress1 = 1; // Set the progress value between 0 and 1
+ function PaymentHistory(props) {
+  const progress1 = 1; 
   const progress2 = 1;
   const progress3 = 0;
 
@@ -50,7 +50,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 
       <View>
-        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#FFF', marginTop: 12 }}>Transaction</Text>
+        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#FFF', marginTop: 12 }}>Payment History</Text>
       </View>
 
 
@@ -158,15 +158,7 @@ import { LinearGradient } from 'expo-linear-gradient';
         <Text style={{ fontSize: 12 }}>Just Now</Text>
       </View>
     </ScrollView>
-
-
-
-
-
-
-
   </SafeAreaView>
-
   );
  }
  const styles = StyleSheet.create({
@@ -174,9 +166,7 @@ import { LinearGradient } from 'expo-linear-gradient';
     flex: 1,
     justifyContent: 'flex-start',
     backgroundColor: '#DCF3E8',
-
   },
-
   header: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -191,14 +181,10 @@ import { LinearGradient } from 'expo-linear-gradient';
     justifyContent: 'space-around',
     flexDirection: 'row',
     width: '100%'
-
   },
   transcationtoday: {
     marginTop: 10,
-
   },
-
-
   transactionCategory: {
     fontWeight: 'bold',
     fontSize: 20,
@@ -206,11 +192,9 @@ import { LinearGradient } from 'expo-linear-gradient';
     marginTop: 5,
     marginBottom: 10
   },
-
   transactionBoxContainer: {
     marginHorizontal: 20,
     marginTop: 25
-
   },
   transactionBox: {
     borderRadius: 10,
@@ -222,7 +206,5 @@ import { LinearGradient } from 'expo-linear-gradient';
     borderStartColor: '#8FBF45',
     borderEndColor: 'blue'
   },
-
-
 });
- export default TransactionScreen;
+ export default PaymentHistory;

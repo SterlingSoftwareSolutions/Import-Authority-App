@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Text,
   Image,
   Switch,
@@ -13,17 +14,16 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import DropDownPicker from "react-native-dropdown-picker";
+import { SelectList } from "react-native-dropdown-select-list";
 import colors from "../config/colors";
-import { useNavigation } from "@react-navigation/native";
-import Screen from "../components/Screen";
-import TopUserControlBg from "../components/TopUserControlBg";
+import * as Yup from "yup";
+import { Formik } from "formik";
+import client from "../api/client";
 
-function CreateApplicationScreen() {
-  const navigation = useNavigation();
+const CreateApplicationScreen = () => {
+  const endpoint = "/applications";
 
-  const progress1 = 1; // Set the progress value between 0 and 1
+  const progress1 = 1;
   const progress2 = 0;
   const progress3 = 0;
 
@@ -42,158 +42,495 @@ function CreateApplicationScreen() {
     setSwitch2Value((prevValue) => !prevValue);
   };
 
-  const [selectedValue, setSelectedValue] = useState(null);
+  const [selectedMake, setSelectedMake] = useState("");
+  const [selectedModel, setSelectedModel] = useState("");
+  const [selectedBuildMonth, setSelectedBuildMonth] = useState("");
+  const [selectedBuildYear, setSelectedBuildYear] = useState("");
+  const [selectedFuelType, setSelectedFuelType] = useState("");
+  const [selectedTransmission, setSelectedTransmission] = useState("");
+  const [selectedBodyType, setSelectedBodyType] = useState("");
+  const [selectedDriveType, setSelectedDriveType] = useState("");
+
+  // dropdown data
+  {
+    /Make/;
+  }
+
+  const datamake = [
+    { key: "1", value: "Toyota" },
+    { key: "2", value: "Nissan" },
+    { key: "3", value: "Mitsubishi" },
+    { key: "4", value: "Subaru" },
+    { key: "5", value: "Mazda" },
+    { key: "6", value: "Lexus" },
+    { key: "7", value: "Mersedez Benz" },
+    { key: "8", value: "Suzuki" },
+    { key: "9", value: "Honda" },
+    { key: "10", value: "Waleed" },
+  ];
+
+  {
+    /Model/;
+  }
+  const datamodel = [
+    { key: "1", value: "Toyota" },
+    { key: "2", value: "Nissan" },
+    { key: "3", value: "Mitsubishi" },
+    { key: "4", value: "Subaru" },
+    { key: "5", value: "Mazda" },
+    { key: "6", value: "Lexus" },
+    { key: "7", value: "Mersedez Benz" },
+    { key: "8", value: "Suzuki" },
+    { key: "9", value: "Honda" },
+    { key: "10", value: "Waleed" },
+  ];
+
+  {
+    /Build Month/;
+  }
+
+  const databuildmonth = [
+    { key: "1", value: "January" },
+    { key: "2", value: "February" },
+    { key: "3", value: "March" },
+    { key: "4", value: "April" },
+    { key: "5", value: "May" },
+    { key: "6", value: "June" },
+    { key: "7", value: "July" },
+    { key: "8", value: "August" },
+    { key: "9", value: "September" },
+    { key: "10", value: "October" },
+    { key: "11", value: "November" },
+    { key: "12", value: "December" },
+  ];
+
+  {
+    /Build Year/;
+  }
+  const last = 1886;
+  const now = new Date().getFullYear();
+  const databuildyear = [];
+
+  for (let i = now; i >= last; i--) {
+    databuildyear.push({ key: i, value: i });
+  }
+
+  {
+    /Fuel Type/;
+  }
+
+  const databuildfueltype = [
+    { key: "1", value: "Petrol" },
+    { key: "2", value: "Diesel" },
+    { key: "3", value: "Hybrid(Petrol/Electric)" },
+    { key: "4", value: "Hybrid(Diesel/Electric)" },
+    { key: "5", value: "Electric" },
+  ];
+
+  {
+    /Transmission/;
+  }
+
+  const datatransmission = [
+    { key: "1", value: "Manual" },
+    { key: "2", value: "Automatic" },
+    { key: "3", value: "Other" },
+  ];
+
+  {
+    /Body Type/;
+  }
+
+  const databodytype = [
+    { key: "1", value: "HatchBack" },
+    { key: "2", value: "Sedan" },
+    { key: "3", value: "MUV/SUV" },
+    { key: "4", value: "Coupe" },
+    { key: "5", value: "Convertible" },
+    { key: "6", value: "Wagon" },
+    { key: "7", value: "Van" },
+    { key: "7", value: "Other" },
+  ];
+
+  {
+    /Drive type/;
+  }
+  const datadrivetype = [
+    { key: "1", value: "FWD" },
+    { key: "2", value: "RWD" },
+    { key: "3", value: "4WD" },
+    { key: "4", value: "AWD" },
+  ];
+
+  {
+    /Date Picker/;
+  }
+  const [datePickerVisible, setDatePickerVisibility] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const confirmDatePicker = (date) => {
+    const date_object = new Date(date);
+    setSelectedDate(date_object.toLocaleDateString());
+    setDatePickerVisibility(false);
+  };
+
+  {
+    /Approval Type Switch /;
+  }
+
+  const [approvalType, setApprovalType] = useState(0);
+
+  const switchApprovalType = () => {
+    if (approvalType == 0) {
+      setApprovalType(1);
+    } else {
+      setApprovalType(0);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <TopUserControlBg>
-        {/* step horizontal progess bar */}
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText1}
-              onChangeText={setProgressText1}
-              placeholder="Car Info"
-              placeholderTextColor="#fff"
-            />
-            <ProgressBar
-              progress={progress1}
-              color="#000"
-              style={styles.progressBar1}
-            />
-          </View>
-          <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText2}
-              onChangeText={setProgressText2}
-              placeholder="Documents"
-              placeholderTextColor="#fff"
-            />
-            <ProgressBar
-              progress={progress2}
-              color="#079BB7"
-              style={styles.progressBar2}
-            />
-          </View>
-          <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText3}
-              onChangeText={setProgressText3}
-              placeholder="Payment"
-              placeholderTextColor="#fff"
-            />
-            <ProgressBar
-              progress={progress3}
-              color="#079BB7"
-              style={styles.progressBar3}
-            />
-          </View>
-        </View>
-
-        {/* switch SEV/Old vehicles */}
-        <View style={styles.bottomContainer}>
-          <View style={styles.bottomRow}>
-            <Text style={styles.bottomText1}>SEVs / RAWs</Text>
-            <View style={styles.backgroundColorWrapper1}>
-              <Image
-                source={require("../assets/car1.png")}
-                style={styles.carIcon1}
-              />
+    <Formik
+      initialValues={{
+        chassisNumber: "",
+        make: "",
+        model: "",
+        buildMonth: "",
+        buildYear: "",
+        fuelType: "",
+        transmission: "",
+        bodyType: "",
+        driveType: "",
+        odometer: "",
+      }}
+      onSubmit={(values) => {
+        client
+          .post(endpoint, values)
+          .then((response) => {
+            console.log(response.data); 
+            // Perform any other actions or update the UI as needed
+          })
+          .catch((error) => {
+            // Handle any errors that occurred during the API request
+            console.error(error);
+            // Display an error message or perform error handling as needed
+          });
+      }}
+      validationSchema={Yup.object().shape({
+        chassisNumber: Yup.string().required(
+          "Chassis/Frame Number is required"
+        ),
+        make: Yup.string().required("Make is required"),
+        model: Yup.string().required("Model is required"),
+        buildMonth: Yup.string().required("Build Month is required"),
+        buildYear: Yup.string().required("Build Year is required"),
+        fuelType: Yup.string().required("Fuel Type is required"),
+        transmission: Yup.string().required("Transmission is required"),
+        bodyType: Yup.string().required("Body Type is required"),
+        driveType: Yup.string().required("Drive Type is required"),
+        odometer: Yup.string().required("Odometer is required"),
+      })}
+    >
+      {({ handleChange, handleSubmit, values, errors }) => (
+        <View style={styles.container}>
+          {/* Have to be replaced with the TopUserControl component  */}
+          <LinearGradient
+            colors={[colors.secondary, colors.primary]}
+            style={styles.background}
+          >
+            <View style={styles.header}>
+              <View style={styles.iconContainer}>
+                <TouchableOpacity
+                  onPress={() => handleNotificationPress()}
+                  style={styles.iconButton}
+                >
+                  <Image
+                    source={require("../assets/bell.png")}
+                    style={[
+                      styles.icon,
+                      { width: 24, height: 24, tintColor: "#fff" },
+                    ]}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleLogoutPress()}
+                  style={styles.iconButton}
+                >
+                  <Image
+                    source={require("../assets/money.png")}
+                    style={[
+                      styles.icon,
+                      { width: 24, height: 24, tintColor: "#fff" },
+                    ]}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleTransactionPress()}
+                  style={styles.iconButton}
+                >
+                  <Image
+                    source={require("../assets/user.png")}
+                    style={[
+                      styles.icon,
+                      { width: 24, height: 24, tintColor: "#fff" },
+                    ]}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-          <View style={styles.bottomRow}>
-            <View style={styles.backgroundColorWrapper2}>
-              <Image
-                source={require("../assets/car2.png")}
-                style={styles.carIcon2}
-              />
+
+            <View style={styles.progressContainer}>
+              <View style={styles.progressBarWrapper}>
+                <TextInput
+                  style={[styles.headingText, styles.progressText]}
+                  value={progressText1}
+                  onChangeText={setProgressText1}
+                  placeholder="Car Info"
+                  placeholderTextColor="#fff"
+                />
+                <ProgressBar
+                  progress={progress1}
+                  color="#000"
+                  style={styles.progressBar1}
+                />
+              </View>
+
+              <View style={styles.progressBarWrapper}>
+                <TextInput
+                  style={[styles.headingText, styles.progressText]}
+                  value={progressText2}
+                  onChangeText={setProgressText2}
+                  placeholder="Documents"
+                  placeholderTextColor="#fff"
+                />
+                <ProgressBar
+                  progress={progress2}
+                  color="#079BB7"
+                  style={styles.progressBar2}
+                />
+              </View>
+
+              <View style={styles.progressBarWrapper}>
+                <TextInput
+                  style={[styles.headingText, styles.progressText]}
+                  value={progressText3}
+                  onChangeText={setProgressText3}
+                  placeholder="Payment"
+                  placeholderTextColor="#fff"
+                />
+                <ProgressBar
+                  progress={progress3}
+                  color="#079BB7"
+                  style={styles.progressBar3}
+                />
+              </View>
             </View>
-            <Text style={styles.bottomText2}>Old Vehicle</Text>
-          </View>
-        </View>
-      </TopUserControlBg>
 
-        <View style={styles.formContainer}>
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder="Chassis/ Frame Number *"
-            placeholderTextColor="#23A29F"
-          />
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder="Estimated Date of Arrival *"
-            placeholderTextColor="#23A29F"
-          />
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder="Estimated Date of Arrival *"
-            placeholderTextColor="#23A29F"
-          />
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder="Estimated Date of Arrival *"
-            placeholderTextColor="#23A29F"
-          />
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder="Estimated Date of Arrival *"
-            placeholderTextColor="#23A29F"
-          />
+            <TouchableWithoutFeedback onPress={switchApprovalType}>
+              <View style={styles.bottomContainer}>
+                <View style={styles.bottomRow}>
+                  <Text style={styles.bottomText1}>SEVs / RAWs</Text>
 
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder="Drive Type *"
-            placeholderTextColor="#23A29F"
-            color="#10bca"
-          />
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder="Odometer *"
-            placeholderTextColor="#23A29F"
-            color="#10bca"
-          />
+                  <View
+                    style={[
+                      styles.backgroundColorWrapper1,
+                      approvalType == 0 && styles.switchItemSelected,
+                    ]}
+                  >
+                    <Image
+                      source={require("../assets/car1.png")}
+                      style={styles.carIcon1}
+                    />
+                  </View>
+                </View>
+                <View style={styles.bottomRow}>
+                  <View
+                    style={[
+                      styles.backgroundColorWrapper2,
+                      approvalType == 1 && styles.switchItemSelected,
+                    ]}
+                  >
+                    <Image
+                      source={require("../assets/car2.png")}
+                      style={styles.carIcon2}
+                    />
+                  </View>
 
-          <View style={styles.buttonContainer}>
-            <LinearGradient
-              colors={["#4B4B4B", "#9F9F9F"]} 
-              locations={[0, 1]} 
-              start={{ x: 0.2, y: 0.5 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.button}
+                  <Text style={styles.bottomText2}>Old Vehicle</Text>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </LinearGradient>
+
+          <SafeAreaView style={styles.formContainer}>
+            <ScrollView
+              contentContainerStyle={{ marginTop: 10, paddingBottom: 30 }}
             >
-              <TouchableOpacity>
-                <Text style={styles.buttonText}>Draft</Text>
-              </TouchableOpacity>
-            </LinearGradient>
+              <TextInput
+                style={[styles.input, styles.usernameInput, { marginTop: 10 }]}
+                placeholder="Chassis/ Frame Number *"
+                value={values.chassisNumber}
+                placeholderTextColor="#23A29F"
+                onChangeText={handleChange("chassisNumber")}
+              />
+              <Text>{errors.chassisNumber}</Text>
+              <View style={[styles.dropdown]}>
+              <SelectList
+                placeholder="Make *"
+                setSelected={setSelectedMake}
+                data={datamake}
+                save="value"
+                boxStyles={styles.dropdownBox}
+                inputStyles={{ color: "#23A29F" }}
+                dropdownStyles={{ ...styles.dropDownListStyle }}
+                dropdownTextStyles={{ color: "#23A29F" }}
+                search={false}
+              />
+              </View>
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Model *"
+                  setSelected={setSelectedModel}
+                  data={datamodel}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
 
-            <LinearGradient
-              colors={["#77B859", "#2DA596"]}
-              locations={[0, 1]}
-              start={{ x: 0.2, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.button}
-            >
-              <TouchableOpacity
-                onPress={() => navigation.navigate("CreateApplicationImage")}
-              >
-                <Text style={styles.buttonText}>Next</Text>
-              </TouchableOpacity>
-            </LinearGradient>
-          </View>
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Build Month *"
+                  setSelected={setSelectedBuildMonth}
+                  data={databuildmonth}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
+
+              <View style={[styles.dropdown, {}]}>
+                <SelectList
+                  placeholder="Build Year *"
+                  setSelected={setSelectedBuildYear}
+                  data={databuildyear}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
+
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Fuel Type *"
+                  setSelected={setSelectedFuelType}
+                  data={databuildfueltype}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
+
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Transmisson *"
+                  setSelected={setSelectedTransmission}
+                  data={datatransmission}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
+
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Body Type *"
+                  setSelected={setSelectedBodyType}
+                  data={databodytype}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
+
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Drive Type *"
+                  setSelected={setSelectedDriveType}
+                  data={datadrivetype}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
+
+              <View>
+                <TextInput
+                  style={[styles.input, styles.usernameInput, {}]}
+                  placeholder="Odometer *"
+                  placeholderTextColor="#23A29F"
+                />
+              </View>
+
+              <View style={styles.buttonContainer}>
+                <LinearGradient
+                  colors={["#4B4B4B", "#9F9F9F"]}
+                  locations={[0, 1]}
+                  start={{ x: 0.2, y: 0.5 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.button}
+                >
+                  <TouchableOpacity>
+                    <Text style={styles.buttonText}>Draft</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+
+                <LinearGradient
+                  colors={["#77B859", "#2DA596"]}
+                  locations={[0, 1]}
+                  start={{ x: 0.2, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.button}
+                >
+                  <TouchableOpacity onPress={handleSubmit}>
+                    <Text style={styles.buttonText}>Next</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+              </View>
+            </ScrollView>
+          </SafeAreaView>
+          <StatusBar style="auto" />
         </View>
-    </View>
+      )}
+    </Formik>
   );
-}
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-start",
-    backgroundColor: colors.backgroundgreen,
-  },
-  scrollContainer: {
-    flex: 1,
+    backgroundColor: "#DCF3E8",
   },
   background: {
     position: "absolute",
@@ -209,7 +546,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     width: "100%",
-    top: 25,
+    marginTop: 132,
   },
 
   label: {
@@ -220,8 +557,15 @@ const styles = StyleSheet.create({
 
   input: {
     borderRadius: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     paddingVertical: 10,
+    color: "black",
+    marginBottom: 5,
+  },
+
+  dropdown: {
+    backgroundColor: "#fff0",
+    borderRadius: 10,
     marginBottom: 10,
   },
 
@@ -233,11 +577,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-  rowContainer: {
-    flexDirection: "row",
+  createapplicationrowContainer: {
     justifyContent: "space-between",
     marginBottom: 10,
-    width: 357,
   },
 
   smallInput: {
@@ -279,16 +621,15 @@ const styles = StyleSheet.create({
   progressBar3: {
     height: 8,
     width: 110,
-
     borderRadius: 5,
     marginLeft: 11,
   },
 
   progressContainer: {
     flexDirection: "row",
+    paddingHorizontal: 22,
     marginTop: 40,
     justifyContent: "flex-end",
-    bottom: 15,
   },
 
   progressText: {
@@ -316,10 +657,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 1,
     left: -20,
+    right: 0,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 80,
   },
+
   bottomRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -344,7 +687,7 @@ const styles = StyleSheet.create({
   },
 
   backgroundColorWrapper1: {
-    backgroundColor: "#E5E5E5",
+    backgroundColor: "white",
     padding: 8,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 0,
@@ -354,7 +697,7 @@ const styles = StyleSheet.create({
   },
 
   backgroundColorWrapper2: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "white",
     padding: 8,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 10,
@@ -362,6 +705,22 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
     width: 45,
   },
-});
-export default CreateApplicationScreen;
 
+  dropDownListStyle: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 10,
+    borderColor: "white",
+  },
+
+  dropdownBox: {
+    backgroundColor: "white",
+    borderColor: "white",
+  },
+
+  switchItemSelected: {
+    backgroundColor: "#E5E5E5",
+  },
+});
+
+export default CreateApplicationScreen;
