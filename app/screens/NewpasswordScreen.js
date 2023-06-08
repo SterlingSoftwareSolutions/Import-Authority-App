@@ -45,7 +45,7 @@ const NewpasswordScreen = (props) => {
           </View>
         </View>
       </LinearGradient>
-      <CustomButton text='CONTINUE'/>
+      <CustomButton text='CONTINUE'alignSelf="center"/>
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           Not a member? <Text style={styles.signupText}> SIGN UP</Text>

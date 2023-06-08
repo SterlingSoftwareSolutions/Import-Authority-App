@@ -1,14 +1,13 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-
 import colors from "../config/colors";
 
-function CustomButton({ title, onPress }) {
+function CustomButton({ title, onPress, style }) {
   return (
     <LinearGradient
       colors={[colors.primary, colors.secondary]}
-      style={styles.buttonContainer}
+      style={[styles.buttonContainer, style]}
       start={{ x: 0.1, y: 0.5 }}
       end={{ x: 1, y: 1 }}
     >
@@ -18,7 +17,6 @@ function CustomButton({ title, onPress }) {
     </LinearGradient>
   );
 }
-
 
 const styles = StyleSheet.create({
   buttonContainer: {

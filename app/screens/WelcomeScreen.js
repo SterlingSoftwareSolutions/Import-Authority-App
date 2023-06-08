@@ -11,9 +11,6 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import colors from "../config/colors";
 import CustomButton from "../components/CustomButton";
-import { useNavigation } from "@react-navigation/native";
-
-
 
 function WelcomeScreen({ navigation }) {
   return (
@@ -41,8 +38,8 @@ function WelcomeScreen({ navigation }) {
         </Text>
       </LinearGradient>
       
-      <CustomButton title="LOGIN" onPress={() => navigation.navigate("Login")} />
-      <CustomButton title="SIGN UP" onPress={() => navigation.navigate("Signup")}/>
+      <CustomButton title="LOGIN" alignSelf="center" onPress={() => navigation.navigate("Login")} />
+      <CustomButton title="SIGN UP" alignSelf="center" onPress={() => navigation.navigate("Signup")}/>
 
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>Import Authority</Text>

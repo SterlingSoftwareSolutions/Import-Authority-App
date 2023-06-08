@@ -3,10 +3,17 @@ import { useFormikContext } from "formik";
 
 import CustomButton from "../CustomButton";
 
-function SubmitButton({ title }) {
+function SubmitButton({ title, alignSelf, style }) {
   const { handleSubmit } = useFormikContext();
 
-  return <CustomButton title={title} onPress={handleSubmit} />;
+  return (
+    <CustomButton
+      title={title}
+      onPress={handleSubmit}
+      alignSelf={alignSelf}
+      style={style}
+    />
+  );
 }
 
 export default SubmitButton;

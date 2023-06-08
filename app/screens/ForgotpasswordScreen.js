@@ -41,7 +41,7 @@ const ForgotpasswordScreen = (props) => {
           </View>
         </View>
       </LinearGradient>
-      <CustomButton title = "CONTINUE" />
+      <CustomButton title = "CONTINUE" alignSelf="center"/>
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>
           Already have an Account?{" "}

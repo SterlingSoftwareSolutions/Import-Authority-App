@@ -2,17 +2,13 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
-
-import LoginScreen from "../screens/LoginScreen";
-import SignupScreen from "../screens/SignupScreen";
-import NewpasswordScreen from "../screens/NewpasswordScreen";
-import FourdigitScreen from "../screens/FourdigitScreen";
-import CreateNewAppButton from "../components/CreateNewAppButton";
-import WelcomeScreen from "../screens/WelcomeScreen";
-import ForgotpasswordScreen from "../screens/ForgotpasswordScreen";
 import colors from "../config/colors";
 import UpdatePassword from "../screens/UpdatePasswordScreen";
 import UpdateProfileScreen from "../screens/UpdateProfileScreen";
+import ApplicationCreateNavigator from "../navigation/ApplicationCreateNavigator";
+import AllApplicationScreen from "../screens/AllApplicationScreen";
+import PaymentHistoryScreen from "../screens/Transaction";
+import TransactionNavigator from "./TransactionNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,10 +19,29 @@ const AppNavigator = () => (
       tabStyle: styles.tab,
       showLabel: false,
     }}
+    keyboardHidesTabBar={true}
   >
     <Tab.Screen
+      name="Home"
+      component={TransactionNavigator}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="home" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="create"
+      component={ApplicationCreateNavigator}
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <MaterialCommunityIcons name="file-plus" color={color} size={size} />
+        ),
+      }}
+    />
+    <Tab.Screen
       name="Complete"
-      component={UpdateProfileScreen}
+      component={AllApplicationScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-check" color={color} size={size} />
@@ -47,25 +62,8 @@ const AppNavigator = () => (
       }}
     />
     <Tab.Screen
-      name="Create"
-      component={FourdigitScreen}
-      options={({ navigation }) => ({
-        tabBarButton: () => (
-          <CreateNewAppButton onPress={() => navigation.navigate("Login")} />
-        ),
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons
-            name="plus-circle"
-            color={color}
-            size={size}
-          />
-        ),
-      })}
-    />
-
-    <Tab.Screen
       name="Pending"
-      component={SignupScreen}
+      component={PaymentHistoryScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-clock" color={color} size={size} />
@@ -74,7 +72,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Reject"
-      component={FourdigitScreen}
+      component={UpdateProfileScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons

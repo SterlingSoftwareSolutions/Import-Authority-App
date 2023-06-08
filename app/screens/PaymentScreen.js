@@ -5,10 +5,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { ProgressBar } from 'react-native-paper';
 import { color } from 'react-native-elements/dist/helpers';
 import colors from '../config/colors';
+import { useNavigation } from "@react-navigation/native";
+
 
 
 function PaymentScreen(props) {
-    const progress1 = 1; // Set the progress value between 0 and 1
+  const navigation = useNavigation();
+
+  const progress1 = 1; // Set the progress value between 0 and 1
   const progress2 = 1;
   const progress3 = 1;
 
@@ -181,7 +185,7 @@ function PaymentScreen(props) {
                 style={styles.button}
               >
                 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("PaymentSuccess")}>
                   <Text style={{...styles.buttonText}}>Pay 1500</Text>
                 </TouchableOpacity>
               

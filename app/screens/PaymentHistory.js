@@ -2,11 +2,10 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ProgressBar } from 'react-native-paper';
 
  
- function TransactionScreen(props) {
-  const progress1 = 1; // Set the progress value between 0 and 1
+ function PaymentHistory(props) {
+  const progress1 = 1; 
   const progress2 = 1;
   const progress3 = 0;
 
@@ -51,8 +50,7 @@ import { ProgressBar } from 'react-native-paper';
 
 
       <View>
-        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#FFF', marginTop: 12 }}>Transaction</Text>
-
+        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#FFF', marginTop: 12 }}>Payment History</Text>
       </View>
 
 
@@ -160,15 +158,7 @@ import { ProgressBar } from 'react-native-paper';
         <Text style={{ fontSize: 12 }}>Just Now</Text>
       </View>
     </ScrollView>
-
-
-
-
-
-
-
   </SafeAreaView>
-
   );
  }
  const styles = StyleSheet.create({
@@ -176,41 +166,25 @@ import { ProgressBar } from 'react-native-paper';
     flex: 1,
     justifyContent: 'flex-start',
     backgroundColor: '#DCF3E8',
-
   },
-
   header: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     paddingHorizontal: 20,
     paddingTop: 20,
   },
-  iconContainer: {
-    flexDirection: 'row',
-
-  },
   icon: {
     marginLeft: 10,
-
   },
-  transaction: {
-    marginLeft: 15,
-
-  },
-
   data_and_searchicon: {
 
     justifyContent: 'space-around',
     flexDirection: 'row',
     width: '100%'
-
   },
   transcationtoday: {
     marginTop: 10,
-
   },
-
-
   transactionCategory: {
     fontWeight: 'bold',
     fontSize: 20,
@@ -218,11 +192,9 @@ import { ProgressBar } from 'react-native-paper';
     marginTop: 5,
     marginBottom: 10
   },
-
   transactionBoxContainer: {
     marginHorizontal: 20,
     marginTop: 25
-
   },
   transactionBox: {
     borderRadius: 10,
@@ -234,7 +206,5 @@ import { ProgressBar } from 'react-native-paper';
     borderStartColor: '#8FBF45',
     borderEndColor: 'blue'
   },
-
-
 });
- export default TransactionScreen;
+ export default PaymentHistory;
