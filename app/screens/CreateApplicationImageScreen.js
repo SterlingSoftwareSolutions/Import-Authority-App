@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch } from 'react-native';
+import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch, Button } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProgressBar } from 'react-native-paper';
 import colors from '../config/colors';
+import * as ImagePicker from 'expo-image-picker';
 
-function CreateApplicationImageScreen(props) {
- const progress1 = 1; // Set the progress value between 0 and 1
+
+const CreateApplicationImageScreen = (props) => {
+  const progress1 = 1; // Set the progress value between 0 and 1
   const progress2 = 1;
   const progress3 = 0;
 
-
-  
   const [progressText1, setProgressText1] = React.useState('');
   const [progressText2, setProgressText2] = React.useState('');
   const [progressText3, setProgressText3] = React.useState('');
@@ -26,9 +26,37 @@ function CreateApplicationImageScreen(props) {
   const handleSwitch2Toggle = () => {
     setSwitch2Value((prevValue) => !prevValue);
   };
+    const [images, setImages] = useState({})
 
-    return (
-        <View style={styles.container}>
+  const selectImage = async (key) => {
+    console.log(key)
+    const picker = await ImagePicker.launchImageLibraryAsync();
+    if (!picker.canceled) {
+      setImages(images => ({
+        ...images,
+        [key]: picker.assets[0].uri
+      }));
+
+      console.log(images);
+    }
+  };
+
+  { /Approval Type Switch / }
+
+  const [approvalType, setApprovalType] = useState(0);
+
+  const switchApprovalType = () => {
+    if (approvalType == 0) {
+      setApprovalType(1);
+    } else {
+      setApprovalType(0);
+    }
+  };
+
+
+
+  return (
+    <View style={styles.container}>
       <LinearGradient
         colors={[colors.secondary, colors.primary]} // Set the starting and ending colors for the gradient
         style={styles.background}
@@ -103,56 +131,105 @@ function CreateApplicationImageScreen(props) {
           </View>
         </View>
 
+        {/* Image selector  container */}
         <View>
-        <Text style={[styles.exteriortext, { marginTop: 60 }]}>Exterior Images</Text>
-        
-          <SafeAreaView style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <View style={styles.cameraContainer}>
-              <Image source={require('../assets/cam.png')} style={[styles.cameraIcon]} />
-              <Text style={styles.frText}>FR Corner</Text>
-            </View>
-            <View style={styles.cameraContainer}>
-              <Image source={require('../assets/cam.png')} style={[styles.cameraIcon]} />
-              <Text style={styles.frText}>RR Corner</Text>
-            </View>
-          </SafeAreaView>
-          <SafeAreaView style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <View style={styles.cameraContainer}>
-              <Image source={require('../assets/cam.png')} style={[styles.cameraIcon]} />
-              <Text style={styles.frText}>FL Corner</Text>
-            </View>
-            <View style={styles.cameraContainer}>
-              <Image source={require('../assets/cam.png')} style={[styles.cameraIcon]} />
-              <Text style={styles.frText}>RL Corner</Text>
-            </View>
-          </SafeAreaView>
-        </View>
-  
-        <View>
-        <Text style={[styles.exteriortext, { marginTop: 20 }]}>Interior Images</Text>
+          <Text style={[styles.exteriortext, { marginTop: 60 }]}>Exterior Images</Text>
 
-          <SafeAreaView style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <View style={styles.cameraContainer}>
-              <Image source={require('../assets/cam.png')} style={[styles.cameraIcon]} />
-              <Text style={styles.frText}>FR Corner</Text>
-            </View>
-            <View style={styles.cameraContainer}>
-              <Image source={require('../assets/cam.png')} style={[styles.cameraIcon]} />
-              <Text style={styles.frText}>RR Corner</Text>
-            </View>
-          </SafeAreaView>
-          <SafeAreaView style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <View style={styles.cameraContainer}>
-              <Image source={require('../assets/cam.png')} style={[styles.cameraIcon]} />
-              <Text style={styles.frText}>FL Corner</Text>
-            </View>
-            <View style={styles.cameraContainer}>
-              <Image source={require('../assets/cam.png')} style={[styles.cameraIcon]} />
-              <Text style={styles.frText}>RL Corner</Text>
-            </View>
-          </SafeAreaView>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <TouchableOpacity onPress={() => {
+              selectImage('img_front_right');
+            }}>
+              <View style={styles.cameraContainer}>
+                <Image source={require('../assets/cam.png')} style={styles.cameraIcon} />
+                <Image source={{ uri: images['img_front_right'] }} style={styles.imagePreview} />
+                <Text style={styles.cameraText}>FR Corner</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => {
+              selectImage('img_rear_right');
+            }}>
+              <View style={styles.cameraContainer}>
+                <Image source={require('../assets/cam.png')} style={styles.cameraIcon} />
+                <Image source={{ uri: images['img_rear_right'] }} style={styles.imagePreview} />
+                <Text style={styles.cameraText}>RR Corner</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <TouchableOpacity onPress={() => {
+              selectImage('img_front_left');
+            }}>
+              <View style={styles.cameraContainer}>
+                <Image source={require('../assets/cam.png')} style={styles.cameraIcon} />
+                <Image source={{ uri: images['img_front_left'] }} style={styles.imagePreview} />
+                <Text style={styles.cameraText}>FL Corner</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => {
+              selectImage('img_rear_left');
+            }}>
+              <View style={styles.cameraContainer}>
+                <Image source={require('../assets/cam.png')} style={styles.cameraIcon} />
+                <Image source={{ uri: images['img_rear_left'] }} style={styles.imagePreview} />
+                <Text style={styles.cameraText}>RL Corner</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+
+
+          <Text style={[styles.exteriortext, { marginTop: 30 }]}>Interiror Images</Text>
+
+
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <TouchableOpacity onPress={() => {
+              selectImage('img_interior_1');
+            }}>
+              <View style={styles.cameraContainer}>
+                <Image source={require('../assets/cam.png')} style={styles.cameraIcon} />
+                <Image source={{ uri: images['img_interior_1'] }} style={styles.imagePreview} />
+                <Text style={styles.cameraText}>FR Corner</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => {
+              selectImage('img_interior_2');
+            }}>
+              <View style={styles.cameraContainer}>
+                <Image source={require('../assets/cam.png')} style={styles.cameraIcon} />
+                <Image source={{ uri: images['img_interior_2'] }} style={styles.imagePreview} />
+                <Text style={styles.cameraText}>RR Corner</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <TouchableOpacity onPress={() => {
+              selectImage('img_interior_3');
+            }}>
+              <View style={styles.cameraContainer}>
+                <Image source={require('../assets/cam.png')} style={styles.cameraIcon} />
+                <Image source={{ uri: images['img_interior_3'] }} style={styles.imagePreview} />
+                <Text style={styles.cameraText}>FL Corner</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => {
+              selectImage('img_interior_4');
+            }}>
+              <View style={styles.cameraContainer}>
+                <Image source={require('../assets/cam.png')} style={styles.cameraIcon} />
+                <Image source={{ uri: images['img_interior_4'] }} style={styles.imagePreview} />
+                <Text style={styles.cameraText}>RL Corner</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-  
+
         <SafeAreaView style={styles.back_draft}>
 
           <View style={styles.buttonContainer}>
@@ -191,213 +268,218 @@ function CreateApplicationImageScreen(props) {
       </LinearGradient>
     </View>
 
-    );
-}
+  );
+};
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'flex-start',
-      backgroundColor: '#DCF3E8',
-  
-    },
-    background: {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-      maxHeight: 130,
-      borderRadius: 20,
-  
-    },
-  
-  
-    back_draft: {
-      paddingHorizontal: 20,
-      borderRadius: 10,
-      width: '100%',
-      marginTop:20,
-    },
-  
-  
-  
-  
-  
-  
-    buttonContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      // marginTop: 20,
-  
-    },
-  
-    button: {
-      borderRadius: 5,
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      borderRadius: 10,
-      width: '38%',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  
-  
-    buttonText: {
-      color: '#fff',
-    },
-  
-    progressBar1: {
-      height: 8,
-      width: 110,
-      borderRadius: 5,
-      marginLeft: 5
-  
-    },
-    progressBar2: {
-      height: 8,
-      width: 110,
-      borderRadius: 5,
-      marginLeft: 8
-  
-  
-    },
-    progressBar3: {
-      height: 8,
-      width: 110,
-  
-      borderRadius: 5,
-      marginLeft: 11
-  
-    },
-  
-  
-    progressContainer: {
-      flexDirection: 'row',
-      paddingHorizontal: 22,
-      marginTop: 40,
-      justifyContent: 'flex-end',
-    },
-  
-    progressText: {
-      position: 'absolute',
-      bottom: 10,
-      alignSelf: 'center',
-      backgroundColor: 'transparent',
-      color: '#fff',
-    },
-  
-  
-    header: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      paddingHorizontal: 20,
-      paddingTop: 20,
-    },
-    iconContainer: {
-      flexDirection: 'row',
-  
-    },
-    icon: {
-      marginLeft: 10,
-  
-    },
-  
-    bottomContainer: {
-      position: 'absolute',
-      bottom: 1,
-      left: -20,
-      right: 0,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      paddingHorizontal: 80,
-  
-  
-  
-    },
-    bottomRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-  
-    },
-    bottomText1: {
-      color: '#fff',
-      marginRight: 10,
-    },
-  
-    bottomText2: {
-      color: '#fff',
-      marginRight: 1,
-    },
-  
-  
-  
-    backgroundColorWrapper: {
-      backgroundColor: '#E5E5E5',
-  
-    },
-  
-  
-    backgroundColorWrapper1: {
-      backgroundColor: '#E5E5E5',
-      padding: 8,
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 0,
-      borderBottomLeftRadius: 10,
-      borderBottomRightRadius: 0,
-      width: 45,
-  
-    },
-  
-    backgroundColorWrapper2: {
-      backgroundColor: '#FFFFFF',
-      padding: 8,
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 10,
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 10,
-      width: 45,
-  
-    },
-  
-    exteriortext: {
-      marginTop: 80,
-      left: 20,
-      color: '#079BB7',
-  
-    },
-  
-    cameraIcon: {
-      marginTop: 10,
-      borderRadius: 10,
-      width: 50,
-      height: 50,
-      tintColor: '#C9C9C9',
-  
-  
-  
-    },
-  
-  
-    frText: {
-      marginLeft: -2,
-      color: '#C9C9C9',
-      fontSize: 13,
-      fontWeight: 'bold',
-    },
-  
-    cameraContainer: {
-      marginHorizontal: 'auto',
-      backgroundColor: 'white',
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      marginTop: 25,
-      borderRadius: 25,
-      borderWidth: 1,
-      width:100,
-      alignItems: 'center',
-      borderColor: 'grey'
-    }
-  
-  });
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    backgroundColor: '#DCF3E8',
+
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    maxHeight: 130,
+    borderRadius: 20,
+
+  },
+
+
+  back_draft: {
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    width: '100%',
+    marginTop: 20,
+  },
+
+
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // marginTop: 20,
+
+  },
+
+  button: {
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    width: '38%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+
+  buttonText: {
+    color: '#fff',
+  },
+
+  progressBar1: {
+    height: 8,
+    width: 110,
+    borderRadius: 5,
+    marginLeft: 5
+
+  },
+  progressBar2: {
+    height: 8,
+    width: 110,
+    borderRadius: 5,
+    marginLeft: 8
+
+
+  },
+  progressBar3: {
+    height: 8,
+    width: 110,
+
+    borderRadius: 5,
+    marginLeft: 11
+
+  },
+
+
+  progressContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 22,
+    marginTop: 40,
+    justifyContent: 'flex-end',
+  },
+
+  progressText: {
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
+    color: '#fff',
+  },
+
+
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+
+  },
+  icon: {
+    marginLeft: 10,
+
+  },
+
+  bottomContainer: {
+    position: 'absolute',
+    bottom: 1,
+    left: -20,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 80,
+
+
+
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+  },
+  bottomText1: {
+    color: '#fff',
+    marginRight: 10,
+  },
+
+  bottomText2: {
+    color: '#fff',
+    marginRight: 1,
+  },
+
+
+
+  backgroundColorWrapper: {
+    backgroundColor: '#E5E5E5',
+
+  },
+
+
+  backgroundColorWrapper1: {
+    backgroundColor: '#E5E5E5',
+    padding: 8,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 0,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 0,
+    width: 45,
+
+  },
+
+  backgroundColorWrapper2: {
+    backgroundColor: '#FFFFFF',
+    padding: 8,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 10,
+    width: 45,
+
+  },
+
+  exteriortext: {
+    marginTop: 80,
+    left: 20,
+    color: '#079BB7',
+
+  },
+
+  cameraIcon: {
+    marginTop: 10,
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    // tintColor: '#C9C9C9',
+
+
+
+  },
+
+
+  cameraText: {
+    marginLeft: -2,
+    color: '#C9C9C9',
+    fontSize: 13,
+    fontWeight: 'bold',
+  },
+
+  cameraContainer: {
+    marginHorizontal: 'auto',
+    backgroundColor: 'white',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginTop: 25,
+    borderRadius: 25,
+    borderWidth: 1,
+    width: 100,
+    alignItems: 'center',
+    borderColor: 'grey'
+  },
+
+  imagePreview: {
+    position: 'absolute',
+    width: "150%",
+    height: '120%',
+    resizeMode: 'cover',
+    borderRadius: 20,
+    zIndex: 2,
+  }
+
+});
 
 export default CreateApplicationImageScreen;

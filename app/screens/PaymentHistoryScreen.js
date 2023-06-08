@@ -4,7 +4,7 @@ import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Imag
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProgressBar } from 'react-native-paper';
 import colors from '../config/colors';
-
+import { SelectList } from "react-native-dropdown-select-list";
 
 function PaymentHistoryScreen(props) {
   const progress1 = 1; // Set the progress value between 0 and 1
@@ -28,6 +28,16 @@ function PaymentHistoryScreen(props) {
   const handleSwitch2Toggle = () => {
     setSwitch2Value((prevValue) => !prevValue);
   };
+
+
+  const [selected, setSelected] = React.useState("");
+
+  const datasortbyun_paid = [
+    { key: "1", value: "Paid" },
+    { key: "2", value: "Unpaid" },
+
+
+  ];
 
   return (
     <View style={styles.container}>
@@ -73,7 +83,18 @@ function PaymentHistoryScreen(props) {
 
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 30 }}>
-        <Text style={{ textAlign: 'left', fontSize: 15, color: '#000000', fontWeight: 600, top: 10 }}>Sort By Unpiad </Text>
+
+        <SelectList
+          placeholder="Sort By Unpaid "
+          setSelected={(val) => setSelected(val)}
+          data={datasortbyun_paid}
+          save="value"
+          boxStyles={{ borderColor: '#DDF4E9' }}
+          inputStyles={{ color: "#23A29F" }}
+          dropdownStyles={{ borderColor: 'white' }}
+          dropdownTextStyles={{ color: "#23A29F" }}
+        />
+
         <Text style={{ textAlign: 'left', fontSize: 15, color: '#000000', fontWeight: 600, top: 10 }}>Remaining Payments: 2/5</Text>
       </View>
 
@@ -495,7 +516,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
     justifyContent: 'space-between',
-    marginBottom: 10
+    marginBottom: 10,
 
   },
 

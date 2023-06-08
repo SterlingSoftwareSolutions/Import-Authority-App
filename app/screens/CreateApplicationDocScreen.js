@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ProgressBar } from 'react-native-paper';
-
+import colors from '../config/colors';
+import * as FileSystem from 'expo-file-system';
+import * as DocumentPicker from 'expo-document-picker';
 
 function CreateApplicationDocScreen(props) {
     const progress1 = 1; // Set the progress value between 0 and 1
@@ -27,6 +29,21 @@ function CreateApplicationDocScreen(props) {
     const handleSwitch1Toggle = () => {
         setSwitch1Value((prevValue) => !prevValue);
     };
+
+    const [docs, setDocs] = useState({})
+
+    const selectDocs = async (key) => {
+
+        const picker = await DocumentPicker.getDocumentAsync();
+        if (!picker.canceled) {
+            setDocs(docs => ({
+                ...docs,
+                [key]: picker.uri
+            }));
+        }
+    };
+
+
     return (
         <View style={styles.container}>
             <LinearGradient
@@ -106,21 +123,29 @@ function CreateApplicationDocScreen(props) {
                 <View>
                     <Text style={[styles.exteriortext, { marginTop: 60 }]}>Documents</Text>
 
-                    <SafeAreaView style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                        <View style={styles.cameraContainer}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                        <TouchableOpacity style={styles.cameraContainer}
+                            onPress={() => {
+                                selectDocs('doc_invoice')
+                            }}>
                             <Image source={require('../assets/document.png')} style={[styles.cameraIcon]} />
                             <Text style={styles.frText}>Invoice</Text>
-                        </View>
-                        <View style={styles.cameraContainer}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.cameraContainer}
+                            onPress={() => {
+                                selectDocs('doc_invoice')
+                            }}>
                             <Image source={require('../assets/document.png')} style={[styles.cameraIcon]} />
                             <Text style={styles.frText}>Export Certificate</Text>
-                        </View>
-                    </SafeAreaView>
+                        </TouchableOpacity>
+                    </View>
                     <SafeAreaView style={{ flexDirection: 'row', marginLeft: 46 }}>
-                        <View style={styles.cameraContainer}>
+                        <TouchableOpacity style={styles.cameraContainer} onPress={() => {
+                            selectDocs('doc_invoice')
+                        }}>
                             <Image source={require('../assets/document.png')} style={[styles.cameraIcon]} />
                             <Text style={styles.frText}>Auction Report</Text>
-                        </View>
+                        </TouchableOpacity>
 
                     </SafeAreaView>
                 </View>
