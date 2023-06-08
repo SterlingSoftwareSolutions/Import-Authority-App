@@ -13,7 +13,7 @@ function TopUserControlBg({children}) {
       end={{ x: 1, y: 0 }}>
       <View>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <TouchableOpacity onPress={() => handleNotificationPress()} >
+          <TouchableOpacity>
             <Image source={require('../assets/bell.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() =>

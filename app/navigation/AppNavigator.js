@@ -18,8 +18,8 @@ const AppNavigator = () => (
       style: styles.tabBar,
       tabStyle: styles.tab,
       showLabel: false,
+      keyboardHidesTabBar:true
     }}
-    keyboardHidesTabBar={true}
   >
     <Tab.Screen
       name="Home"
