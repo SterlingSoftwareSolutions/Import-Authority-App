@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   Text,
+  ScrollView,
 } from "react-native";
 import * as Yup from "yup";
 import { LinearGradient } from "expo-linear-gradient";
@@ -180,7 +181,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   gradient: {
-    flex: 1,
+    width: "100%",
+    height: 620,
+    borderBottomRightRadius: 30,
+    borderBottomLeftRadius: 30,
   },
   gradientBackground: {
     position: "absolute",
@@ -189,7 +193,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     width: "100%",
-    height: "100%",
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
   },
@@ -200,26 +203,23 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 70,
   },
   displayPic: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-    height: "80%",
+    position: 'absolute',
+    height: 450,
     width: "100%",
-    position: "relative",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
+    paddingHorizontal: 0
   },
   content: {
     flex: 2,
     alignItems: "center",
-    justifyContent: "center",
   },
   logo: {
+    marginTop: 50,
+    marginBottom: 150,
     width: 170,
     height: 45,
     resizeMode: "contain",
-    position: "absolute",
-    top: 50,
   },
   overlay: {
     top: 120,
