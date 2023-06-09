@@ -3,16 +3,17 @@ import {
   ImageBackground,
   SafeAreaView,
   StyleSheet,
+  TextInput,
   View,
   Image,
   TouchableOpacity,
   Text,
   ScrollView,
 } from "react-native";
-import * as Yup from "yup";
 import { LinearGradient } from "expo-linear-gradient";
-
 import colors from "../config/colors";
+import * as Yup from "yup";
+
 import {
   ErrorMessage,
   AppForm,
@@ -22,26 +23,25 @@ import {
 import useApi from "../hooks/useApi";
 import usersApi from "../api/users";
 import authApi from "../api/auth";
-import useAuth from "../auth/useAuth";
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required().label("Name"),
-  businessname: Yup.string().required().label("Business Name"),
-  username: Yup.string().required().label("User Name"),
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(8).label("Password"),
-  phone: Yup.string()
-    .required()
-    .matches(/^\d+$/, "Phone number must be numeric")
-    .label("Phone"),
-    password_confirmation: Yup.string()
-    .required()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
-    .label("Confirm Password"),
-});
+    name: Yup.string().required().label("Name"),
+    businessname: Yup.string().required().label("Business Name"),
+    username: Yup.string().required().label("User Name"),
+    email: Yup.string().required().email().label("Email"),
+    password: Yup.string().required().min(8).label("Password"),
+    phone: Yup.string()
+      .required()
+      .matches(/^\d+$/, "Phone number must be numeric")
+      .label("Phone"),
+      password_confirmation: Yup.string()
+      .required()
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .label("Confirm Password"),
+  });
 
-function SignupScreen() {
-  const registerApi = useApi(usersApi.register);
+const SignupScreen = (props) => {
+    const registerApi = useApi(usersApi.register);
   const loginApi = useApi(authApi.login);
   const auth = useAuth();
   const { user } = useAuth();
@@ -65,27 +65,26 @@ function SignupScreen() {
     );
     auth.logIn(authToken , user);
   };
-
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.gradient}>
-        <LinearGradient
-          colors={["#8FBF45", "#079BB7"]}
-          style={styles.gradientBackground}
-          start={{ x: 0.5, y: 0.5 }}
-          end={{ x: 1, y: 1 }}
-        />
-        <View style={styles.displayPicWrapper}>
-          <ImageBackground
-            source={require("../assets/displaypic.jpg")}
-            style={styles.displayPic}
-          >
-            <View style={styles.content}>
-              <Image
-                style={styles.logo}
-                source={require("../assets/ImportAuthorityLogo.jpg")}
-              />
-              <View style={styles.overlay}>
+      <ScrollView>
+        <View style={styles.gradient}>
+          <LinearGradient
+            colors={["#8FBF45", "#079BB7"]}
+            style={styles.gradientBackground}
+            start={{ x: 0.5, y: 0.5 }}
+            end={{ x: 1, y: 1 }}
+          />
+          <View style={styles.displayPicWrapper}>
+            <View>
+              <View style={styles.content}>
+                <Image source={require("../assets/displaypic.jpg")}
+                  style={styles.displayPic} />
+                <Image
+                  style={styles.logo}
+                  source={require("../assets/ImportAuthorityLogo.jpg")}
+                />
+                <View style={styles.overlay}>
                 <AppForm
                   initialValues={{
                     name: "",
@@ -148,36 +147,47 @@ function SignupScreen() {
                   />
                   <SubmitButton title="SIGNUP" />
                 </AppForm>
+                </View>
               </View>
+              <View style={styles.overlay} />
             </View>
-            <View style={styles.overlay} />
-          </ImageBackground>
+          </View>
         </View>
-      </View>
-      <TouchableOpacity style={styles.acceptTermsContainer}>
-        <View style={styles.checkbox} />
-        <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
-      </TouchableOpacity>
-      <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>
-          Already have an Account?{" "}
-          <Text style={styles.signupText}> LOGIN </Text>
-        </Text>
+        {/* <TouchableOpacity style={styles.acceptTermsContainer}>
+          <View style={styles.checkbox} />
+          <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
+        </TouchableOpacity> */}
+        {/* <LinearGradient
+          colors={["#8FBF45", "#079BB7"]}
+          style={styles.buttonContainer}
+          start={{ x: 0.1, y: 0.5 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <TouchableOpacity style={styles.signupButton}>
+            <Text style={styles.buttonText}>SIGN UP</Text>
+          </TouchableOpacity>
+        </LinearGradient> */}
         <View style={styles.footerContainer}>
-          <Text style={styles.footerText}>Import Authority</Text>
-          <Text style={styles.footerText}>All rights reserved</Text>
-          <Text style={styles.footerTextTerms}>
-            Terms of use | Privacy Policy
+          <Text style={styles.footerText}>
+            Already have an Account?{" "}
+            <Text style={styles.signupText}> LOGIN </Text>
           </Text>
+          <View style={styles.footerContainer}>
+            <Text style={styles.footerText}>Import Authority</Text>
+            <Text style={styles.footerText}>All rights reserved</Text>
+            <Text style={styles.footerTextTerms}>
+              Terms of use | Privacy Policy
+            </Text>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 3,
+    flex: 1,
     backgroundColor: colors.white,
   },
   gradient: {
@@ -197,7 +207,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
   },
   displayPicWrapper: {
-    flex: 2,
+    flex: 1,
     overflow: "hidden",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
@@ -210,8 +220,10 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 70,
     paddingHorizontal: 0
   },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)"
+  },
   content: {
-    flex: 2,
     alignItems: "center",
   },
   logo: {
@@ -222,11 +234,9 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   overlay: {
-    top: 120,
     paddingHorizontal: 10,
     borderRadius: 15,
-    width: "90%",
-    alignItems: "center",
+    width: "80%",
   },
   input: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -254,6 +264,27 @@ const styles = StyleSheet.create({
   acceptTermsText: {
     fontSize: 10,
   },
+  buttonContainer: {
+    width: "50%",
+    height: 41,
+    borderRadius: 15,
+    marginTop: 10,
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  signupButton: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "transparent",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
   footerContainer: {
     alignItems: "center",
     marginTop: 10,
@@ -275,4 +306,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen;
+export default SignupScreen;
+
