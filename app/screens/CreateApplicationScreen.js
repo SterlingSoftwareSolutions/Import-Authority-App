@@ -10,51 +10,26 @@ import {
   Text,
   Image,
   Switch,
-  ScrollView
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { ProgressBar } from "react-native-paper";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import DropDownPicker from "react-native-dropdown-picker";
-import { SelectList } from "react-native-dropdown-select-list";
-import colors from "../config/colors";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  View,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Text,
-  Image,
-  Switch,
   ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
 import { SelectList } from "react-native-dropdown-select-list";
 import colors from "../config/colors";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import client from "../api/client";
-
-const CreateApplicationScreen = () => {
-  const endpoint = "/applications";
+import { useNavigation } from "@react-navigation/native";
+import TopUserControlBg from "../components/TopUserControlBg";
 
 const CreateApplicationMain = () => {
+  const endpoint = "/applications";
+  const navigation = useNavigation();
 
   const progress1 = 1; // Set the progress value between 0 and 1
   const progress2 = 0;
   const progress3 = 0;
-
-  const x = 0.5; // Set the x-coordinate (between 0 and 1)
-  const y = 1; // Set the y-coordinate (between 0 and 1)
-
-  const blueColor = `rgba(128, 253, 128, ${x})`; // Calculate blue color with transparency based on x
-  const greenColor = `rgba(16, 188, 163, ${y})`; // Calculate green color with transparency based on y
 
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
@@ -71,12 +46,19 @@ const CreateApplicationMain = () => {
     setSwitch2Value((prevValue) => !prevValue);
   };
 
-  const [selectedValue, setSelectedValue] = useState(null);
-  const [makesOpen, setMakesOpen] = useState(false);
-
   const [selected, setSelected] = React.useState("");
+  const [selectedMake, setSelectedMake] = useState("");
+  const [selectedModel, setSelectedModel] = useState("");
+  const [selectedBuildMonth, setSelectedBuildMonth] = useState("");
+  const [selectedBuildYear, setSelectedBuildYear] = useState("");
+  const [selectedFuelType, setSelectedFuelType] = useState("");
+  const [selectedTransmission, setSelectedTransmission] = useState("");
+  const [selectedBodyType, setSelectedBodyType] = useState("");
+  const [selectedDriveType, setSelectedDriveType] = useState("");
 
-  { /Make/ }
+  {
+    /Make/;
+  }
 
   const datamake = [
     { key: "1", value: "Toyota" },
@@ -91,7 +73,9 @@ const CreateApplicationMain = () => {
     { key: "10", value: "Waleed" },
   ];
 
-  { /Model/ }
+  {
+    /Model/;
+  }
   const datamodel = [
     { key: "1", value: "Toyota" },
     { key: "2", value: "Nissan" },
@@ -105,7 +89,9 @@ const CreateApplicationMain = () => {
     { key: "10", value: "Waleed" },
   ];
 
-  { /Build Month/ }
+  {
+    /Build Month/;
+  }
 
   const databuildmonth = [
     { key: "1", value: "January" },
@@ -122,8 +108,9 @@ const CreateApplicationMain = () => {
     { key: "12", value: "December" },
   ];
 
-
-  { /Build Year/ }
+  {
+    /Build Year/;
+  }
   const last = 1886;
   const now = new Date().getFullYear();
   const databuildyear = [];
@@ -132,9 +119,9 @@ const CreateApplicationMain = () => {
     databuildyear.push({ key: i, value: i });
   }
 
-
-
-  { /Fuel Type/ }
+  {
+    /Fuel Type/;
+  }
 
   const databuildfueltype = [
     { key: "1", value: "Petrol" },
@@ -142,12 +129,11 @@ const CreateApplicationMain = () => {
     { key: "3", value: "Hybrid(Petrol/Electric)" },
     { key: "4", value: "Hybrid(Diesel/Electric)" },
     { key: "5", value: "Electric" },
-
   ];
 
-
-
-  { /Transmission/ }
+  {
+    /Transmission/;
+  }
 
   const datatransmission = [
     { key: "1", value: "Manual" },
@@ -155,7 +141,9 @@ const CreateApplicationMain = () => {
     { key: "3", value: "Other" },
   ];
 
-  { /Body Type/ }
+  {
+    /Body Type/;
+  }
 
   const databodytype = [
     { key: "1", value: "HatchBack" },
@@ -168,7 +156,9 @@ const CreateApplicationMain = () => {
     { key: "7", value: "Other" },
   ];
 
-  { /Drive type/ }
+  {
+    /Drive type/;
+  }
   const datadrivetype = [
     { key: "1", value: "FWD" },
     { key: "2", value: "RWD" },
@@ -176,7 +166,9 @@ const CreateApplicationMain = () => {
     { key: "4", value: "AWD" },
   ];
 
-  { /Date Picker/ }
+  {
+    /Date Picker/;
+  }
   const [datePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -194,9 +186,9 @@ const CreateApplicationMain = () => {
     setDatePickerVisibility(false);
   };
 
-
-
-  { /Approval Type Switch / }
+  {
+    /Approval Type Switch /;
+  }
 
   const [approvalType, setApprovalType] = useState(0);
 
@@ -208,313 +200,312 @@ const CreateApplicationMain = () => {
     }
   };
 
-
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={[colors.secondary, colors.primary]} // Set the starting and ending colors for the gradient
-        style={styles.background}
-      >
-        <View style={styles.header}>
-          <View style={styles.iconContainer}>
-            <TouchableOpacity
-              onPress={() => handleNotificationPress()}
-              style={styles.iconButton}
-            >
-              <Image
-                source={require("../assets/bell.png")}
-                style={[
-                  styles.icon,
-                  { width: 24, height: 24, tintColor: "#fff" },
-                ]}
-              />
-
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleLogoutPress()}
-              style={styles.iconButton}
-            >
-              <Image
-                source={require("../assets/money.png")}
-                style={[
-                  styles.icon,
-                  { width: 24, height: 24, tintColor: "#fff" },
-                ]}
-              />
-
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleTransactionPress()}
-              style={styles.iconButton}
-            >
-              <Image
-                source={require("../assets/user.png")}
-                style={[
-                  styles.icon,
-                  { width: 24, height: 24, tintColor: "#fff" },
-                ]}
-              />
-
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText1}
-              onChangeText={setProgressText1}
-              placeholder="Car Info"
-              placeholderTextColor="#fff"
-            />
-            <ProgressBar
-              progress={progress1}
-              color="#000"
-              style={styles.progressBar1}
-            />
-          </View>
-
-          <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText2}
-              onChangeText={setProgressText2}
-              placeholder="Documents"
-              placeholderTextColor="#fff"
-            />
-            <ProgressBar
-              progress={progress2}
-              color="#079BB7"
-              style={styles.progressBar2}
-            />
-          </View>
-
-          <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText3}
-              onChangeText={setProgressText3}
-              placeholder="Payment"
-              placeholderTextColor="#fff"
-            />
-            <ProgressBar
-              progress={progress3}
-              color="#079BB7"
-              style={styles.progressBar3}
-            />
-          </View>
-        </View>
-
-        <TouchableWithoutFeedback
-          onPress={switchApprovalType}>
-          <View
-            style={styles.bottomContainer}>
-            <View style={styles.bottomRow}>
-              <Text style={styles.bottomText1}>SEVs / RAWs</Text>
-
-              <View style={[styles.backgroundColorWrapper1, approvalType == 0 && styles.switchItemSelected]}>
-                <Image
-                  source={require("../assets/car1.png")}
-                  style={styles.carIcon1}
+    <Formik
+      initialValues={{
+        chassisNumber: "",
+        make: "",
+        model: "",
+        buildMonth: "",
+        buildYear: "",
+        fuelType: "",
+        transmission: "",
+        bodyType: "",
+        driveType: "",
+        odometer: "",
+      }}
+      onSubmit={(values) => {
+        client
+          .post(endpoint, values)
+          .then((response) => {
+            console.log(response.data);
+            // Perform any other actions or update the UI as needed
+          })
+          .catch((error) => {
+            // Handle any errors that occurred during the API request
+            console.error(error);
+            // Display an error message or perform error handling as needed
+          });
+      }}
+      validationSchema={Yup.object().shape({
+        chassisNumber: Yup.string().required(
+          "Chassis/Frame Number is required"
+        ),
+        make: Yup.string().required("Make is required"),
+        model: Yup.string().required("Model is required"),
+        buildMonth: Yup.string().required("Build Month is required"),
+        buildYear: Yup.string().required("Build Year is required"),
+        fuelType: Yup.string().required("Fuel Type is required"),
+        transmission: Yup.string().required("Transmission is required"),
+        bodyType: Yup.string().required("Body Type is required"),
+        driveType: Yup.string().required("Drive Type is required"),
+        odometer: Yup.string().required("Odometer is required"),
+      })}
+    >
+      {({ handleChange, handleSubmit, values, errors }) => (
+        <View style={styles.container}>
+          <TopUserControlBg>
+            {/* step progress container */}
+            <View style={styles.progressContainer}>
+              <View style={styles.progressBarWrapper}>
+                <TextInput
+                  style={[styles.headingText, styles.progressText]}
+                  value={progressText1}
+                  onChangeText={setProgressText1}
+                  placeholder="Car Info"
+                  placeholderTextColor="#fff"
                 />
-              </View>
-            </View>
-            <View style={styles.bottomRow}>
-              <View style={[styles.backgroundColorWrapper2, approvalType == 1 && styles.switchItemSelected]}>
-                <Image
-                  source={require("../assets/car2.png")}
-                  style={styles.carIcon2}
+                <ProgressBar
+                  progress={progress1}
+                  color="#000"
+                  style={styles.progressBar1}
                 />
               </View>
 
-              <Text style={styles.bottomText2}>Old Vehicle</Text>
+              <View style={styles.progressBarWrapper}>
+                <TextInput
+                  style={[styles.headingText, styles.progressText]}
+                  value={progressText2}
+                  onChangeText={setProgressText2}
+                  placeholder="Documents"
+                  placeholderTextColor="#fff"
+                />
+                <ProgressBar
+                  progress={progress2}
+                  color="#079BB7"
+                  style={styles.progressBar2}
+                />
+              </View>
+
+              <View style={styles.progressBarWrapper}>
+                <TextInput
+                  style={[styles.headingText, styles.progressText]}
+                  value={progressText3}
+                  onChangeText={setProgressText3}
+                  placeholder="Payment"
+                  placeholderTextColor="#fff"
+                />
+                <ProgressBar
+                  progress={progress3}
+                  color="#079BB7"
+                  style={styles.progressBar3}
+                />
+              </View>
             </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </LinearGradient>
+            {/* Switch container */}
+            <TouchableWithoutFeedback onPress={switchApprovalType}>
+              <View style={styles.bottomContainer}>
+                <View style={styles.bottomRow}>
+                  <Text style={styles.bottomText1}>SEVs / RAWs</Text>
+                  <View
+                    style={[
+                      styles.backgroundColorWrapper1,
+                      approvalType == 0 && styles.switchItemSelected,
+                    ]}
+                  >
+                    <Image
+                      source={require("../assets/car1.png")}
+                      style={styles.carIcon1}
+                    />
+                  </View>
+                </View>
+                <View style={styles.bottomRow}>
+                  <View
+                    style={[
+                      styles.backgroundColorWrapper2,
+                      approvalType == 1 && styles.switchItemSelected,
+                    ]}
+                  >
+                    <Image
+                      source={require("../assets/car2.png")}
+                      style={styles.carIcon2}
+                    />
+                  </View>
 
-      <SafeAreaView style={styles.formContainer}>
-        <ScrollView contentContainerStyle={{ marginTop: 10, paddingBottom: 30 }}>
-          <TextInput
-            style={[styles.input, styles.usernameInput, { marginTop: 10 }]}
-            placeholder="Chassis/ Frame Number *"
-            placeholderTextColor="#23A29F"
-          />
-
-          <TouchableOpacity onPress={() => {
-            showDatePicker();
-          }} >
-            <TextInput
-              style={[styles.input, styles.usernameInput]}
-              placeholder="Estimated Date of Arrival *"
-              placeholderTextColor="#23A29F"
-              value={selectedDate}
-              editable={false}
-            />
-          </TouchableOpacity>
-
-          <DateTimePickerModal
-            isVisible={datePickerVisible}
-            mode="date"
-            onConfirm={confirmDatePicker}
-            onCancel={hideDatePicker}
-          />
-
-          <View style={[styles.dropdown]}>
-            <SelectList
-              placeholder="Make *"
-              setSelected={(val) => setSelected(val)}
-              data={datamake}
-              save="value"
-              boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
-              dropdownStyles={{ ...styles.dropDownListStyle }}
-              dropdownTextStyles={{ color: "#23A29F" }}
-              search={false}
-
-            />
-          </View>
-
-          <View style={[styles.dropdown]}>
-            <SelectList
-              placeholder="Model *"
-              setSelected={(val) => setSelected(val)}
-              data={datamodel}
-              save="value"
-              boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
-              dropdownStyles={{ ...styles.dropDownListStyle }}
-              dropdownTextStyles={{ color: "#23A29F" }}
-            />
-          </View>
-
-
-          <View style={[styles.dropdown]}>
-            <SelectList
-              placeholder="Build Month *"
-              setSelected={(val) => setSelected(val)}
-              data={databuildmonth}
-              save="value"
-              boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
-              dropdownStyles={{ ...styles.dropDownListStyle }}
-              dropdownTextStyles={{ color: "#23A29F" }}
-            />
-          </View>
-
-          <View style={[styles.dropdown, {}]}>
-            <SelectList
-              placeholder="Build Year *"
-              setSelected={(val) => setSelected(val)}
-              data={databuildyear}
-              save="value"
-              boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
-              dropdownStyles={{ ...styles.dropDownListStyle }}
-              dropdownTextStyles={{ color: "#23A29F" }}
-            />
-          </View>
-
-          <View style={[styles.dropdown]}>
-            <SelectList
-              placeholder="Fuel Type *"
-              setSelected={(val) => setSelected(val)}
-              data={databuildfueltype}
-              save="value"
-              boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
-              dropdownStyles={{ ...styles.dropDownListStyle }}
-              dropdownTextStyles={{ color: "#23A29F" }}
-            />
-          </View>
-
-          <View style={[styles.dropdown]}>
-            <SelectList
-              placeholder="Transmisson *"
-              setSelected={(val) => setSelected(val)}
-              data={datatransmission}
-              save="value"
-              boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
-              dropdownStyles={{ ...styles.dropDownListStyle }}
-              dropdownTextStyles={{ color: "#23A29F" }}
-            />
-          </View>
-
-          <View style={[styles.dropdown]}>
-            <SelectList
-              placeholder="Body Type *"
-              setSelected={(val) => setSelected(val)}
-              data={databodytype}
-              save="value"
-              boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
-              dropdownStyles={{ ...styles.dropDownListStyle }}
-              dropdownTextStyles={{ color: "#23A29F" }}
-            />
-          </View>
-
-          <View style={[styles.dropdown]}>
-            <SelectList
-              placeholder="Drive Type *"
-              setSelected={(val) => setSelected(val)}
-              data={datadrivetype}
-              save="value"
-              boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
-              dropdownStyles={{ ...styles.dropDownListStyle }}
-              dropdownTextStyles={{ color: "#23A29F" }}
-            />
-          </View>
-
-          <View>
-            <TextInput
-              style={[styles.input, styles.usernameInput, {}]}
-              placeholder="Odometer *"
-              placeholderTextColor="#23A29F"
-
-            />
-
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <LinearGradient
-              colors={["#4B4B4B", "#9F9F9F"]} // Define the colors for the gradient (ash to lighter ash)
-              locations={[0, 1]} // Define the gradient color stops
-              start={{ x: 0.2, y: 0.5 }} // Define the start position (top-left)
-              end={{ x: 1, y: 1 }} // Define the end position (top-right)
-              style={styles.button}
+                  <Text style={styles.bottomText2}>Old Vehicle</Text>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </TopUserControlBg>
+          <SafeAreaView style={styles.formContainer}>
+            <ScrollView
+              contentContainerStyle={{ marginTop: 10, paddingBottom: 180 }}
             >
-              <TouchableOpacity>
-                <Text style={styles.buttonText}>Draft</Text>
+              <TextInput
+                style={[styles.input, styles.usernameInput, { marginTop: 10 }]}
+                placeholder="Chassis/ Frame Number *"
+                value={values.chassisNumber}
+                placeholderTextColor="#23A29F"
+                onChangeText={handleChange("chassisNumber")}
+              />
+              <DateTimePickerModal
+                isVisible={datePickerVisible}
+                mode="date"
+                onConfirm={confirmDatePicker}
+                onCancel={hideDatePicker}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  showDatePicker();
+                }}
+              >
+                <TextInput
+                  style={[styles.input, styles.usernameInput]}
+                  placeholder="Estimated Date of Arrival *"
+                  placeholderTextColor="#23A29F"
+                  value={selectedDate}
+                  editable={false}
+                />
               </TouchableOpacity>
-            </LinearGradient>
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Make *"
+                  setSelected={setSelectedMake}
+                  data={datamake}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                  search={false}
+                />
+              </View>
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Model *"
+                  setSelected={setSelectedModel}
+                  data={datamodel}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Build Month *"
+                  setSelected={setSelectedBuildMonth}
+                  data={databuildmonth}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
+              <View style={[styles.dropdown, {}]}>
+                <SelectList
+                  placeholder="Build Year *"
+                  setSelected={setSelectedBuildYear}
+                  data={databuildyear}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
 
-            <LinearGradient
-              colors={["#77B859", "#2DA596"]}
-              locations={[0, 1]}
-              start={{ x: 0.2, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.button}
-            >
-              <TouchableOpacity>
-                <Text style={styles.buttonText}>Next</Text>
-              </TouchableOpacity>
-            </LinearGradient>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Fuel Type *"
+                  setSelected={setSelectedFuelType}
+                  data={databuildfueltype}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
 
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Transmisson *"
+                  setSelected={setSelectedTransmission}
+                  data={datatransmission}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
 
-      <StatusBar style="auto" />
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Body Type *"
+                  setSelected={setSelectedBodyType}
+                  data={databodytype}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
 
+              <View style={[styles.dropdown]}>
+                <SelectList
+                  placeholder="Drive Type *"
+                  setSelected={setSelectedDriveType}
+                  data={datadrivetype}
+                  save="value"
+                  boxStyles={styles.dropdownBox}
+                  inputStyles={{ color: "#23A29F" }}
+                  dropdownStyles={{ ...styles.dropDownListStyle }}
+                  dropdownTextStyles={{ color: "#23A29F" }}
+                />
+              </View>
 
-    </View>
+              <View>
+                <TextInput
+                  style={[styles.input, styles.usernameInput, {}]}
+                  placeholder="Odometer *"
+                  placeholderTextColor="#23A29F"
+                />
+              </View>
 
+              <View style={styles.buttonContainer}>
+                <LinearGradient
+                  colors={["#4B4B4B", "#9F9F9F"]} // Define the colors for the gradient (ash to lighter ash)
+                  locations={[0, 1]} // Define the gradient color stops
+                  start={{ x: 0.2, y: 0.5 }} // Define the start position (top-left)
+                  end={{ x: 1, y: 1 }} // Define the end position (top-right)
+                  style={styles.button}
+                >
+                  <TouchableOpacity>
+                    <Text style={styles.buttonText}>Draft</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+
+                <LinearGradient
+                  colors={["#77B859", "#2DA596"]}
+                  locations={[0, 1]}
+                  start={{ x: 0.2, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.button}
+                >
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("CreateApplicationImageScreen");
+                      handleSubmit();
+                    }}
+                  >
+                    <Text style={styles.buttonText}>Next</Text>
+                  </TouchableOpacity>
+                </LinearGradient>
+              </View>
+            </ScrollView>
+          </SafeAreaView>
+          <StatusBar style="auto" />
+        </View>
+      )}
+    </Formik>
   );
 };
-};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -524,7 +515,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#DCF3E8",
   },
   background: {
-    position: "absolute",
     position: "absolute",
     left: 0,
     right: 0,
@@ -540,7 +530,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 132,
     width: "100%",
-    marginTop: 132,
+    marginTop: 12,
   },
 
   label: {
@@ -555,15 +545,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    color: 'black',
-    marginBottom: 10
+    color: "black",
+    marginBottom: 10,
   },
 
   dropdown: {
     backgroundColor: "#fff0",
     borderRadius: 10,
-    marginBottom: 10
-
+    marginBottom: 10,
   },
 
   usernameInput: {
@@ -579,10 +568,8 @@ const styles = StyleSheet.create({
   },
 
   createapplicationrowContainer: {
-
     justifyContent: "space-between",
     marginBottom: 10,
-
   },
 
   smallInput: {
@@ -594,7 +581,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-
   },
 
   button: {
@@ -638,9 +624,9 @@ const styles = StyleSheet.create({
 
   progressContainer: {
     flexDirection: "row",
-    paddingHorizontal: 22,
     marginTop: 40,
-    justifyContent: "flex-end",
+    justifyContent: "center",
+    paddingBottom: 20,
   },
 
   progressText: {
@@ -650,33 +636,24 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     color: "#fff",
   },
-
-  header: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
   iconContainer: {
     flexDirection: "row",
   },
   icon: {
     marginLeft: 10,
   },
-
   bottomContainer: {
     position: "absolute",
     bottom: 1,
-    left: -20,
     right: 0,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 80,
   },
-
   bottomRow: {
     flexDirection: "row",
     alignItems: "center",
+    alignContent: "center",
   },
   bottomText1: {
     color: "#fff",
@@ -685,7 +662,7 @@ const styles = StyleSheet.create({
 
   bottomText2: {
     color: "#fff",
-    marginRight: 1,
+    marginLeft: 20,
   },
 
   carIcon1: {},
@@ -721,17 +698,17 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
     borderRadius: 10,
-    borderColor: 'white'
+    borderColor: "white",
   },
 
   dropdownBox: {
-    backgroundColor: 'white',
-    borderColor: 'white'
+    backgroundColor: "white",
+    borderColor: "white",
   },
 
   switchItemSelected: {
-    backgroundColor: '#E5E5E5'
-  }
+    backgroundColor: "#E5E5E5",
+  },
 });
 
 export default CreateApplicationMain;

@@ -1,6 +1,16 @@
 import React from "react";
-import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import {
+  Image,
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
 import * as Yup from "yup";
 
 import Screen from "../components/Screen";
@@ -10,6 +20,7 @@ import {
   AppFormField,
   SubmitButton,
 } from "../components/forms";
+import { LinearGradient } from "expo-linear-gradient";
 import authApi from "../api/auth";
 import colors from "../config/colors";
 import { useState } from "react";
@@ -20,35 +31,28 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required().min(8).label("Password"),
 });
 
-function LoginScreen() {
+const LoginScreen = (props) => {
   const { logIn } = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
 
   const handleSubmit = async ({ username, password }) => {
-  const result = await authApi.login(username, password);
-  if (!result.ok) return setLoginFailed(true);
-  setLoginFailed(false);
-  logIn(result.data, result.data.data.user);
+    const result = await authApi.login(username, password);
+    if (!result.ok) return setLoginFailed(true);
+    setLoginFailed(false);
+    logIn(result.data, result.data.data.user);
   };
-
   return (
-    <Screen style={styles.container}>
-      <LinearGradient
-        colors={["#8FBF45", "#079BB7"]}
-        style={styles.gradient}
-        start={{ x: 0.5, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <View style={styles.content}>
-          <Image
-            style={styles.displayPic}
-            source={require("../assets/displaypic.jpg")}
-          />
-          <Image
-            style={styles.logo}
-            source={require("../assets/ImportAuthorityLogo.jpg")}
-          />
-          <View style={styles.formContainer}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <LinearGradient
+          colors={["#8FBF45", "#079BB7"]}
+          style={styles.gradient}
+          start={{ x: 0.5, y: 0.5 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.content}>
+            <Image style={styles.displayPic} source={require("../assets/displaypic.jpg")} />
+            <Image style={styles.logo} source={require("../assets/ImportAuthorityLogo.jpg")} />
             <AppForm
               initialValues={{ username: "", password: "" }}
               onSubmit={handleSubmit}
@@ -84,72 +88,79 @@ function LoginScreen() {
               <SubmitButton title="LOGIN" alignSelf="center" />
             </AppForm>
           </View>
+        </LinearGradient>
+        <View style={styles.footerContainer}>
+          <Text style={styles.footerText}>
+            Not a member? 
+            <Text style={styles.signupText}> SIGN UP</Text>
+          </Text>
+          <View style={styles.footerContainer}>
+            <Text style={styles.footerText}>Import Authority</Text>
+            <Text style={styles.footerText}>© 2023 ALL RIGHTS RESERVED</Text>
+            <Text style={styles.footerTextTerms}>Terms of use | Privacy Policy</Text>
+          </View>
         </View>
-      </LinearGradient>
-      <View style={styles.ssss}>
-        <Text style={styles.footerText}>Import Authority</Text>
-        <Text style={styles.footerText}>All rights reserved</Text>
-        <Text style={styles.footerTextTerms}>
-          Terms of use | Privacy Policy
-        </Text>
-      </View>
-    </Screen>
+      </ScrollView>
+    </SafeAreaView>
+
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.white,
   },
   gradient: {
-    flex: 3.5,
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
     paddingBottom: 20,
-
   },
-  content: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  displayPicContainer: {
+    paddingBottom: 40,
+    paddingHorizontal: 20,
+    paddingHorizontal: 0
   },
   displayPic: {
-    flex: 1,
-    height: "70%",
+    height:  400,
     width: "100%",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
+    paddingHorizontal: 0
   },
-  ssss: {
-    flex: 0.5,
-    marginTop: 120,
-  },
-
 
   logo: {
     width: 170,
     height: 45,
     resizeMode: "contain",
     position: "absolute",
-    marginTop: 50,
+    marginTop: 35,
     alignSelf: "center",
   },
-  formContainer: {
-    paddingHorizontal: 25,
-    width: "90%",
-    height: "25%",
+  inputContainer: {
+    marginTop: 10,
+    paddingHorizontal: 25
+  },
+  input: {
+    backgroundColor: "white",
+    borderRadius: 15,
+    height: 41,
+    marginBottom: 5,
+    paddingHorizontal: 10,
+    fontSize: 12,
   },
   forgotPassword: {
-    color: colors.white,
+    color: "white",
     textAlign: "right",
-    fontSize: 12,
-    paddingBottom: 10,
+    fontSize: 13,
+    marginRight:20
   },
   acceptTermsContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginLeft: 20,
+    marginTop: 20,
     alignSelf: "center",
-    top: 8,
   },
   checkbox: {
     width: 11,
@@ -161,6 +172,27 @@ const styles = StyleSheet.create({
   acceptTermsText: {
     fontSize: 10,
   },
+  buttonContainer: {
+    width: "50%",
+    height: 41,
+    borderRadius: 15,
+    marginTop: 10,
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  loginButton: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "transparent",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
   footerContainer: {
     alignItems: "center",
     marginTop: 10,
@@ -171,16 +203,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textAlign: "center",
   },
-  signupTextContainer: {
-    color: "black",
-    fontSize: 10,
-    textAlign: "center",
-    top: 10,
-  },
   signupText: {
     color: colors.primary,
-    fontSize: 10,
-    textAlign: "center",
+    fontSize: 12,
   },
   footerTextTerms: {
     color: colors.tertiary,
@@ -190,4 +215,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default LoginScreen;
+export default LoginScreen;

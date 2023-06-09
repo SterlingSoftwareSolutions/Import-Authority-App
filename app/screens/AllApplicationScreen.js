@@ -1,34 +1,10 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ProgressBar } from 'react-native-paper';
 import colors from '../config/colors';
-import { SelectList } from "react-native-dropdown-select-list";
+import TopUserControlBg from '../components/TopUserControlBg';
 
 function AllApplicationScreen(props) {
-    const progress1 = 1; // Set the progress value between 0 and 1
-    const progress2 = 1;
-    const progress3 = 0;
-
-
-    const [progressText1, setProgressText1] = React.useState('');
-    const [progressText2, setProgressText2] = React.useState('');
-    const [progressText3, setProgressText3] = React.useState('');
-
-    const [switch1Value, setSwitch1Value] = React.useState(false);
-    const [switch2Value, setSwitch2Value] = React.useState(false);
-
-    const handleSwitch1Toggle = () => {
-        setSwitch1Value((prevValue) => !prevValue);
-    };
-
-    const handleSwitch2Toggle = () => {
-        setSwitch2Value((prevValue) => !prevValue);
-    };
-
-    const [selected, setSelected] = React.useState("");
-
     const dataallapplications = [
       { key: "1", value: "Paid" }, 
       { key: "2", value: "Completed" },
@@ -39,76 +15,11 @@ function AllApplicationScreen(props) {
     ]; 
     return (
         <SafeAreaView style={styles.container}>
-
-            <LinearGradient style={{ paddingHorizontal: 20, paddingTop: 35, paddingBottom: 30, borderBottomLeftRadius: 30, borderBottomRightRadius: 30 }}
-                colors={[colors.secondary, colors.primary]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}>
-                <View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                        <TouchableOpacity onPress={() => handleNotificationPress()} style={styles.iconButton}>
-                            <Image source={require('../assets/bell.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleNotificationPress()} style={styles.iconButton}>
-                            <Image source={require('../assets/money.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleNotificationPress()} style={styles.iconButton}>
-                            <Image source={require('../assets/user.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-                        </TouchableOpacity>
-                    </View>
-
-                </View>
-
-
-                <View>
-                    <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#FFF', marginTop: 12 }}>All Applications</Text>
-
-                </View>
-
-
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12, alignItems: 'center' }}>
-             <SelectList
-              placeholder="All *"
-              setSelected={(val) => setSelected(val)}
-              data={dataallapplications}
-              save="value"
-              boxStyles={{ borderColor: 'white',backgroundColor: 'white'}}
-              inputStyles={{ color: "#000", fontWeight: '700' }}
-              dropdownStyles={{borderColor: 'white',backgroundColor: 'white' }}
-              dropdownTextStyles={{ color: "#000" }}
-            />
-            <SelectList
-              placeholder="Make"
-              setSelected={(val) => setSelected(val)}
-              data={dataallapplications}
-              save="value"
-              boxStyles={{ borderColor: 'white',backgroundColor: 'white'}}
-              inputStyles={{ color: "#000", fontWeight: '700' }}
-              dropdownStyles={{borderColor: 'white',backgroundColor: 'white' }}
-              dropdownTextStyles={{ color: "#000" }}
-            />
-
-             <SelectList
-              placeholder="Model"
-              setSelected={(val) => setSelected(val)}
-              data={dataallapplications}
-              save="value"
-              boxStyles={{ borderColor: 'white',backgroundColor: 'white'}}
-              inputStyles={{ color: "#000", fontWeight: '700' }}
-              dropdownStyles={{borderColor: 'white',backgroundColor: 'white' }}
-              dropdownTextStyles={{ color: "#000" }}
-            />
-                    
-                    <TouchableOpacity onPress={() => handleTransactionPress()}>
-                        <Image source={require('../assets/search.png')} style={[{ width: 32, height: 32, tintColor: '#fff' }]} />
-                    </TouchableOpacity>
-
-                </View>
-            </LinearGradient>
-
+            <TopUserControlBg>
+                <Text style={styles.statusText}>Completed</Text>
+            </TopUserControlBg>
 
             <ScrollView contentContainerStyle={{ ...styles.paymenthisorycontainer, marginTop: 20 }}>
-
                 {/* BOX 1*/}
                 <View style={{
                     ...styles.application1, borderLeftWidth: 10,
@@ -647,7 +558,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         backgroundColor: '#DCF3E8',
-
     },
     background: {
         left: 0,
@@ -656,10 +566,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         maxHeight: 130,
         borderRadius: 20,
-
     },
-
-
     header: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
@@ -668,18 +575,13 @@ const styles = StyleSheet.create({
     },
     iconContainer: {
         flexDirection: 'row',
-
     },
     icon: {
         marginLeft: 10,
-
     },
-
     paymenthisorycontainer: {
         alignItems: 'center'
-
     },
-
     application1: {
         flexDirection: 'row',
         borderRadius: 10,
@@ -690,11 +592,9 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         justifyContent: 'space-between',
         marginBottom: 10,
-
     },
-
     paymenthistorybtn: {
-        color: '#fff',
+        color: colors.white,
         backgroundColor: '#FF6D60',
         textAlign: 'center',
         borderRadius: 5,
@@ -702,12 +602,15 @@ const styles = StyleSheet.create({
         fontWeight: 900,
         width: 70
     },
-
     applicationbuttons: {
         borderRadius: 4,
         width: 75,
         height: 20
-
+    },
+    statusText:{
+        fontWeight:700,
+        fontSize:25,
+        color: colors.white,
     }
 
 });

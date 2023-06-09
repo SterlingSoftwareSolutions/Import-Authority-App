@@ -4,28 +4,6 @@ import TopUserControlBg from '../components/TopUserControlBg';
 
 
 function Transaction(props) {
-  const progress1 = 1; // Set the progress value between 0 and 1
-  const progress2 = 1;
-  const progress3 = 0;
-
-
-
-
-  const [progressText1, setProgressText1] = React.useState('');
-  const [progressText2, setProgressText2] = React.useState('');
-  const [progressText3, setProgressText3] = React.useState('');
-
-  const [switch1Value, setSwitch1Value] = React.useState(false);
-  const [switch2Value, setSwitch2Value] = React.useState(false);
-
-  const handleSwitch1Toggle = () => {
-    setSwitch1Value((prevValue) => !prevValue);
-  };
-
-  const handleSwitch2Toggle = () => {
-    setSwitch2Value((prevValue) => !prevValue);
-  };
-
   return (
     <View style={styles.container}>
       <TopUserControlBg>
@@ -46,10 +24,11 @@ function Transaction(props) {
         </View>
       </TopUserControlBg>
    
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 30 }}>
+   {/* Filtering dropdown should be added */}
+      {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 30 }}>
         <Text style={{ textAlign: 'left', fontSize: 15, color: '#000000', fontWeight: 600, top: 10 }}>Sort By Unpiad </Text>
         <Text style={{ textAlign: 'left', fontSize: 15, color: '#000000', fontWeight: 600, top: 10 }}>Remaining Payments: 2/5</Text>
-      </View>
+      </View> */}
 
       <ScrollView contentContainerStyle={styles.paymenthisorycontainer}>
         <View style={styles.paymenthistorybox}>

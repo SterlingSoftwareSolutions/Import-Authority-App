@@ -14,7 +14,7 @@ const ApplicationCreateNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="CreateApplicationMain"
+        name="CreateApplicationScreen"
         component={CreateApplicationScreen}
         options={{ headerShown: false }}
       />

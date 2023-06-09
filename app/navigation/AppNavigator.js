@@ -9,6 +9,7 @@ import ApplicationCreateNavigator from "../navigation/ApplicationCreateNavigator
 import AllApplicationScreen from "../screens/AllApplicationScreen";
 import PaymentHistoryScreen from "../screens/Transaction";
 import TransactionNavigator from "./TransactionNavigator";
+import CreateApplicationDocScreen from "../screens/CreateApplicationDocScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -18,8 +19,8 @@ const AppNavigator = () => (
       style: styles.tabBar,
       tabStyle: styles.tab,
       showLabel: false,
+      keyboardHidesTabBar:true
     }}
-    keyboardHidesTabBar={true}
   >
     <Tab.Screen
       name="Home"
@@ -50,7 +51,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Draft"
-      component={UpdatePassword}
+      component={CreateApplicationDocScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons

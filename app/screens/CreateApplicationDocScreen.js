@@ -6,6 +6,7 @@ import { ProgressBar } from 'react-native-paper';
 import colors from '../config/colors';
 import * as FileSystem from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker';
+import TopUserControlBg from '../components/TopUserControlBg';
 
 function CreateApplicationDocScreen(props) {
     const progress1 = 1;
@@ -19,12 +20,12 @@ function CreateApplicationDocScreen(props) {
     const blueColor = `rgba(128, 253, 128, ${x})`;
     const greenColor = `rgba(16, 188, 163, ${y})`;
 
-  const [progressText1, setProgressText1] = React.useState("");
-  const [progressText2, setProgressText2] = React.useState("");
-  const [progressText3, setProgressText3] = React.useState("");
+    const [progressText1, setProgressText1] = React.useState('');
+    const [progressText2, setProgressText2] = React.useState('');
+    const [progressText3, setProgressText3] = React.useState('');
 
-  const [switch1Value, setSwitch1Value] = React.useState(false);
-  const [switch2Value, setSwitch2Value] = React.useState(false);
+    const [switch1Value, setSwitch1Value] = React.useState(false);
+    const [switch2Value, setSwitch2Value] = React.useState(false);
 
     const handleSwitch1Toggle = () => {
         setSwitch1Value((prevValue) => !prevValue);
@@ -46,27 +47,9 @@ function CreateApplicationDocScreen(props) {
 
     return (
         <View style={styles.container}>
-            <LinearGradient
-                colors={[blueColor, greenColor]} // Set the starting and ending colors for the gradient
-                style={styles.background}
-            >
-                <View style={styles.header}>
-                    <View style={styles.iconContainer}>
-                        <TouchableOpacity onPress={() => handleNotificationPress()} style={styles.iconButton}>
-                            <Image source={require('../assets/bell.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleLogoutPress()} style={styles.iconButton}>
-                            <Image source={require('../assets/money.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleTransactionPress()} style={styles.iconButton}>
-                            <Image source={require('../assets/user.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
-
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
+  
+               <TopUserControlBg>
+               <TopUserControlBg>
         <View style={styles.progressContainer}>
           <View style={styles.progressBarWrapper}>
             <TextInput
@@ -113,13 +96,10 @@ function CreateApplicationDocScreen(props) {
             />
           </View>
         </View>
-
-
-
-        <View>
-          <Text style={[styles.exteriortext, { marginTop: 60 }]}>
-            Documents
-          </Text>
+      </TopUserControlBg>
+               </TopUserControlBg>
+                <View>
+                    <Text style={[styles.exteriortext, { marginTop: 60 }]}>Documents</Text>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                         <TouchableOpacity style={styles.cameraContainer}
@@ -148,184 +128,217 @@ function CreateApplicationDocScreen(props) {
                     </SafeAreaView>
                 </View>
 
-        <SafeAreaView style={styles.back_draft}>
-          <View style={styles.buttonContainer}>
-            <LinearGradient
-              colors={["#4B4B4B", "#9F9F9F"]} // Define the colors for the gradient (ash to lighter ash)
-              locations={[0, 1]} // Define the gradient color stops
-              start={{ x: 0.2, y: 0.5 }} // Define the start position (top-left)
-              end={{ x: 1, y: 1 }} // Define the end position (top-right)
-              style={styles.button}
-            >
-              <TouchableOpacity>
-                <Text style={styles.buttonText}>Draft</Text>
-              </TouchableOpacity>
-            </LinearGradient>
+                <SafeAreaView style={styles.back_draft}>
 
-            <LinearGradient
-              colors={["#77B859", "#2DA596"]} // Define the colors for the gradient (ash to lighter ash)
-              locations={[0, 1]} // Define the gradient color stops
-              start={{ x: 0.2, y: 0 }} // Define the start position (top-left)
-              end={{ x: 1, y: 1 }} // Define the end position (top-right)
-              style={styles.button}
-            >
-              <TouchableOpacity
-                onPress={() => navigation.navigate("StepThreePayment")}
-              >
-                <Text style={styles.buttonText}>Next</Text>
-              </TouchableOpacity>
-            </LinearGradient>
-          </View>
-        </SafeAreaView>
+                    <View style={styles.buttonContainer}>
+                        <LinearGradient
+                            colors={['#4B4B4B', '#9F9F9F']} // Define the colors for the gradient (ash to lighter ash)
+                            locations={[0, 1]} // Define the gradient color stops
+                            start={{ x: 0.2, y: 0.5 }} // Define the start position (top-left)
+                            end={{ x: 1, y: 1 }} // Define the end position (top-right)
+                            style={styles.button}
+                        >
+                            <TouchableOpacity>
+                                <Text style={styles.buttonText}>Draft</Text>
+                            </TouchableOpacity>
+                        </LinearGradient>
 
-        <StatusBar style="auto" />
-      </LinearGradient>
-    </View>
-  );
+
+                        <LinearGradient
+                            colors={['#77B859', '#2DA596']} // Define the colors for the gradient (ash to lighter ash)
+                            locations={[0, 1]} // Define the gradient color stops
+                            start={{ x: 0.2, y: 0 }} // Define the start position (top-left)
+                            end={{ x: 1, y: 1 }} // Define the end position (top-right)
+                            style={styles.button}
+                        >
+                            <TouchableOpacity> 
+                                <Text style={styles.buttonText}>Next</Text>
+                            </TouchableOpacity>
+                        </LinearGradient>
+
+                    </View>
+
+
+                </SafeAreaView>
+
+
+                <StatusBar style="auto" />
+        </View>
+    );
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-start",
-    backgroundColor: "#DCF3E8",
-  },
-  background: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    maxHeight: 130,
-    borderRadius: 20,
-  },
+    container: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        backgroundColor: '#DCF3E8',
 
-  back_draft: {
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    width: "100%",
-    marginTop: 90,
-  },
+    },
+    background: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        maxHeight: 130,
+        borderRadius: 20,
 
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    // marginTop: 20,
-  },
+    },
 
-  button: {
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    width: "38%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
 
-  buttonText: {
-    color: "#fff",
-  },
+    back_draft: {
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        width: '100%',
+        marginTop: 90,
 
-  progressBar1: {
-    height: 8,
-    width: 110,
-    borderRadius: 5,
-    marginLeft: 5,
-  },
-  progressBar2: {
-    height: 8,
-    width: 110,
-    borderRadius: 5,
-    marginLeft: 8,
-  },
-  progressBar3: {
-    height: 8,
-    width: 110,
+    },
 
-    borderRadius: 5,
-    marginLeft: 11,
-  },
 
-  progressContainer: {
-    flexDirection: "row",
-    paddingHorizontal: 22,
-    marginTop: 40,
-    justifyContent: "flex-end",
-  },
 
-  progressText: {
-    position: "absolute",
-    bottom: 10,
-    alignSelf: "center",
-    backgroundColor: "transparent",
-    color: "#fff",
-  },
 
-  header: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-  iconContainer: {
-    flexDirection: "row",
-  },
-  icon: {
-    marginLeft: 10,
-  },
 
-  bottomContainer: {
-    position: "absolute",
-    bottom: 1,
-    left: -20,
-    right: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 80,
-  },
-  bottomRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  bottomText1: {
-    color: "#fff",
-    marginRight: 10,
-  },
 
-  bottomText2: {
-    color: "#fff",
-    marginRight: 1,
-  },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        // marginTop: 20,
 
-  backgroundColorWrapper: {
-    backgroundColor: "#E5E5E5",
-  },
+    },
 
-  backgroundColorWrapper1: {
-    backgroundColor: "#E5E5E5",
-    padding: 8,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 0,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 0,
-    width: 45,
-  },
+    button: {
+        borderRadius: 5,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        width: '38%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 
-  backgroundColorWrapper2: {
-    backgroundColor: "#FFFFFF",
-    padding: 8,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 10,
-    width: 45,
-  },
 
-  exteriortext: {
-    marginTop: 80,
-    left: 20,
-    color: "#079BB7",
-  },
+    buttonText: {
+        color: '#fff',
+    },
+
+    progressBar1: {
+        height: 8,
+        width: 110,
+        borderRadius: 5,
+        marginLeft: 5
+
+    },
+    progressBar2: {
+        height: 8,
+        width: 110,
+        borderRadius: 5,
+        marginLeft: 8
+
+
+    },
+    progressBar3: {
+        height: 8,
+        width: 110,
+
+        borderRadius: 5,
+        marginLeft: 11
+
+    },
+
+
+    progressContainer: {
+        flexDirection: 'row',
+        paddingHorizontal: 22,
+        marginTop: 40,
+        justifyContent: 'flex-end',
+    },
+
+    progressText: {
+        position: 'absolute',
+        bottom: 10,
+        alignSelf: 'center',
+        backgroundColor: 'transparent',
+        color: '#fff',
+    },
+
+
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        paddingHorizontal: 20,
+        paddingTop: 20,
+    },
+    iconContainer: {
+        flexDirection: 'row',
+
+    },
+    icon: {
+        marginLeft: 10,
+
+    },
+
+    bottomContainer: {
+        position: 'absolute',
+        bottom: 1,
+        left: -20,
+        right: 0,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 80,
+
+
+
+    },
+    bottomRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+
+    },
+    bottomText1: {
+        color: '#fff',
+        marginRight: 10,
+    },
+
+    bottomText2: {
+        color: '#fff',
+        marginRight: 1,
+    },
+
+
+
+    backgroundColorWrapper: {
+        backgroundColor: '#E5E5E5',
+
+    },
+
+
+    backgroundColorWrapper1: {
+        backgroundColor: '#E5E5E5',
+        padding: 8,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 0,
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 0,
+        width: 45,
+
+    },
+
+    backgroundColorWrapper2: {
+        backgroundColor: '#FFFFFF',
+        padding: 8,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 10,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 10,
+        width: 45,
+
+    },
+
+    exteriortext: {
+        marginTop: 80,
+        left: 20,
+        color: '#079BB7',
+
+    },
 
     cameraIcon: {
         marginTop: 10,
@@ -334,25 +347,27 @@ const styles = StyleSheet.create({
         height: 50,
     },
 
-  frText: {
-    marginLeft: -2,
-    color: "#C9C9C9",
-    fontSize: 13,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
 
-  cameraContainer: {
-    marginHorizontal: "auto",
-    backgroundColor: "white",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginTop: 25,
-    borderRadius: 25,
-    borderWidth: 1,
-    width: 100,
-    alignItems: "center",
-    borderColor: "grey",
-  },
+    frText: {
+        marginLeft: -2,
+        color: '#C9C9C9',
+        fontSize: 13,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+
+    cameraContainer: {
+        marginHorizontal: 'auto',
+        backgroundColor: 'white',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        marginTop: 25,
+        borderRadius: 25,
+        borderWidth: 1,
+        width: 100,
+        alignItems: 'center',
+        borderColor: 'grey'
+    }
+
 });
 export default CreateApplicationDocScreen;
