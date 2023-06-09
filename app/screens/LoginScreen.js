@@ -53,45 +53,47 @@ const LoginScreen = (props) => {
           <View style={styles.content}>
             <Image style={styles.displayPic} source={require("../assets/displaypic.jpg")} />
             <Image style={styles.logo} source={require("../assets/ImportAuthorityLogo.jpg")} />
-            <AppForm
-              initialValues={{ username: "", password: "" }}
-              onSubmit={handleSubmit}
-              validationSchema={validationSchema}
-            >
-              <ErrorMessage
-                error="Invalid email and/or password."
-                visible={loginFailed}
-              />
-              <AppFormField
-                name="username"
-                placeholder="Email"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-              <AppFormField
-                name="password"
-                placeholder="Password"
-                autoCapitalize="none"
-                autoCorrect={false}
-                secureTextEntry
-                textContentType="password"
-              />
-              <TouchableOpacity>
-                <Text style={styles.forgotPassword}>Forget password?</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.acceptTermsContainer}>
-                <View style={styles.checkbox} />
-                <Text style={styles.acceptTermsText}>
-                  I Accept the Terms of Use
-                </Text>
-              </TouchableOpacity>
-              <SubmitButton title="LOGIN" alignSelf="center" />
-            </AppForm>
+            <View style={{ width: "80%", marginLeft: "auto", marginRight: "auto" }}>
+              <AppForm
+                initialValues={{ username: "", password: "" }}
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+              >
+                <ErrorMessage
+                  error="Invalid email and/or password."
+                  visible={loginFailed}
+                />
+                <AppFormField
+                  name="username"
+                  placeholder="Email"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+                <AppFormField
+                  name="password"
+                  placeholder="Password"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  secureTextEntry
+                  textContentType="password"
+                />
+                <TouchableOpacity>
+                  <Text style={styles.forgotPassword}>Forget password?</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.acceptTermsContainer}>
+                  <View style={styles.checkbox} />
+                  <Text style={styles.acceptTermsText}>
+                    I Accept the Terms of Use
+                  </Text>
+                </TouchableOpacity>
+                <SubmitButton title="LOGIN" alignSelf="center" />
+              </AppForm>
+            </View>
           </View>
         </LinearGradient>
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>
-            Not a member? 
+            Not a member?
             <Text style={styles.signupText}> SIGN UP</Text>
           </Text>
           <View style={styles.footerContainer}>
@@ -122,7 +124,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0
   },
   displayPic: {
-    height:  400,
+    height: 400,
     width: "100%",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
@@ -153,7 +155,7 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "right",
     fontSize: 13,
-    marginRight:20
+    marginRight: 20
   },
   acceptTermsContainer: {
     flexDirection: "row",
@@ -215,4 +217,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default LoginScreen;
+export default LoginScreen;
