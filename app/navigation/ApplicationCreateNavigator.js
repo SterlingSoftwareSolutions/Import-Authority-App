@@ -29,7 +29,7 @@ const ApplicationCreateNavigator = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="StepThreePayment"
+        name="PaymentScreen"
         component={PaymentScreen}
         options={{ headerShown: false }}
       />

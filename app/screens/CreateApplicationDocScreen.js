@@ -1,55 +1,61 @@
-import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ProgressBar } from 'react-native-paper';
-import colors from '../config/colors';
-import * as FileSystem from 'expo-file-system';
-import * as DocumentPicker from 'expo-document-picker';
-import TopUserControlBg from '../components/TopUserControlBg';
+import React, { useState } from "react";
+import { StatusBar } from "expo-status-bar";
+import {
+  StyleSheet,
+  SafeAreaView,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+  Switch,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { ProgressBar } from "react-native-paper";
+import colors from "../config/colors";
+import * as FileSystem from "expo-file-system";
+import * as DocumentPicker from "expo-document-picker";
+import TopUserControlBg from "../components/TopUserControlBg";
+import { useNavigation } from "@react-navigation/native";
 
 function CreateApplicationDocScreen(props) {
-    const progress1 = 1;
-    const progress2 = 1;
-    const progress3 = 0;
+  const navigation = useNavigation();
+  const progress1 = 1;
+  const progress2 = 1;
+  const progress3 = 0;
 
+  const x = 0.5;
+  const y = 1;
 
-    const x = 0.5;
-    const y = 1;
+  const blueColor = `rgba(128, 253, 128, ${x})`;
+  const greenColor = `rgba(16, 188, 163, ${y})`;
 
-    const blueColor = `rgba(128, 253, 128, ${x})`;
-    const greenColor = `rgba(16, 188, 163, ${y})`;
+  const [progressText1, setProgressText1] = React.useState("");
+  const [progressText2, setProgressText2] = React.useState("");
+  const [progressText3, setProgressText3] = React.useState("");
 
-    const [progressText1, setProgressText1] = React.useState('');
-    const [progressText2, setProgressText2] = React.useState('');
-    const [progressText3, setProgressText3] = React.useState('');
+  const [switch1Value, setSwitch1Value] = React.useState(false);
+  const [switch2Value, setSwitch2Value] = React.useState(false);
 
-    const [switch1Value, setSwitch1Value] = React.useState(false);
-    const [switch2Value, setSwitch2Value] = React.useState(false);
+  const handleSwitch1Toggle = () => {
+    setSwitch1Value((prevValue) => !prevValue);
+  };
 
-    const handleSwitch1Toggle = () => {
-        setSwitch1Value((prevValue) => !prevValue);
-    };
+  const [docs, setDocs] = useState({});
 
-    const [docs, setDocs] = useState({})
+  const selectDocs = async (key) => {
+    const picker = await DocumentPicker.getDocumentAsync();
+    if (!picker.canceled) {
+      setDocs((docs) => ({
+        ...docs,
+        [key]: picker.uri,
+      }));
+    }
+  };
 
-    const selectDocs = async (key) => {
-
-        const picker = await DocumentPicker.getDocumentAsync();
-        if (!picker.canceled) {
-            setDocs(docs => ({
-                ...docs,
-                [key]: picker.uri
-            }));
-        }
-    };
-
-
-    return (
-        <View style={styles.container}>
-  
-               <TopUserControlBg>
-               <TopUserControlBg>
+  return (
+    <View style={styles.container}>
+      <TopUserControlBg>
         <View style={styles.progressContainer}>
           <View style={styles.progressBarWrapper}>
             <TextInput
@@ -97,277 +103,265 @@ function CreateApplicationDocScreen(props) {
           </View>
         </View>
       </TopUserControlBg>
-               </TopUserControlBg>
-                <View>
-                    <Text style={[styles.exteriortext, { marginTop: 60 }]}>Documents</Text>
+      <View>
+        <Text style={[styles.exteriortext, { marginTop: 60 }]}>Documents</Text>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                        <TouchableOpacity style={styles.cameraContainer}
-                            onPress={() => {
-                                selectDocs('doc_invoice');
-                            }}>
-                            <Image source={docs['doc_invoice'] ? require('../assets/doc_thumbnail.png') : require('../assets/doc_placeholder.png')} style={[styles.cameraIcon]} />
-                            <Text style={styles.frText}>Invoice</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.cameraContainer}
-                            onPress={() => {
-                                selectDocs('doc_export_certificate');
-                            }}>
-                            <Image source={docs['doc_export_certificate'] ? require('../assets/doc_thumbnail.png') : require('../assets/doc_placeholder.png')} style={[styles.cameraIcon]} />
-                            <Text style={styles.frText}>Export Certificate</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <SafeAreaView style={{ flexDirection: 'row', marginLeft: 46 }}>
-                        <TouchableOpacity style={styles.cameraContainer} onPress={() => {
-                            selectDocs('doc_auction_report');
-                        }}>
-                            <Image source={docs['doc_auction_report'] ? require('../assets/doc_thumbnail.png') : require('../assets/doc_placeholder.png')} style={[styles.cameraIcon]} />
-                            <Text style={styles.frText}>Auction Report</Text>
-                        </TouchableOpacity>
-
-                    </SafeAreaView>
-                </View>
-
-                <SafeAreaView style={styles.back_draft}>
-
-                    <View style={styles.buttonContainer}>
-                        <LinearGradient
-                            colors={['#4B4B4B', '#9F9F9F']} // Define the colors for the gradient (ash to lighter ash)
-                            locations={[0, 1]} // Define the gradient color stops
-                            start={{ x: 0.2, y: 0.5 }} // Define the start position (top-left)
-                            end={{ x: 1, y: 1 }} // Define the end position (top-right)
-                            style={styles.button}
-                        >
-                            <TouchableOpacity>
-                                <Text style={styles.buttonText}>Draft</Text>
-                            </TouchableOpacity>
-                        </LinearGradient>
-
-
-                        <LinearGradient
-                            colors={['#77B859', '#2DA596']} // Define the colors for the gradient (ash to lighter ash)
-                            locations={[0, 1]} // Define the gradient color stops
-                            start={{ x: 0.2, y: 0 }} // Define the start position (top-left)
-                            end={{ x: 1, y: 1 }} // Define the end position (top-right)
-                            style={styles.button}
-                        >
-                            <TouchableOpacity> 
-                                <Text style={styles.buttonText}>Next</Text>
-                            </TouchableOpacity>
-                        </LinearGradient>
-
-                    </View>
-
-
-                </SafeAreaView>
-
-
-                <StatusBar style="auto" />
+        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+          <TouchableOpacity
+            style={styles.cameraContainer}
+            onPress={() => {
+              selectDocs("doc_invoice");
+            }}
+          >
+            <Image
+              source={
+                docs["doc_invoice"]
+                  ? require("../assets/doc_thumbnail.png")
+                  : require("../assets/doc_placeholder.png")
+              }
+              style={[styles.cameraIcon]}
+            />
+            <Text style={styles.frText}>Invoice</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.cameraContainer}
+            onPress={() => {
+              selectDocs("doc_export_certificate");
+            }}
+          >
+            <Image
+              source={
+                docs["doc_export_certificate"]
+                  ? require("../assets/doc_thumbnail.png")
+                  : require("../assets/doc_placeholder.png")
+              }
+              style={[styles.cameraIcon]}
+            />
+            <Text style={styles.frText}>Export Certificate</Text>
+          </TouchableOpacity>
         </View>
-    );
+        <SafeAreaView style={{ flexDirection: "row", marginLeft: 46 }}>
+          <TouchableOpacity
+            style={styles.cameraContainer}
+            onPress={() => {
+              selectDocs("doc_auction_report");
+            }}
+          >
+            <Image
+              source={
+                docs["doc_auction_report"]
+                  ? require("../assets/doc_thumbnail.png")
+                  : require("../assets/doc_placeholder.png")
+              }
+              style={[styles.cameraIcon]}
+            />
+            <Text style={styles.frText}>Auction Report</Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </View>
+
+      <SafeAreaView style={styles.back_draft}>
+        <View style={styles.buttonContainer}>
+          <LinearGradient
+            colors={["#4B4B4B", "#9F9F9F"]}
+            locations={[0, 1]}
+            start={{ x: 0.2, y: 0.5 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.button}
+          >
+            <TouchableOpacity>
+              <Text style={styles.buttonText}>Draft</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+
+          <LinearGradient
+            colors={["#77B859", "#2DA596"]}
+            locations={[0, 1]}
+            start={{ x: 0.2, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.button}
+          >
+            <TouchableOpacity onPress={() => navigation.navigate("PaymentScreen")}>
+              <Text style={styles.buttonText}>Next</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </View>
+      </SafeAreaView>
+
+      <StatusBar style="auto" />
+    </View>
+  );
 }
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        backgroundColor: '#DCF3E8',
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    backgroundColor: "#DCF3E8",
+  },
+  background: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    maxHeight: 130,
+    borderRadius: 20,
+  },
 
-    },
-    background: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        maxHeight: 130,
-        borderRadius: 20,
+  back_draft: {
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    width: "100%",
+    marginTop: 90,
+  },
 
-    },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // marginTop: 20,
+  },
 
+  button: {
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    width: "38%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
-    back_draft: {
-        paddingHorizontal: 20,
-        borderRadius: 10,
-        width: '100%',
-        marginTop: 90,
+  buttonText: {
+    color: "#fff",
+  },
 
-    },
+  progressBar1: {
+    height: 8,
+    width: 110,
+    borderRadius: 5,
+    marginLeft: 5,
+  },
+  progressBar2: {
+    height: 8,
+    width: 110,
+    borderRadius: 5,
+    marginLeft: 8,
+  },
+  progressBar3: {
+    height: 8,
+    width: 110,
 
+    borderRadius: 5,
+    marginLeft: 11,
+  },
 
+  progressContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 22,
+    marginTop: 40,
+    justifyContent: "flex-end",
+  },
 
+  progressText: {
+    position: "absolute",
+    bottom: 10,
+    alignSelf: "center",
+    backgroundColor: "transparent",
+    color: "#fff",
+  },
 
+  header: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  iconContainer: {
+    flexDirection: "row",
+  },
+  icon: {
+    marginLeft: 10,
+  },
 
+  bottomContainer: {
+    position: "absolute",
+    bottom: 1,
+    left: -20,
+    right: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 80,
+  },
+  bottomRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  bottomText1: {
+    color: "#fff",
+    marginRight: 10,
+  },
 
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        // marginTop: 20,
+  bottomText2: {
+    color: "#fff",
+    marginRight: 1,
+  },
 
-    },
+  backgroundColorWrapper: {
+    backgroundColor: "#E5E5E5",
+  },
 
-    button: {
-        borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 10,
-        width: '38%',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+  backgroundColorWrapper1: {
+    backgroundColor: "#E5E5E5",
+    padding: 8,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 0,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 0,
+    width: 45,
+  },
 
+  backgroundColorWrapper2: {
+    backgroundColor: "#FFFFFF",
+    padding: 8,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 10,
+    width: 45,
+  },
 
-    buttonText: {
-        color: '#fff',
-    },
+  exteriortext: {
+    marginTop: 80,
+    left: 20,
+    color: "#079BB7",
+  },
 
-    progressBar1: {
-        height: 8,
-        width: 110,
-        borderRadius: 5,
-        marginLeft: 5
+  cameraIcon: {
+    marginTop: 10,
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+  },
 
-    },
-    progressBar2: {
-        height: 8,
-        width: 110,
-        borderRadius: 5,
-        marginLeft: 8
+  frText: {
+    marginLeft: -2,
+    color: "#C9C9C9",
+    fontSize: 13,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 
-
-    },
-    progressBar3: {
-        height: 8,
-        width: 110,
-
-        borderRadius: 5,
-        marginLeft: 11
-
-    },
-
-
-    progressContainer: {
-        flexDirection: 'row',
-        paddingHorizontal: 22,
-        marginTop: 40,
-        justifyContent: 'flex-end',
-    },
-
-    progressText: {
-        position: 'absolute',
-        bottom: 10,
-        alignSelf: 'center',
-        backgroundColor: 'transparent',
-        color: '#fff',
-    },
-
-
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        paddingHorizontal: 20,
-        paddingTop: 20,
-    },
-    iconContainer: {
-        flexDirection: 'row',
-
-    },
-    icon: {
-        marginLeft: 10,
-
-    },
-
-    bottomContainer: {
-        position: 'absolute',
-        bottom: 1,
-        left: -20,
-        right: 0,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 80,
-
-
-
-    },
-    bottomRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-
-    },
-    bottomText1: {
-        color: '#fff',
-        marginRight: 10,
-    },
-
-    bottomText2: {
-        color: '#fff',
-        marginRight: 1,
-    },
-
-
-
-    backgroundColorWrapper: {
-        backgroundColor: '#E5E5E5',
-
-    },
-
-
-    backgroundColorWrapper1: {
-        backgroundColor: '#E5E5E5',
-        padding: 8,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 0,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 0,
-        width: 45,
-
-    },
-
-    backgroundColorWrapper2: {
-        backgroundColor: '#FFFFFF',
-        padding: 8,
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 10,
-        borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 10,
-        width: 45,
-
-    },
-
-    exteriortext: {
-        marginTop: 80,
-        left: 20,
-        color: '#079BB7',
-
-    },
-
-    cameraIcon: {
-        marginTop: 10,
-        borderRadius: 10,
-        width: 50,
-        height: 50,
-    },
-
-
-    frText: {
-        marginLeft: -2,
-        color: '#C9C9C9',
-        fontSize: 13,
-        fontWeight: 'bold',
-        textAlign: 'center'
-    },
-
-    cameraContainer: {
-        marginHorizontal: 'auto',
-        backgroundColor: 'white',
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        marginTop: 25,
-        borderRadius: 25,
-        borderWidth: 1,
-        width: 100,
-        alignItems: 'center',
-        borderColor: 'grey'
-    }
-
+  cameraContainer: {
+    marginHorizontal: "auto",
+    backgroundColor: "white",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginTop: 25,
+    borderRadius: 25,
+    borderWidth: 1,
+    width: 100,
+    alignItems: "center",
+    borderColor: "grey",
+  },
 });
 export default CreateApplicationDocScreen;
