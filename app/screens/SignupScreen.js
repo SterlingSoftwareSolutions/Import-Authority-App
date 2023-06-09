@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   ImageBackground,
   SafeAreaView,
@@ -17,54 +17,62 @@ import * as Yup from "yup";
 import {
   ErrorMessage,
   AppForm,
-  AppFormField,
-  SubmitButton,
+  AppFormField
 } from "../components/forms";
 import useApi from "../hooks/useApi";
 import usersApi from "../api/users";
 import authApi from "../api/auth";
+import ExtSubmitButton from "../components/forms/ExtSubmitButton";
+import { useFormikContext } from "formik";
 
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required().label("Name"),
-    businessname: Yup.string().required().label("Business Name"),
-    username: Yup.string().required().label("User Name"),
-    email: Yup.string().required().email().label("Email"),
-    password: Yup.string().required().min(8).label("Password"),
-    phone: Yup.string()
-      .required()
-      .matches(/^\d+$/, "Phone number must be numeric")
-      .label("Phone"),
-      password_confirmation: Yup.string()
-      .required()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .label("Confirm Password"),
-  });
+  name: Yup.string().required().label("Name"),
+  businessname: Yup.string().required().label("Business Name"),
+  username: Yup.string().required().label("User Name"),
+  email: Yup.string().required().email().label("Email"),
+  password: Yup.string().required().min(8).label("Password"),
+  phone: Yup.string()
+    .required()
+    .matches(/^\d+$/, "Phone number must be numeric")
+    .label("Phone"),
+  password_confirmation: Yup.string()
+    .required()
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .label("Confirm Password"),
+});
 
 const SignupScreen = (props) => {
-    const registerApi = useApi(usersApi.register);
+  const registerApi = useApi(usersApi.register);
   const loginApi = useApi(authApi.login);
   const auth = useAuth();
   const { user } = useAuth();
   const [error, setError] = useState();
+  const signUpForm = useRef(null);
 
   const handleSubmit = async (userInfo) => {
     const result = await registerApi.request(userInfo);
-  //  console.log(result);
+    console.log(result);
+    //  console.log(result);
     if (!result.ok) {
       if (result.data) setError(result.data.error);
       else {
         setError("An unexpected error occurred.");
         console.log(result);
       }
-      return; 
+      return;
     }
 
     const { data: authToken } = await loginApi.request(
       userInfo.username,
       userInfo.password
     );
-    auth.logIn(authToken , user);
+    auth.logIn(authToken, user);
   };
+
+  const submitForm = () => {
+    signUpForm.current.submitForm();
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -85,88 +93,77 @@ const SignupScreen = (props) => {
                   source={require("../assets/ImportAuthorityLogo.jpg")}
                 />
                 <View style={styles.overlay}>
-                <AppForm
-                  initialValues={{
-                    name: "",
-                    businessname: "",
-                    username: "",
-                    phone: "",
-                    email: "",
-                    password: "",
-                    password_confirmation: "",
-                  }}
-                  onSubmit={handleSubmit}
-                  validationSchema={validationSchema}
-                >
-                  <ErrorMessage error={error} visible={error} />
-                  <AppFormField
-                    autoCorrect={false}
-                    name="name"
-                    placeholder="Name"
-                  />
-                  <AppFormField
-                    autoCorrect={false}
-                    name="businessname"
-                    placeholder="Business Name"
-                  />
-                  <AppFormField
-                    autoCorrect={false}
-                    name="username"
-                    placeholder="User Name"
-                  />
-                  <AppFormField
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="email-address"
-                    name="email"
-                    placeholder="Email"
-                    textContentType="emailAddress"
-                  />
-                  <AppFormField
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    name="phone"
-                    placeholder="Mobile Number"
-                    textContentType="emailAddress"
-                  />
-                  <AppFormField
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    name="password"
-                    placeholder="Password"
-                    secureTextEntry
-                    textContentType="password"
-                  />
-                  <AppFormField
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    name="password_confirmation"
-                    placeholder="Confirm Password"
-                    secureTextEntry
-                    textContentType="password"
-                  />
-                  <SubmitButton title="SIGNUP" />
-                </AppForm>
+                  <AppForm
+
+                    initialValues={{
+                      name: "",
+                      businessname: "",
+                      username: "",
+                      phone: "",
+                      email: "",
+                      password: "",
+                      password_confirmation: "",
+                    }}
+                    innerRef={signUpForm}
+                    onSubmit={handleSubmit}
+                    validationSchema={validationSchema}
+                  >
+                    <ErrorMessage error={error} visible={error} />
+
+                    <AppFormField
+                      autoCorrect={false}
+                      name="name"
+                      placeholder="Name"
+                    />
+                    <AppFormField
+                      autoCorrect={false}
+                      name="businessname"
+                      placeholder="Business Name"
+                    />
+                    <AppFormField
+                      autoCorrect={false}
+                      name="username"
+                      placeholder="User Name"
+                    />
+                    <AppFormField
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      keyboardType="email-address"
+                      name="email"
+                      placeholder="Email"
+                      textContentType="emailAddress"
+                    />
+                    <AppFormField
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      name="phone"
+                      placeholder="Mobile Number"
+                      textContentType="emailAddress"
+                    />
+                    <AppFormField
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      name="password"
+                      placeholder="Password"
+                      secureTextEntry
+                      textContentType="password"
+                    />
+                    <AppFormField
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      name="password_confirmation"
+                      placeholder="Confirm Password"
+                      secureTextEntry
+                      textContentType="password"
+                    />
+                  </AppForm>
                 </View>
               </View>
               <View style={styles.overlay} />
             </View>
           </View>
         </View>
-        {/* <TouchableOpacity style={styles.acceptTermsContainer}>
-          <View style={styles.checkbox} />
-          <Text style={styles.acceptTermsText}>I Accept the Terms of Use</Text>
-        </TouchableOpacity> */}
-        {/* <LinearGradient
-          colors={["#8FBF45", "#079BB7"]}
-          style={styles.buttonContainer}
-          start={{ x: 0.1, y: 0.5 }}
-          end={{ x: 1, y: 1 }}
-        >
-          <TouchableOpacity style={styles.signupButton}>
-            <Text style={styles.buttonText}>SIGN UP</Text>
-          </TouchableOpacity>
-        </LinearGradient> */}
+        <ExtSubmitButton title="SIGNUP" onPress={submitForm} />
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>
             Already have an Account?{" "}
@@ -192,7 +189,6 @@ const styles = StyleSheet.create({
   },
   gradient: {
     width: "100%",
-    height: 620,
     borderBottomRightRadius: 30,
     borderBottomLeftRadius: 30,
   },
@@ -221,10 +217,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0
   },
   overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)"
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+
   },
   content: {
     alignItems: "center",
+    paddingBottom: 10
   },
   logo: {
     marginTop: 50,
@@ -234,9 +232,11 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   overlay: {
+
     paddingHorizontal: 10,
     borderRadius: 15,
     width: "80%",
+
   },
   input: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -306,5 +306,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen;
+export default SignupScreen;
 
