@@ -2,7 +2,6 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import CreateApplicationScreen from "../screens/CreateApplicationScreen";
 import CreateApplicationImageScreen from "../screens/CreateApplicationImageScreen";
-import CreateApplicationDocScreen from "../screens/CreateApplicationDocScreen";
 import PaymentScreen from "../screens/PaymentScreen";
 import PaymentSuccessScreen from "../screens/PaymentSuccessScreen";
 import Dashboard from "../screens/Dashboard";
@@ -21,11 +20,6 @@ const ApplicationCreateNavigator = () => {
       <Stack.Screen
         name="CreateApplicationImageScreen"
         component={CreateApplicationImageScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="CreateApplicationDocScreen"
-        component={CreateApplicationDocScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
