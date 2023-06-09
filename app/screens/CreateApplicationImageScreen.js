@@ -1,20 +1,16 @@
 import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
-  SafeAreaView,
   TextInput,
   View,
   TouchableOpacity,
   Text,
   Image,
-  Switch,
-  Button,
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
 import colors from "../config/colors";
-import * as ImagePicker from "expo-image-picker";
 import {
   Dialog,
   DialogTitle,
@@ -23,8 +19,10 @@ import {
   DialogContent,
 } from "react-native-popup-dialog";
 import TopUserControlBg from "../components/TopUserControlBg";
+import { useNavigation } from "@react-navigation/native";
 
 const CreateApplicationImageScreen = (props) => {
+  const navigation = useNavigation();
   const progress1 = 1; // Set the progress value between 0 and 1
   const progress2 = 1;
   const progress3 = 0;
@@ -81,6 +79,7 @@ const CreateApplicationImageScreen = (props) => {
 
   return (
     <View style={styles.container}>
+      {/* Modal gallery || camera */}
       <Dialog
         onDismiss={() => {
           setImageSourceDialog(false);
@@ -122,7 +121,7 @@ const CreateApplicationImageScreen = (props) => {
           </DialogFooter>
         }
       ></Dialog>
-
+      {/* User control Header */}
       <TopUserControlBg>
         <View style={styles.progressContainer}>
           <View style={styles.progressBarWrapper}>
@@ -172,198 +171,205 @@ const CreateApplicationImageScreen = (props) => {
         </View>
       </TopUserControlBg>
 
-      {/* Image selector  container */}
-      <View>
-        <Text style={[styles.exteriortext, { marginTop: 20 }]}>
-          Exterior Images
-        </Text>
-
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          <TouchableOpacity
-            onPress={() => {
-              selectImage("img_front_right");
-            }}
+      {/* Image selector container */}
+      <ScrollView contentContainerStyle={{ marginTop: 10, paddingBottom: 40 }}>
+        <View>
+          <Text style={[styles.exteriortext, { marginTop: 20 }]}>
+            Exterior Images
+          </Text>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/cam.png")}
-                style={styles.cameraIcon}
-              />
-              <Image
-                source={{ uri: images["img_front_right"] }}
-                style={styles.imagePreview}
-              />
-              <Text style={styles.cameraText}>FR Corner</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              selectImage("img_rear_right");
-            }}
-          >
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/cam.png")}
-                style={styles.cameraIcon}
-              />
-              <Image
-                source={{ uri: images["img_rear_right"] }}
-                style={styles.imagePreview}
-              />
-              <Text style={styles.cameraText}>RR Corner</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          <TouchableOpacity
-            onPress={() => {
-              selectImage("img_front_left");
-            }}
-          >
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/cam.png")}
-                style={styles.cameraIcon}
-              />
-              <Image
-                source={{ uri: images["img_front_left"] }}
-                style={styles.imagePreview}
-              />
-              <Text style={styles.cameraText}>FL Corner</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              selectImage("img_rear_left");
-            }}
-          >
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/cam.png")}
-                style={styles.cameraIcon}
-              />
-              <Image
-                source={{ uri: images["img_rear_left"] }}
-                style={styles.imagePreview}
-              />
-              <Text style={styles.cameraText}>RL Corner</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <Text style={[styles.exteriortext, { marginTop: 30 }]}>
-          Interiror Images
-        </Text>
-
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          <TouchableOpacity
-            onPress={() => {
-              selectImage("img_interior_1");
-            }}
-          >
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/cam.png")}
-                style={styles.cameraIcon}
-              />
-              <Image
-                source={{ uri: images["img_interior_1"] }}
-                style={styles.imagePreview}
-              />
-              <Text style={styles.cameraText}>FR Corner</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              selectImage("img_interior_2");
-            }}
-          >
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/cam.png")}
-                style={styles.cameraIcon}
-              />
-              <Image
-                source={{ uri: images["img_interior_2"] }}
-                style={styles.imagePreview}
-              />
-              <Text style={styles.cameraText}>RR Corner</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          <TouchableOpacity
-            onPress={() => {
-              selectImage("img_interior_3");
-            }}
-          >
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/cam.png")}
-                style={styles.cameraIcon}
-              />
-              <Image
-                source={{ uri: images["img_interior_3"] }}
-                style={styles.imagePreview}
-              />
-              <Text style={styles.cameraText}>FL Corner</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              selectImage("img_interior_4");
-            }}
-          >
-            <View style={styles.cameraContainer}>
-              <Image
-                source={require("../assets/cam.png")}
-                style={styles.cameraIcon}
-              />
-              <Image
-                source={{ uri: images["img_interior_4"] }}
-                style={styles.imagePreview}
-              />
-              <Text style={styles.cameraText}>RL Corner</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <SafeAreaView style={styles.back_draft}>
-        <View style={styles.buttonContainer}>
-          <LinearGradient
-            colors={["#4B4B4B", "#9F9F9F"]} // Define the colors for the gradient (ash to lighter ash)
-            locations={[0, 1]} // Define the gradient color stops
-            start={{ x: 0.2, y: 0.5 }} // Define the start position (top-left)
-            end={{ x: 1, y: 1 }} // Define the end position (top-right)
-            style={styles.button}
-          >
-            <TouchableOpacity>
-              <Text style={styles.buttonText}>Draft</Text>
+            <TouchableOpacity
+              onPress={() => {
+                selectImage("img_front_right");
+              }}
+            >
+              <View style={styles.cameraContainer}>
+                <Image
+                  source={require("../assets/cam.png")}
+                  style={styles.cameraIcon}
+                />
+                <Image
+                  source={{ uri: images["img_front_right"] }}
+                  style={styles.imagePreview}
+                />
+                <Text style={styles.cameraText}>FR Corner</Text>
+              </View>
             </TouchableOpacity>
-          </LinearGradient>
 
-          <LinearGradient
-            colors={["#77B859", "#2DA596"]} // Define the colors for the gradient (ash to lighter ash)
-            locations={[0, 1]} // Define the gradient color stops
-            start={{ x: 0.2, y: 0 }} // Define the start position (top-left)
-            end={{ x: 1, y: 1 }} // Define the end position (top-right)
-            style={styles.button}
-          >
-            <TouchableOpacity>
-              <Text style={styles.buttonText}>Next</Text>
+            <TouchableOpacity
+              onPress={() => {
+                selectImage("img_rear_right");
+              }}
+            >
+              <View style={styles.cameraContainer}>
+                <Image
+                  source={require("../assets/cam.png")}
+                  style={styles.cameraIcon}
+                />
+                <Image
+                  source={{ uri: images["img_rear_right"] }}
+                  style={styles.imagePreview}
+                />
+                <Text style={styles.cameraText}>RR Corner</Text>
+              </View>
             </TouchableOpacity>
-          </LinearGradient>
-        </View>
-      </SafeAreaView>
+          </View>
 
-      <StatusBar style="auto" />
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-around" }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                selectImage("img_front_left");
+              }}
+            >
+              <View style={styles.cameraContainer}>
+                <Image
+                  source={require("../assets/cam.png")}
+                  style={styles.cameraIcon}
+                />
+                <Image
+                  source={{ uri: images["img_front_left"] }}
+                  style={styles.imagePreview}
+                />
+                <Text style={styles.cameraText}>FL Corner</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                selectImage("img_rear_left");
+              }}
+            >
+              <View style={styles.cameraContainer}>
+                <Image
+                  source={require("../assets/cam.png")}
+                  style={styles.cameraIcon}
+                />
+                <Image
+                  source={{ uri: images["img_rear_left"] }}
+                  style={styles.imagePreview}
+                />
+                <Text style={styles.cameraText}>RL Corner</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <Text style={[styles.exteriortext, { marginTop: 30 }]}>
+            Interiror Images
+          </Text>
+
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-around" }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                selectImage("img_interior_1");
+              }}
+            >
+              <View style={styles.cameraContainer}>
+                <Image
+                  source={require("../assets/cam.png")}
+                  style={styles.cameraIcon}
+                />
+                <Image
+                  source={{ uri: images["img_interior_1"] }}
+                  style={styles.imagePreview}
+                />
+                <Text style={styles.cameraText}>FR Corner</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                selectImage("img_interior_2");
+              }}
+            >
+              <View style={styles.cameraContainer}>
+                <Image
+                  source={require("../assets/cam.png")}
+                  style={styles.cameraIcon}
+                />
+                <Image
+                  source={{ uri: images["img_interior_2"] }}
+                  style={styles.imagePreview}
+                />
+                <Text style={styles.cameraText}>RR Corner</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-around" }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                selectImage("img_interior_3");
+              }}
+            >
+              <View style={styles.cameraContainer}>
+                <Image
+                  source={require("../assets/cam.png")}
+                  style={styles.cameraIcon}
+                />
+                <Image
+                  source={{ uri: images["img_interior_3"] }}
+                  style={styles.imagePreview}
+                />
+                <Text style={styles.cameraText}>FL Corner</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                selectImage("img_interior_4");
+              }}
+            >
+              <View style={styles.cameraContainer}>
+                <Image
+                  source={require("../assets/cam.png")}
+                  style={styles.cameraIcon}
+                />
+                <Image
+                  source={{ uri: images["img_interior_4"] }}
+                  style={styles.imagePreview}
+                />
+                <Text style={styles.cameraText}>RL Corner</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* Draft & Next Button */}
+        <View style={styles.back_draft}>
+          <View style={styles.buttonContainer}>
+            <LinearGradient
+              colors={["#4B4B4B", "#9F9F9F"]}
+              locations={[0, 1]}
+              start={{ x: 0.2, y: 0.5 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.button}
+            >
+              <TouchableOpacity>
+                <Text style={styles.buttonText}>Draft</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+
+            <LinearGradient
+              colors={["#77B859", "#2DA596"]}
+              locations={[0, 1]}
+              start={{ x: 0.2, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.button}
+            >
+              <TouchableOpacity onPress={() => navigation.navigate("CreateApplicationDocScreen")}>
+                <Text style={styles.buttonText}>Next</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -382,20 +388,16 @@ const styles = StyleSheet.create({
     maxHeight: 130,
     borderRadius: 20,
   },
-
   back_draft: {
     paddingHorizontal: 20,
     borderRadius: 10,
     width: "100%",
     marginTop: 20,
   },
-
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // marginTop: 20,
   },
-
   button: {
     borderRadius: 5,
     paddingVertical: 10,
@@ -405,11 +407,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   buttonText: {
     color: "#fff",
   },
-
   progressBar1: {
     height: 8,
     width: 110,
@@ -425,7 +425,6 @@ const styles = StyleSheet.create({
   progressBar3: {
     height: 8,
     width: 110,
-
     borderRadius: 5,
     marginLeft: 11,
   },
@@ -436,7 +435,6 @@ const styles = StyleSheet.create({
     marginTop: 40,
     justifyContent: "flex-end",
   },
-
   progressText: {
     position: "absolute",
     bottom: 10,
@@ -444,7 +442,6 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     color: "#fff",
   },
-
   header: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -457,7 +454,6 @@ const styles = StyleSheet.create({
   icon: {
     marginLeft: 10,
   },
-
   bottomContainer: {
     position: "absolute",
     bottom: 1,
@@ -475,57 +471,30 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginRight: 10,
   },
-
   bottomText2: {
     color: "#fff",
     marginRight: 1,
   },
-
   backgroundColorWrapper: {
     backgroundColor: "#E5E5E5",
   },
-
-  backgroundColorWrapper1: {
-    backgroundColor: "#E5E5E5",
-    padding: 8,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 0,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 0,
-    width: 45,
-  },
-
-  backgroundColorWrapper2: {
-    backgroundColor: "#FFFFFF",
-    padding: 8,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 10,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 10,
-    width: 45,
-  },
-
   exteriortext: {
     marginTop: 80,
     left: 20,
     color: "#079BB7",
   },
-
   cameraIcon: {
     marginTop: 10,
     borderRadius: 10,
     width: 50,
     height: 50,
-    // tintColor: '#C9C9C9',
   },
-
   cameraText: {
     marginLeft: -2,
     color: "#C9C9C9",
     fontSize: 13,
     fontWeight: "bold",
   },
-
   cameraContainer: {
     marginHorizontal: "auto",
     backgroundColor: "white",
@@ -538,7 +507,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "grey",
   },
-
   imagePreview: {
     position: "absolute",
     width: "150%",
