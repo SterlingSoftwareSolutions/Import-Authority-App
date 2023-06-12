@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Text,
   Image,
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
@@ -26,69 +27,71 @@ function UpdateProfileScreen({ navigation }) {
       colors={[colors.secondary, colors.primary]}
       style={styles.container}
     >
-      <SafeAreaView style={[styles.safeArea, { marginBottom: -300 }]}>
-        <View style={styles.circleContainer}>
-          <View style={styles.labelsContainer}>
-            <TouchableOpacity style={styles.button} onPress={() => {}}>
-              <Text style={styles.buttonProfile}>PROFILE</Text>
+      <ScrollView>
+        <SafeAreaView style={[styles.safeArea]}>
+          <View style={{ ...styles.circleContainer, marginBottom: 150 }}>
+            <View style={styles.labelsContainer}>
+              <TouchableOpacity style={styles.button} onPress={() => { }}>
+                <Text style={styles.buttonProfile}>PROFILE</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => { }}>
+                <Text style={styles.buttonPassword}>PASSWORD</Text>
+              </TouchableOpacity>
+            </View>
+            <Image
+              source={require("../assets/user.jpg")}
+              style={[styles.circleImage, { marginBottom: -200 }]}
+            />
+          </View>
+
+          <View style={styles.formContainer}>
+            <TextInput
+              style={[styles.input, styles.usernameInput]}
+              placeholder={user.name}
+              placeholderTextColor="#23A29F"
+              color="#10bca"
+            />
+            <TextInput
+              style={[styles.input, styles.usernameInput]}
+              placeholder={user.businessname}
+              placeholderTextColor="#23A29F"
+              color="#10bca"
+            />
+            <TextInput
+              style={[styles.input, styles.usernameInput]}
+              placeholder={user.username}
+              placeholderTextColor="#23A29F"
+              color="#10bca"
+            />
+            <TextInput
+              style={[styles.input, styles.usernameInput]}
+              placeholder={user.email}
+              placeholderTextColor="#23A29F"
+              color="#10bca"
+            />
+            <TextInput
+              style={[styles.input, styles.usernameInput]}
+              placeholder={user.phone}
+              placeholderTextColor="#23A29F"
+              color="#10bca"
+            />
+
+            <TouchableOpacity
+              style={{ ...styles.buttonContainer, marginBottom: 10 }}
+              onPress={() => { }}
+            >
+              <Text style={styles.buttonText}>UPDATE</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => {}}>
-              <Text style={styles.buttonPassword}>PASSWORD</Text>
+            <TouchableOpacity
+              style={{ ...styles.buttonContainer, marginBottom: 20 }}
+              onPress={() => logOut()}
+            >
+              <Text style={styles.buttonText}>LOGOUT</Text>
             </TouchableOpacity>
           </View>
-          <Image
-            source={require("../assets/user.jpg")}
-            style={[styles.circleImage, { marginBottom: -200 }]}
-          />
-        </View>
-
-        <View style={styles.formContainer}>
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder={user.name}
-            placeholderTextColor="#23A29F"
-            color="#10bca"
-          />
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder={user.businessname}
-            placeholderTextColor="#23A29F"
-            color="#10bca"
-          />
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder={user.username}
-            placeholderTextColor="#23A29F"
-            color="#10bca"
-          />
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder={user.email}
-            placeholderTextColor="#23A29F"
-            color="#10bca"
-          />
-          <TextInput
-            style={[styles.input, styles.usernameInput]}
-            placeholder={user.phone}
-            placeholderTextColor="#23A29F"
-            color="#10bca"
-          />
-
-          <TouchableOpacity
-            style={{ ...styles.buttonContainer, marginBottom: 10 }}
-            onPress={() => {}}
-          >
-            <Text style={styles.buttonText}>UPDATE</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ ...styles.buttonContainer, marginBottom: 20 }}
-            onPress={() => logOut()}
-          >
-            <Text style={styles.buttonText}>LOGOUT</Text>
-          </TouchableOpacity>
-        </View>
-        <StatusBar style="auto" />
-      </SafeAreaView>
+          <StatusBar style="auto" />
+        </SafeAreaView>
+      </ScrollView>
     </LinearGradient>
   );
 }
@@ -107,8 +110,6 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
-    width: "80%",
     borderRadius: 10,
     width: "100%",
   },
@@ -152,8 +153,8 @@ const styles = StyleSheet.create({
   },
 
   circleContainer: {
-    position: "absolute",
-    top: 60,
+
+    marginBottom: 200,
     justifyContent: "center",
     alignItems: "center",
     width: 100,
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    marginLeft: 15, 
+    marginLeft: 15,
   },
 
   buttonPassword: {
