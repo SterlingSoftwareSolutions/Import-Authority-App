@@ -7,6 +7,7 @@ import {
   Text,
   Image,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
@@ -19,11 +20,14 @@ import {
   DialogContent,
 } from "react-native-popup-dialog";
 import TopUserControlBg from "../components/TopUserControlBg";
+import * as FileSystem from "expo-file-system";
+import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 
 const CreateApplicationImageScreen = (props) => {
   const navigation = useNavigation();
-  const progress1 = 1; // Set the progress value between 0 and 1
+  const progress1 = 1;
   const progress2 = 1;
   const progress3 = 0;
 
@@ -31,6 +35,7 @@ const CreateApplicationImageScreen = (props) => {
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
 
+  // image state
   const [images, setImages] = useState({});
   const [key, setKey] = useState(null);
 
@@ -55,6 +60,19 @@ const CreateApplicationImageScreen = (props) => {
       }));
 
       console.log(images);
+    }
+  };
+
+  // doc state
+  const [docs, setDocs] = useState({});
+
+  const selectDocs = async (key) => {
+    const picker = await DocumentPicker.getDocumentAsync();
+    if (!picker.canceled) {
+      setDocs((docs) => ({
+        ...docs,
+        [key]: picker.uri,
+      }));
     }
   };
 
@@ -173,6 +191,7 @@ const CreateApplicationImageScreen = (props) => {
 
       {/* Image selector container */}
       <ScrollView contentContainerStyle={{ marginTop: 10, paddingBottom: 40 }}>
+        {/* Exterior Images Selector */}
         <View>
           <Text style={[styles.exteriortext, { marginTop: 20 }]}>
             Exterior Images
@@ -256,7 +275,7 @@ const CreateApplicationImageScreen = (props) => {
               </View>
             </TouchableOpacity>
           </View>
-
+          {/* Interior Images Selector */}
           <Text style={[styles.exteriortext, { marginTop: 30 }]}>
             Interiror Images
           </Text>
@@ -341,6 +360,66 @@ const CreateApplicationImageScreen = (props) => {
             </TouchableOpacity>
           </View>
         </View>
+        <View>
+          <Text style={[styles.exteriortext, { marginTop: 60 }]}>
+            Documents
+          </Text>
+
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-around" }}
+          >
+            <TouchableOpacity
+              style={styles.cameraContainer}
+              onPress={() => {
+                selectDocs("doc_invoice");
+              }}
+            >
+              <Image
+                source={
+                  docs["doc_invoice"]
+                    ? require("../assets/doc_thumbnail.png")
+                    : require("../assets/doc_placeholder.png")
+                }
+                style={[styles.cameraIcon]}
+              />
+              <Text style={styles.frText}>Invoice</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cameraContainer}
+              onPress={() => {
+                selectDocs("doc_export_certificate");
+              }}
+            >
+              <Image
+                source={
+                  docs["doc_export_certificate"]
+                    ? require("../assets/doc_thumbnail.png")
+                    : require("../assets/doc_placeholder.png")
+                }
+                style={[styles.cameraIcon]}
+              />
+              <Text style={styles.frText}>Export Certificate</Text>
+            </TouchableOpacity>
+          </View>
+          <SafeAreaView style={{ flexDirection: "row", marginLeft: 46 }}>
+            <TouchableOpacity
+              style={styles.cameraContainer}
+              onPress={() => {
+                selectDocs("doc_auction_report");
+              }}
+            >
+              <Image
+                source={
+                  docs["doc_auction_report"]
+                    ? require("../assets/doc_thumbnail.png")
+                    : require("../assets/doc_placeholder.png")
+                }
+                style={[styles.cameraIcon]}
+              />
+              <Text style={styles.frText}>Auction Report</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+        </View>
         {/* Draft & Next Button */}
         <View style={styles.back_draft}>
           <View style={styles.buttonContainer}>
@@ -363,7 +442,9 @@ const CreateApplicationImageScreen = (props) => {
               end={{ x: 1, y: 1 }}
               style={styles.button}
             >
-              <TouchableOpacity onPress={() => navigation.navigate("CreateApplicationDocScreen")}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("PaymentScreen")}
+              >
                 <Text style={styles.buttonText}>Next</Text>
               </TouchableOpacity>
             </LinearGradient>
@@ -428,7 +509,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginLeft: 11,
   },
-
   progressContainer: {
     flexDirection: "row",
     paddingHorizontal: 22,
@@ -441,42 +521,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: "transparent",
     color: "#fff",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-  iconContainer: {
-    flexDirection: "row",
-  },
-  icon: {
-    marginLeft: 10,
-  },
-  bottomContainer: {
-    position: "absolute",
-    bottom: 1,
-    left: -20,
-    right: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 80,
-  },
-  bottomRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  bottomText1: {
-    color: "#fff",
-    marginRight: 10,
-  },
-  bottomText2: {
-    color: "#fff",
-    marginRight: 1,
-  },
-  backgroundColorWrapper: {
-    backgroundColor: "#E5E5E5",
   },
   exteriortext: {
     marginTop: 80,
@@ -494,6 +538,13 @@ const styles = StyleSheet.create({
     color: "#C9C9C9",
     fontSize: 13,
     fontWeight: "bold",
+  },
+  frText: {
+    marginLeft: -2,
+    color: "#C9C9C9",
+    fontSize: 13,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   cameraContainer: {
     marginHorizontal: "auto",

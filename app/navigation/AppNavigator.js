@@ -9,8 +9,6 @@ import ApplicationCreateNavigator from "../navigation/ApplicationCreateNavigator
 import AllApplicationScreen from "../screens/AllApplicationScreen";
 import PaymentHistoryScreen from "../screens/Transaction";
 import TransactionNavigator from "./TransactionNavigator";
-import CreateApplicationDocScreen from "../screens/CreateApplicationDocScreen";
-
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
@@ -51,7 +49,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Draft"
-      component={CreateApplicationDocScreen}
+      component={PaymentHistoryScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
