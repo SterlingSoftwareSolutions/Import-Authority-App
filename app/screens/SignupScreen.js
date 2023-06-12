@@ -3,10 +3,8 @@ import {
   ImageBackground,
   SafeAreaView,
   StyleSheet,
-  TextInput,
   View,
   Image,
-  TouchableOpacity,
   Text,
   ScrollView,
 } from "react-native";
@@ -14,16 +12,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
 import * as Yup from "yup";
 
-import {
-  ErrorMessage,
-  AppForm,
-  AppFormField
-} from "../components/forms";
+import { ErrorMessage, AppForm, AppFormField } from "../components/forms";
 import useApi from "../hooks/useApi";
 import usersApi from "../api/users";
 import authApi from "../api/auth";
 import ExtSubmitButton from "../components/forms/ExtSubmitButton";
 import { useFormikContext } from "formik";
+import apiClient from "../api/client";
+import useAuth from "../auth/useAuth";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -51,13 +47,13 @@ const SignupScreen = (props) => {
 
   const handleSubmit = async (userInfo) => {
     const result = await registerApi.request(userInfo);
-    console.log(result);
-    //  console.log(result);
+    // console.log(result);
     if (!result.ok) {
+      console.log(result.data.errors);
       if (result.data) setError(result.data.error);
       else {
         setError("An unexpected error occurred.");
-        console.log(result);
+        // console.log(result);
       }
       return;
     }
@@ -66,12 +62,12 @@ const SignupScreen = (props) => {
       userInfo.username,
       userInfo.password
     );
-    auth.logIn(authToken, user);
+    auth.logIn(authToken, result.data.data.user);
   };
 
   const submitForm = () => {
     signUpForm.current.submitForm();
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,15 +82,16 @@ const SignupScreen = (props) => {
           <View style={styles.displayPicWrapper}>
             <View>
               <View style={styles.content}>
-                <Image source={require("../assets/displaypic.jpg")}
-                  style={styles.displayPic} />
+                <Image
+                  source={require("../assets/displaypic.jpg")}
+                  style={styles.displayPic}
+                />
                 <Image
                   style={styles.logo}
                   source={require("../assets/ImportAuthorityLogo.jpg")}
                 />
                 <View style={styles.overlay}>
                   <AppForm
-
                     initialValues={{
                       name: "",
                       businessname: "",
@@ -209,20 +206,19 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 70,
   },
   displayPic: {
-    position: 'absolute',
+    position: "absolute",
     height: 450,
     width: "100%",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
-    paddingHorizontal: 0
+    paddingHorizontal: 0,
   },
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-
   },
   content: {
     alignItems: "center",
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   logo: {
     marginTop: 50,
@@ -232,11 +228,9 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   overlay: {
-
     paddingHorizontal: 10,
     borderRadius: 15,
     width: "80%",
-
   },
   input: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -307,4 +301,3 @@ const styles = StyleSheet.create({
 });
 
 export default SignupScreen;
-

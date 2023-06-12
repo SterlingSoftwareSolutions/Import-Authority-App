@@ -7,7 +7,7 @@ import {
   Text,
   Image,
   ScrollView,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
@@ -22,11 +22,12 @@ import {
 import TopUserControlBg from "../components/TopUserControlBg";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 
 const CreateApplicationImageScreen = (props) => {
   const navigation = useNavigation();
-  const progress1 = 1; 
+  const progress1 = 1;
   const progress2 = 1;
   const progress3 = 0;
 
@@ -62,7 +63,7 @@ const CreateApplicationImageScreen = (props) => {
     }
   };
 
-  // doc state 
+  // doc state
   const [docs, setDocs] = useState({});
 
   const selectDocs = async (key) => {
@@ -360,61 +361,65 @@ const CreateApplicationImageScreen = (props) => {
           </View>
         </View>
         <View>
-        <Text style={[styles.exteriortext, { marginTop: 60 }]}>Documents</Text>
+          <Text style={[styles.exteriortext, { marginTop: 60 }]}>
+            Documents
+          </Text>
 
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-          <TouchableOpacity
-            style={styles.cameraContainer}
-            onPress={() => {
-              selectDocs("doc_invoice");
-            }}
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
-            <Image
-              source={
-                docs["doc_invoice"]
-                  ? require("../assets/doc_thumbnail.png")
-                  : require("../assets/doc_placeholder.png")
-              }
-              style={[styles.cameraIcon]}
-            />
-            <Text style={styles.frText}>Invoice</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.cameraContainer}
-            onPress={() => {
-              selectDocs("doc_export_certificate");
-            }}
-          >
-            <Image
-              source={
-                docs["doc_export_certificate"]
-                  ? require("../assets/doc_thumbnail.png")
-                  : require("../assets/doc_placeholder.png")
-              }
-              style={[styles.cameraIcon]}
-            />
-            <Text style={styles.frText}>Export Certificate</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cameraContainer}
+              onPress={() => {
+                selectDocs("doc_invoice");
+              }}
+            >
+              <Image
+                source={
+                  docs["doc_invoice"]
+                    ? require("../assets/doc_thumbnail.png")
+                    : require("../assets/doc_placeholder.png")
+                }
+                style={[styles.cameraIcon]}
+              />
+              <Text style={styles.frText}>Invoice</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.cameraContainer}
+              onPress={() => {
+                selectDocs("doc_export_certificate");
+              }}
+            >
+              <Image
+                source={
+                  docs["doc_export_certificate"]
+                    ? require("../assets/doc_thumbnail.png")
+                    : require("../assets/doc_placeholder.png")
+                }
+                style={[styles.cameraIcon]}
+              />
+              <Text style={styles.frText}>Export Certificate</Text>
+            </TouchableOpacity>
+          </View>
+          <SafeAreaView style={{ flexDirection: "row", marginLeft: 46 }}>
+            <TouchableOpacity
+              style={styles.cameraContainer}
+              onPress={() => {
+                selectDocs("doc_auction_report");
+              }}
+            >
+              <Image
+                source={
+                  docs["doc_auction_report"]
+                    ? require("../assets/doc_thumbnail.png")
+                    : require("../assets/doc_placeholder.png")
+                }
+                style={[styles.cameraIcon]}
+              />
+              <Text style={styles.frText}>Auction Report</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
         </View>
-        <SafeAreaView style={{ flexDirection: "row", marginLeft: 46 }}>
-          <TouchableOpacity
-            style={styles.cameraContainer}
-            onPress={() => {
-              selectDocs("doc_auction_report");
-            }}
-          >
-            <Image
-              source={
-                docs["doc_auction_report"]
-                  ? require("../assets/doc_thumbnail.png")
-                  : require("../assets/doc_placeholder.png")
-              }
-              style={[styles.cameraIcon]}
-            />
-            <Text style={styles.frText}>Auction Report</Text>
-          </TouchableOpacity>
-        </SafeAreaView>
-      </View>
         {/* Draft & Next Button */}
         <View style={styles.back_draft}>
           <View style={styles.buttonContainer}>
