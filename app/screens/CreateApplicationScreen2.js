@@ -10,7 +10,7 @@ import {
   Text,
   Image,
   Switch,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
@@ -19,10 +19,12 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { SelectList } from "react-native-dropdown-select-list";
 import colors from "../config/colors";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { RadioButton } from 'react-native-paper';
+import { RadioButton } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import TopUserControlBg from "../components/TopUserControlBg";
 
 const CreateApplicationMain = () => {
-
+  const navigation = useNavigation();
   const progress1 = 1; // Set the progress value between 0 and 1
   const progress2 = 0;
   const progress3 = 0;
@@ -47,8 +49,9 @@ const CreateApplicationMain = () => {
 
   const [selected, setSelected] = React.useState("");
 
- 
-  { /Make/ }
+  {
+    /Make/;
+  }
 
   const datamake = [
     { key: "1", value: "Toyota" },
@@ -63,7 +66,9 @@ const CreateApplicationMain = () => {
     { key: "10", value: "Waleed" },
   ];
 
-  { /Model/ }
+  {
+    /Model/;
+  }
   const datamodel = [
     { key: "1", value: "Toyota" },
     { key: "2", value: "Nissan" },
@@ -77,7 +82,9 @@ const CreateApplicationMain = () => {
     { key: "10", value: "Waleed" },
   ];
 
-  { /Build Month/ }
+  {
+    /Build Month/;
+  }
 
   const databuildmonth = [
     { key: "1", value: "January" },
@@ -94,8 +101,9 @@ const CreateApplicationMain = () => {
     { key: "12", value: "December" },
   ];
 
-
-  { /Build Year/ }
+  {
+    /Build Year/;
+  }
   const last = 1886;
   const now = new Date().getFullYear();
   const databuildyear = [];
@@ -104,9 +112,9 @@ const CreateApplicationMain = () => {
     databuildyear.push({ key: i, value: i });
   }
 
-
-
-  { /Fuel Type/ }
+  {
+    /Fuel Type/;
+  }
 
   const databuildfueltype = [
     { key: "1", value: "Petrol" },
@@ -114,12 +122,11 @@ const CreateApplicationMain = () => {
     { key: "3", value: "Hybrid(Petrol/Electric)" },
     { key: "4", value: "Hybrid(Diesel/Electric)" },
     { key: "5", value: "Electric" },
-
   ];
 
-
-
-  { /Transmission/ }
+  {
+    /Transmission/;
+  }
 
   const datatransmission = [
     { key: "1", value: "Manual" },
@@ -127,7 +134,9 @@ const CreateApplicationMain = () => {
     { key: "3", value: "Other" },
   ];
 
-  { /Body Type/ }
+  {
+    /Body Type/;
+  }
 
   const databodytype = [
     { key: "1", value: "HatchBack" },
@@ -140,7 +149,9 @@ const CreateApplicationMain = () => {
     { key: "7", value: "Other" },
   ];
 
-  { /Drive type/ }
+  {
+    /Drive type/;
+  }
   const datadrivetype = [
     { key: "1", value: "FWD" },
     { key: "2", value: "RWD" },
@@ -148,7 +159,9 @@ const CreateApplicationMain = () => {
     { key: "4", value: "AWD" },
   ];
 
-  { /Date Picker/ }
+  {
+    /Date Picker/;
+  }
   const [datePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -166,9 +179,9 @@ const CreateApplicationMain = () => {
     setDatePickerVisibility(false);
   };
 
-
-
-  { /Approval Type Switch / }
+  {
+    /Approval Type Switch /;
+  }
 
   const [approvalType, setApprovalType] = useState(0);
 
@@ -180,65 +193,15 @@ const CreateApplicationMain = () => {
     }
   };
 
-  
-
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState("");
 
   const handleRadioButtonChange = (newValue) => {
     setValue(newValue);
-
-
-  }
+  };
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={[colors.secondary, colors.primary]} // Set the starting and ending colors for the gradient
-        style={styles.background}
-      >
-        <View style={styles.header}>
-          <View style={styles.iconContainer}>
-            <TouchableOpacity
-              onPress={() => handleNotificationPress()}
-              style={styles.iconButton}
-            >
-              <Image
-                source={require("../assets/bell.png")}
-                style={[
-                  styles.icon,
-                  { width: 24, height: 24, tintColor: "#fff" },
-                ]}
-              />
-
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleLogoutPress()}
-              style={styles.iconButton}
-            >
-              <Image
-                source={require("../assets/money.png")}
-                style={[
-                  styles.icon,
-                  { width: 24, height: 24, tintColor: "#fff" },
-                ]}
-              />
-
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleTransactionPress()}
-              style={styles.iconButton}
-            >
-              <Image
-                source={require("../assets/user.png")}
-                style={[
-                  styles.icon,
-                  { width: 24, height: 24, tintColor: "#fff" },
-                ]}
-              />
-
-            </TouchableOpacity>
-          </View>
-        </View>
-
+      <TopUserControlBg>
+        {/* step progress container */}
         <View style={styles.progressContainer}>
           <View style={styles.progressBarWrapper}>
             <TextInput
@@ -285,25 +248,32 @@ const CreateApplicationMain = () => {
             />
           </View>
         </View>
-
-        <TouchableWithoutFeedback
-          onPress={switchApprovalType}>
-          <View
-            style={styles.bottomContainer}>
+        {/* Switch container */}
+        <TouchableWithoutFeedback onPress={switchApprovalType}>
+          <View style={styles.bottomContainer}>
             <View style={styles.bottomRow}>
               <Text style={styles.bottomText1}>SEVs / RAWs</Text>
-
-              <View style={[styles.backgroundColorWrapper1, approvalType == 1 && styles.switchItemSelected]}>
+              <View
+                style={[
+                  styles.backgroundColorWrapper1,
+                  approvalType == 0 && styles.switchItemSelected,
+                ]}
+              >
                 <Image
-                  source={require("../assets/car2.png")}
+                  source={require("../assets/car1.png")}
                   style={styles.carIcon1}
                 />
               </View>
             </View>
             <View style={styles.bottomRow}>
-              <View style={[styles.backgroundColorWrapper2, approvalType == 0 && styles.switchItemSelected]}>
+              <View
+                style={[
+                  styles.backgroundColorWrapper2,
+                  approvalType == 1 && styles.switchItemSelected,
+                ]}
+              >
                 <Image
-                  source={require("../assets/car1.png")}
+                  source={require("../assets/car2.png")}
                   style={styles.carIcon2}
                 />
               </View>
@@ -312,37 +282,37 @@ const CreateApplicationMain = () => {
             </View>
           </View>
         </TouchableWithoutFeedback>
-      </LinearGradient>
+      </TopUserControlBg>
 
       <SafeAreaView style={styles.formContainer}>
-        <ScrollView contentContainerStyle={{ marginTop: 10, paddingBottom: 30 }}>
-
-        <View>
-            
-  <RadioButton.Group
-  onValueChange={handleRadioButtonChange}
-  value={value}
->
- <View  style={{flexDirection: "row"}}>
-  <RadioButton.Item style={{flexDirection: 'row-reverse', marginRight: -19}}
-    label="I need an Engineer"
-    value="needEngineer"
-    labelStyle={{ color: '#23A29F', fontSize: 14}}
-    uncheckedColor="#23A29F" // Adjust the color of the unchecked radio circle
-    color="#23A29F" // Adjust the color of the checkbox
-  />
- <RadioButton.Item style={{flexDirection: 'row-reverse', marginRight: -29}}
-    label="I have my Own Engineer"
-    value="ownEngineer"
-    labelStyle={{ color: '#23A29F', fontSize: 14 }}
-    uncheckedColor="#23A29F" // Adjust the color of the unchecked radio circle
-    color="#23A29F" // Adjust the color of the checkbox
-  />
-  </View>
-</RadioButton.Group>
-
-
-    </View>
+        <ScrollView
+          contentContainerStyle={{ marginTop: 10, paddingBottom: 180 }}
+        >
+          <View>
+            <RadioButton.Group
+              onValueChange={handleRadioButtonChange}
+              value={value}
+            >
+              <View style={{ flexDirection: "row" }}>
+                <RadioButton.Item
+                  style={{ flexDirection: "row-reverse", marginRight: -19 }}
+                  label="I need an Engineer"
+                  value="needEngineer"
+                  labelStyle={{ color: "#23A29F", fontSize: 14 }}
+                  uncheckedColor="#23A29F"
+                  color="#23A29F"
+                />
+                <RadioButton.Item
+                  style={{ flexDirection: "row-reverse", marginRight: -29 }}
+                  label="I have my Own Engineer"
+                  value="ownEngineer"
+                  labelStyle={{ color: "#23A29F", fontSize: 14 }}
+                  uncheckedColor="#23A29F"
+                  color="#23A29F"
+                />
+              </View>
+            </RadioButton.Group>
+          </View>
 
           <TextInput
             style={[styles.input, styles.usernameInput, { marginTop: 10 }]}
@@ -350,9 +320,11 @@ const CreateApplicationMain = () => {
             placeholderTextColor="#23A29F"
           />
 
-          <TouchableOpacity onPress={() => {
-            showDatePicker();
-          }} >
+          <TouchableOpacity
+            onPress={() => {
+              showDatePicker();
+            }}
+          >
             <TextInput
               style={[styles.input, styles.usernameInput]}
               placeholder="Estimated Date of Arrival *"
@@ -376,11 +348,10 @@ const CreateApplicationMain = () => {
               data={datamake}
               save="value"
               boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
+              inputStyles={{ color: "#23A29F" }}
               dropdownStyles={{ ...styles.dropDownListStyle }}
               dropdownTextStyles={{ color: "#23A29F" }}
               search={false}
-
             />
           </View>
 
@@ -391,12 +362,11 @@ const CreateApplicationMain = () => {
               data={datamodel}
               save="value"
               boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
+              inputStyles={{ color: "#23A29F" }}
               dropdownStyles={{ ...styles.dropDownListStyle }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
           </View>
-
 
           <View style={[styles.dropdown]}>
             <SelectList
@@ -405,7 +375,7 @@ const CreateApplicationMain = () => {
               data={databuildmonth}
               save="value"
               boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
+              inputStyles={{ color: "#23A29F" }}
               dropdownStyles={{ ...styles.dropDownListStyle }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
@@ -418,7 +388,7 @@ const CreateApplicationMain = () => {
               data={databuildyear}
               save="value"
               boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
+              inputStyles={{ color: "#23A29F" }}
               dropdownStyles={{ ...styles.dropDownListStyle }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
@@ -431,7 +401,7 @@ const CreateApplicationMain = () => {
               data={databuildfueltype}
               save="value"
               boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
+              inputStyles={{ color: "#23A29F" }}
               dropdownStyles={{ ...styles.dropDownListStyle }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
@@ -444,7 +414,7 @@ const CreateApplicationMain = () => {
               data={datatransmission}
               save="value"
               boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
+              inputStyles={{ color: "#23A29F" }}
               dropdownStyles={{ ...styles.dropDownListStyle }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
@@ -457,7 +427,7 @@ const CreateApplicationMain = () => {
               data={databodytype}
               save="value"
               boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
+              inputStyles={{ color: "#23A29F" }}
               dropdownStyles={{ ...styles.dropDownListStyle }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
@@ -470,7 +440,7 @@ const CreateApplicationMain = () => {
               data={datadrivetype}
               save="value"
               boxStyles={styles.dropdownBox}
-              inputStyles={{ color: "#23A29F", }}
+              inputStyles={{ color: "#23A29F" }}
               dropdownStyles={{ ...styles.dropDownListStyle }}
               dropdownTextStyles={{ color: "#23A29F" }}
             />
@@ -481,9 +451,7 @@ const CreateApplicationMain = () => {
               style={[styles.input, styles.usernameInput, {}]}
               placeholder="Odometer *"
               placeholderTextColor="#23A29F"
-
             />
-
           </View>
 
           <View style={styles.buttonContainer}>
@@ -514,12 +482,8 @@ const CreateApplicationMain = () => {
         </ScrollView>
       </SafeAreaView>
 
-
       <StatusBar style="auto" />
-
-
     </View>
-
   );
 };
 const styles = StyleSheet.create({
@@ -537,14 +501,14 @@ const styles = StyleSheet.create({
     maxHeight: 130,
     borderRadius: 20,
   },
-
   formContainer: {
     paddingHorizontal: 20,
     borderRadius: 10,
     width: "100%",
     marginTop: 132,
+    width: "100%",
+    marginTop: 12,
   },
-
   label: {
     color: "#fff",
     fontSize: 16,
@@ -555,15 +519,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    color: 'black',
-    marginBottom: 10
+    color: "black",
+    marginBottom: 10,
   },
 
   dropdown: {
     backgroundColor: "#fff0",
     borderRadius: 10,
-    marginBottom: 10
-
+    marginBottom: 10,
   },
 
   usernameInput: {
@@ -575,10 +538,8 @@ const styles = StyleSheet.create({
   },
 
   createapplicationrowContainer: {
-
     justifyContent: "space-between",
     marginBottom: 10,
-
   },
 
   smallInput: {
@@ -589,7 +550,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-
   },
 
   button: {
@@ -611,11 +571,13 @@ const styles = StyleSheet.create({
     width: 110,
     borderRadius: 5,
     marginLeft: 5,
+    marginLeft: 5,
   },
   progressBar2: {
     height: 8,
     width: 110,
     borderRadius: 5,
+    marginLeft: 8,
     marginLeft: 8,
   },
   progressBar3: {
@@ -624,14 +586,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginLeft: 11,
   },
-
   progressContainer: {
     flexDirection: "row",
-    paddingHorizontal: 22,
     marginTop: 40,
-    justifyContent: "flex-end",
+    justifyContent: "center",
+    paddingBottom: 25,
   },
-
   progressText: {
     position: "absolute",
     bottom: 10,
@@ -652,17 +612,15 @@ const styles = StyleSheet.create({
   icon: {
     marginLeft: 10,
   },
-
   bottomContainer: {
     position: "absolute",
     bottom: 1,
-    left: -20,
     right: 0,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 80,
+    marginBottom: 10,
   },
-
   bottomRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -710,18 +668,17 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
     borderRadius: 10,
-    borderColor: 'white'
+    borderColor: "white",
   },
 
   dropdownBox: {
-    backgroundColor: 'white',
-    borderColor: 'white'
+    backgroundColor: "white",
+    borderColor: "white",
   },
 
   switchItemSelected: {
-    backgroundColor: '#E5E5E5'
-  }
-
+    backgroundColor: "#E5E5E5",
+  },
 });
 
 export default CreateApplicationMain;

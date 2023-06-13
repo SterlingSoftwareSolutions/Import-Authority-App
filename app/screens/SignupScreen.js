@@ -1,17 +1,17 @@
 import React, { useRef, useState } from "react";
 import {
-  ImageBackground,
   SafeAreaView,
   StyleSheet,
   View,
   Image,
   Text,
   ScrollView,
+  TouchableOpacity
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
 import * as Yup from "yup";
-
+import { useNavigation } from "@react-navigation/native";
 import { ErrorMessage, AppForm, AppFormField } from "../components/forms";
 import useApi from "../hooks/useApi";
 import usersApi from "../api/users";
@@ -44,6 +44,7 @@ const SignupScreen = (props) => {
   const { user } = useAuth();
   const [error, setError] = useState();
   const signUpForm = useRef(null);
+  const navigation = useNavigation();
 
   const handleSubmit = async (userInfo) => {
     const result = await registerApi.request(userInfo);
@@ -162,10 +163,12 @@ const SignupScreen = (props) => {
         </View>
         <ExtSubmitButton title="SIGNUP" onPress={submitForm} />
         <View style={styles.footerContainer}>
-          <Text style={styles.footerText}>
-            Already have an Account?{" "}
-            <Text style={styles.signupText}> LOGIN </Text>
-          </Text>
+          <View style={{ flexDirection: "row", alignItems: "center" , marginBottom:10}}>
+            <Text style={styles.footerText}>Already have an Account?</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.signupText}> LOGIN </Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.footerContainer}>
             <Text style={styles.footerText}>Import Authority</Text>
             <Text style={styles.footerText}>All rights reserved</Text>

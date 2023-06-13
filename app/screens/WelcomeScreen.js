@@ -11,6 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import colors from "../config/colors";
 import CustomButton from "../components/CustomButton";
+import { TouchableOpacity } from "react-native";
 
 function WelcomeScreen({ navigation }) {
   return (
@@ -44,9 +45,11 @@ function WelcomeScreen({ navigation }) {
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>Import Authority</Text>
         <Text style={styles.footerText}>All rights reserved</Text>
+        <TouchableOpacity>
         <Text style={styles.footerTextTerms}>
           Terms of use | Privacy Policy
         </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
