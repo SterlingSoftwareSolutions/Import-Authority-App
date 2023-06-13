@@ -39,7 +39,7 @@ function UpdateProfileScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <Image
-              source={require("../assets/user.jpg")}
+              source={require("../assets/avatar.jpg")}
               style={[styles.circleImage, { marginBottom: -200 }]}
             />
           </View>
