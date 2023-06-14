@@ -1,6 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { AppLoading } from "expo";
-
 import { StyleSheet } from "react-native";
 import AppNavigator from "./app/navigation/AppNavigator";
 import navigationTheme from "./app/navigation/navigationTheme";
