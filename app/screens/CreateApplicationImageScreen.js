@@ -11,19 +11,18 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
-import colors from "../config/colors";
 import {
   Dialog,
   DialogTitle,
   DialogFooter,
   DialogButton,
-  DialogContent,
 } from "react-native-popup-dialog";
 import TopUserControlBg from "../components/TopUserControlBg";
-import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
+import * as Yup from "yup";
+import { Formik } from "formik";
 
 const CreateApplicationImageScreen = (props) => {
   const navigation = useNavigation();
@@ -76,24 +75,63 @@ const CreateApplicationImageScreen = (props) => {
     }
   };
 
-  {
-    /Approval Type Switch /;
-  }
+  // Image & Doc Validation Start
+  const [imageSourceDialog, setImageSourceDialog] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const [approvalType, setApprovalType] = useState(0);
+  const validateImages = () => {
+    const requiredImages = [
+      "img_front_right",
+      "img_rear_right",
+      "img_front_left",
+      "img_rear_left",
+      "img_interior_1",
+      "img_interior_2",
+      "img_interior_3",
+      "img_interior_4",
+    ];
 
-  const switchApprovalType = () => {
-    if (approvalType == 0) {
-      setApprovalType(1);
-    } else {
-      setApprovalType(0);
+    const missingImages = requiredImages.filter((image) => !images[image]);
+
+    if (missingImages.length > 0) {
+      const imageErrorMessage = missingImages
+        .map((image) => `\u2022 ${image} field is required.`)
+        .join("\n");
+      return imageErrorMessage;
     }
+
+    return "";
   };
 
-  {
-    /Approval Type Switch /;
-  }
-  const [imageSourceDialog, setImageSourceDialog] = useState(false);
+  const validateDocuments = () => {
+    const requiredDocs = ["doc_invoice", "doc_export_certificate"];
+
+    const missingDocs = requiredDocs.filter((doc) => !docs[doc]);
+
+    if (missingDocs.length > 0) {
+      const docErrorMessage = missingDocs
+        .map((doc) => `\u2022 ${doc} field is required.`)
+        .join("\n");
+      return docErrorMessage;
+    }
+
+    return "";
+  };
+
+  const handleNextButton = () => {
+    const imageErrorMessage = validateImages();
+    const docErrorMessage = validateDocuments();
+
+    if (imageErrorMessage || docErrorMessage) {
+      const combinedErrorMessage = `${imageErrorMessage}\n${docErrorMessage}`;
+      setErrorMessage(combinedErrorMessage);
+    } else {
+      setErrorMessage("");
+      navigation.navigate("PaymentScreen");
+    }
+  };
+  // --Image & Doc Validation End--
+
 
   return (
     <View style={styles.container}>
@@ -191,6 +229,12 @@ const CreateApplicationImageScreen = (props) => {
 
       {/* Image selector container */}
       <ScrollView contentContainerStyle={{ marginTop: 10, paddingBottom: 40 }}>
+        {errorMessage ? (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{errorMessage}</Text>
+          </View>
+        ) : null}
+
         {/* Exterior Images Selector */}
         <View>
           <Text style={[styles.exteriortext, { marginTop: 20 }]}>
@@ -442,9 +486,7 @@ const CreateApplicationImageScreen = (props) => {
               end={{ x: 1, y: 1 }}
               style={styles.button}
             >
-              <TouchableOpacity
-                onPress={() => navigation.navigate("PaymentScreen")}
-              >
+              <TouchableOpacity onPress={handleNextButton}>
                 <Text style={styles.buttonText}>Next</Text>
               </TouchableOpacity>
             </LinearGradient>
@@ -557,6 +599,7 @@ const styles = StyleSheet.create({
     width: 100,
     alignItems: "center",
     borderColor: "grey",
+    overflow: "hidden",
   },
   imagePreview: {
     position: "absolute",
@@ -565,6 +608,16 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 20,
     zIndex: 2,
+  },
+  errorContainer: {
+    backgroundColor: "#f8d7da",
+    padding: 10,
+    borderRadius: 15,
+    marginHorizontal: 20,
+  },
+  errorText: {
+    color: "#B71C1C",
+    fontSize: 14,
   },
 });
 

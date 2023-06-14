@@ -7,7 +7,7 @@
     "icon": "./app/assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./app/assets/ImportAuthority_Logo_Full.jpg",
+      "image": "./app/assets/ImportAuthority_Logo_Full.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,12 +19,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/ImportAuthority_Logo_Full.jpg",
+        "foregroundImage": "./app/assets/ImportAuthority_Logo_Full.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.importauthority.portal"
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "117814d0-bfc9-4164-83d1-4a58298d6f5d"
+      }
     }
   }
 }
