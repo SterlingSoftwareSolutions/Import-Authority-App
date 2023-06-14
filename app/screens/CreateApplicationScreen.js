@@ -211,7 +211,7 @@ const CreateApplicationMain = () => {
     try {
       const response = await client.post(endpoint, applicationData);
       console.log("Response:", response.data);
-      navigation.navigate("ApplicationSuccess");
+      navigation.navigate("CreateApplicationImageScreen");
     } catch (error) {
       console.log("Error:", error);
     }
@@ -225,6 +225,9 @@ const CreateApplicationMain = () => {
   };
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
+  };
+  const handleNextButton = () => {
+      navigation.navigate("PaymentScreen");
   };
   return (
 
@@ -261,7 +264,6 @@ const CreateApplicationMain = () => {
         odometer: Yup.string().required("Odometer is required"),
       })}
     >
-
       {({
         values,
         handleChange,
@@ -827,6 +829,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGrey,
     borderColor: colors.primary,
     borderWidth: 2,
+  },
+  errorText: {
+    color: "red", 
+    fontSize: 12,
   },
 });
 
