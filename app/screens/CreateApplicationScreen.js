@@ -9,12 +9,12 @@ import {
   TouchableWithoutFeedback,
   Text,
   Image,
-  Switch,
   ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
 import { SelectList } from "react-native-dropdown-select-list";
+import { RadioButton } from "react-native-paper";
 import colors from "../config/colors";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Yup from "yup";
@@ -34,17 +34,6 @@ const CreateApplicationMain = () => {
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
-
-  const [switch1Value, setSwitch1Value] = React.useState(false);
-  const [switch2Value, setSwitch2Value] = React.useState(false);
-
-  const handleSwitch1Toggle = () => {
-    setSwitch1Value((prevValue) => !prevValue);
-  };
-
-  const handleSwitch2Toggle = () => {
-    setSwitch2Value((prevValue) => !prevValue);
-  };
 
   const [selected, setSelected] = React.useState("");
   const [selectedMake, setSelectedMake] = useState("");
@@ -195,11 +184,22 @@ const CreateApplicationMain = () => {
   const switchApprovalType = () => {
     if (approvalType == 0) {
       setApprovalType(1);
+      setShowDropdown(true);
     } else {
       setApprovalType(0);
+      setShowDropdown(false); 
     }
   };
 
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [radioButtonvalue, setRadioButtonvalue] = React.useState("");
+
+  const handleRadioButtonChange = (newValue) => {
+    setRadioButtonvalue(newValue);
+  };
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
   return (
     <Formik
       initialValues={{
@@ -315,6 +315,7 @@ const CreateApplicationMain = () => {
                       styles.backgroundColorWrapper2,
                       approvalType == 1 && styles.switchItemSelected,
                     ]}
+                    onPress={toggleDropdown} 
                   >
                     <Image
                       source={require("../assets/car2.png")}
@@ -331,11 +332,44 @@ const CreateApplicationMain = () => {
             <ScrollView
               contentContainerStyle={{ marginTop: 10, paddingBottom: 180 }}
             >
+              {showDropdown && (
+                <View>
+                  <RadioButton.Group
+                    onValueChange={handleRadioButtonChange}
+                    value={radioButtonvalue}
+                  >
+                    <View style={{ flexDirection: "row" }}>
+                      <RadioButton.Item
+                        style={{
+                          flexDirection: "row-reverse",
+                          marginRight: -19,
+                        }}
+                        label="I need an Engineer"
+                        value="needEngineer"
+                        labelStyle={{ color: colors.primary, fontSize: 14 }}
+                        uncheckedColor={colors.primary}
+                        color={colors.primary}
+                      />
+                      <RadioButton.Item
+                        style={{
+                          flexDirection: "row-reverse",
+                          marginRight: -25,
+                        }}
+                        label="I have my Own Engineer"
+                        value="ownEngineer"
+                        labelStyle={{ color: colors.primary, fontSize: 14 }}
+                        uncheckedColor={colors.primary}
+                        color={colors.primary}
+                      />
+                    </View>
+                  </RadioButton.Group>
+                </View>
+              )}
               <TextInput
                 style={[styles.input, styles.usernameInput, { marginTop: 10 }]}
                 placeholder="Chassis/ Frame Number *"
                 value={values.chassisNumber}
-                placeholderTextColor="#23A29F"
+                placeholderTextColor={colors.primary}
                 onChangeText={handleChange("chassisNumber")}
               />
               <DateTimePickerModal
@@ -352,7 +386,7 @@ const CreateApplicationMain = () => {
                 <TextInput
                   style={[styles.input, styles.usernameInput]}
                   placeholder="Estimated Date of Arrival *"
-                  placeholderTextColor="#23A29F"
+                  placeholderTextColor={colors.primary}
                   value={selectedDate}
                   editable={false}
                 />
@@ -364,9 +398,9 @@ const CreateApplicationMain = () => {
                   data={datamake}
                   save="value"
                   boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: "#23A29F" }}
+                  inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: "#23A29F" }}
+                  dropdownTextStyles={{ color: colors.primary }}
                   search={false}
                 />
               </View>
@@ -377,9 +411,9 @@ const CreateApplicationMain = () => {
                   data={datamodel}
                   save="value"
                   boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: "#23A29F" }}
+                  inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: "#23A29F" }}
+                  dropdownTextStyles={{ color: colors.primary }}
                 />
               </View>
               <View style={[styles.dropdown]}>
@@ -389,9 +423,9 @@ const CreateApplicationMain = () => {
                   data={databuildmonth}
                   save="value"
                   boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: "#23A29F" }}
+                  inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: "#23A29F" }}
+                  dropdownTextStyles={{ color: colors.primary }}
                 />
               </View>
               <View style={[styles.dropdown, {}]}>
@@ -401,9 +435,9 @@ const CreateApplicationMain = () => {
                   data={databuildyear}
                   save="value"
                   boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: "#23A29F" }}
+                  inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: "#23A29F" }}
+                  dropdownTextStyles={{ color: colors.primary }}
                 />
               </View>
 
@@ -414,9 +448,9 @@ const CreateApplicationMain = () => {
                   data={databuildfueltype}
                   save="value"
                   boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: "#23A29F" }}
+                  inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: "#23A29F" }}
+                  dropdownTextStyles={{ color: colors.primary }}
                 />
               </View>
 
@@ -427,9 +461,9 @@ const CreateApplicationMain = () => {
                   data={datatransmission}
                   save="value"
                   boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: "#23A29F" }}
+                  inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: "#23A29F" }}
+                  dropdownTextStyles={{ color: colors.primary }}
                 />
               </View>
 
@@ -440,9 +474,9 @@ const CreateApplicationMain = () => {
                   data={databodytype}
                   save="value"
                   boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: "#23A29F" }}
+                  inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: "#23A29F" }}
+                  dropdownTextStyles={{ color: colors.primary }}
                 />
               </View>
 
@@ -453,9 +487,9 @@ const CreateApplicationMain = () => {
                   data={datadrivetype}
                   save="value"
                   boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: "#23A29F" }}
+                  inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: "#23A29F" }}
+                  dropdownTextStyles={{ color: colors.primary }}
                 />
               </View>
 
@@ -463,16 +497,16 @@ const CreateApplicationMain = () => {
                 <TextInput
                   style={[styles.input, styles.usernameInput, {}]}
                   placeholder="Odometer *"
-                  placeholderTextColor="#23A29F"
+                  placeholderTextColor={colors.primary}
                 />
               </View>
 
               <View style={styles.buttonContainer}>
                 <LinearGradient
-                  colors={["#4B4B4B", "#9F9F9F"]} // Define the colors for the gradient (ash to lighter ash)
-                  locations={[0, 1]} // Define the gradient color stops
-                  start={{ x: 0.2, y: 0.5 }} // Define the start position (top-left)
-                  end={{ x: 1, y: 1 }} // Define the end position (top-right)
+                  colors={["#4B4B4B", "#9F9F9F"]}
+                  locations={[0, 1]}
+                  start={{ x: 0.2, y: 0.5 }}
+                  end={{ x: 1, y: 1 }}
                   style={styles.button}
                 >
                   <TouchableOpacity>
@@ -523,7 +557,6 @@ const styles = StyleSheet.create({
     maxHeight: 130,
     borderRadius: 20,
   },
-
   formContainer: {
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -532,14 +565,12 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 12,
   },
-
   label: {
     color: "#fff",
     color: "#fff",
     fontSize: 16,
     marginBottom: 5,
   },
-
   input: {
     borderRadius: 5,
     paddingHorizontal: 20,
@@ -548,13 +579,11 @@ const styles = StyleSheet.create({
     color: "black",
     marginBottom: 10,
   },
-
   dropdown: {
     backgroundColor: "#fff0",
     borderRadius: 10,
     marginBottom: 10,
   },
-
   usernameInput: {
     backgroundColor: "#fff",
     justifyContent: "center",
@@ -566,23 +595,19 @@ const styles = StyleSheet.create({
     width: "100%",
     width: "100%",
   },
-
   createapplicationrowContainer: {
     justifyContent: "space-between",
     marginBottom: 10,
   },
-
   smallInput: {
     flex: 1,
     marginRight: 5,
     marginRight: 5,
   },
-
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-
   button: {
     borderRadius: 5,
     paddingVertical: 10,
@@ -595,12 +620,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   buttonText: {
     color: "#fff",
     color: "#fff",
   },
-
   progressBar1: {
     height: 8,
     width: 110,
@@ -621,14 +644,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginLeft: 11,
   },
-
   progressContainer: {
     flexDirection: "row",
     marginTop: 40,
     justifyContent: "center",
-    paddingBottom: 20,
+    paddingBottom: 25,
   },
-
   progressText: {
     position: "absolute",
     bottom: 10,
@@ -649,6 +670,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 80,
+    marginBottom: 10,
   },
   bottomRow: {
     flexDirection: "row",
@@ -659,21 +681,17 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginRight: 10,
   },
-
   bottomText2: {
     color: "#fff",
     marginLeft: 20,
   },
-
   carIcon1: {},
   carIcon2: {
     marginRight: 15,
   },
-
   backgroundColorWrapper: {
     backgroundColor: "#E5E5E5",
   },
-
   backgroundColorWrapper1: {
     backgroundColor: "white",
     padding: 8,
@@ -683,7 +701,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 0,
     width: 45,
   },
-
   backgroundColorWrapper2: {
     backgroundColor: "white",
     padding: 8,
@@ -693,21 +710,20 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
     width: 45,
   },
-
   dropDownListStyle: {
     backgroundColor: "white",
     padding: 10,
     borderRadius: 10,
     borderColor: "white",
   },
-
   dropdownBox: {
     backgroundColor: "white",
     borderColor: "white",
   },
-
   switchItemSelected: {
-    backgroundColor: "#E5E5E5",
+    backgroundColor: colors.lightGrey,
+    borderColor: colors.primary,
+    borderWidth: 2,
   },
 });
 
