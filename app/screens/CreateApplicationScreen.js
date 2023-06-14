@@ -523,7 +523,6 @@ const styles = StyleSheet.create({
     maxHeight: 130,
     borderRadius: 20,
   },
-
   formContainer: {
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -532,14 +531,12 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 12,
   },
-
   label: {
     color: "#fff",
     color: "#fff",
     fontSize: 16,
     marginBottom: 5,
   },
-
   input: {
     borderRadius: 5,
     paddingHorizontal: 20,
@@ -548,13 +545,11 @@ const styles = StyleSheet.create({
     color: "black",
     marginBottom: 10,
   },
-
   dropdown: {
     backgroundColor: "#fff0",
     borderRadius: 10,
     marginBottom: 10,
   },
-
   usernameInput: {
     backgroundColor: "#fff",
     justifyContent: "center",
@@ -566,23 +561,19 @@ const styles = StyleSheet.create({
     width: "100%",
     width: "100%",
   },
-
   createapplicationrowContainer: {
     justifyContent: "space-between",
     marginBottom: 10,
   },
-
   smallInput: {
     flex: 1,
     marginRight: 5,
     marginRight: 5,
   },
-
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-
   button: {
     borderRadius: 5,
     paddingVertical: 10,
@@ -595,12 +586,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   buttonText: {
     color: "#fff",
     color: "#fff",
   },
-
   progressBar1: {
     height: 8,
     width: 110,
@@ -621,14 +610,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginLeft: 11,
   },
-
   progressContainer: {
     flexDirection: "row",
     marginTop: 40,
     justifyContent: "center",
-    paddingBottom: 20,
+    paddingBottom: 25,
   },
-
   progressText: {
     position: "absolute",
     bottom: 10,
@@ -649,6 +636,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 80,
+    marginBottom:10,
   },
   bottomRow: {
     flexDirection: "row",
@@ -659,21 +647,17 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginRight: 10,
   },
-
   bottomText2: {
     color: "#fff",
     marginLeft: 20,
   },
-
   carIcon1: {},
   carIcon2: {
     marginRight: 15,
   },
-
   backgroundColorWrapper: {
     backgroundColor: "#E5E5E5",
   },
-
   backgroundColorWrapper1: {
     backgroundColor: "white",
     padding: 8,
@@ -683,7 +667,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 0,
     width: 45,
   },
-
   backgroundColorWrapper2: {
     backgroundColor: "white",
     padding: 8,
@@ -693,21 +676,20 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
     width: 45,
   },
-
   dropDownListStyle: {
     backgroundColor: "white",
     padding: 10,
     borderRadius: 10,
     borderColor: "white",
   },
-
   dropdownBox: {
     backgroundColor: "white",
     borderColor: "white",
   },
-
   switchItemSelected: {
-    backgroundColor: "#E5E5E5",
+    backgroundColor: colors.lightGrey,
+    borderColor:colors.primary,
+    borderWidth:2
   },
 });
 
