@@ -36,6 +36,8 @@ const CreateApplicationMain = () => {
   const [progressText3, setProgressText3] = React.useState("");
 
   const [selected, setSelected] = React.useState("");
+  const [selectedChassisNumber, setSelectedChassisNumber] = React.useState("");
+  const [selectedEstimatedDateofArrival, setSelectedEstimatedDateofArrival] = React.useState("");
   const [selectedMake, setSelectedMake] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedBuildMonth, setSelectedBuildMonth] = useState("");
@@ -44,6 +46,7 @@ const CreateApplicationMain = () => {
   const [selectedTransmission, setSelectedTransmission] = useState("");
   const [selectedBodyType, setSelectedBodyType] = useState("");
   const [selectedDriveType, setSelectedDriveType] = useState("");
+  const [selectedODOMeter, setSelectedODOMeter] = useState("");
 
   {
     /Make/;
@@ -59,7 +62,7 @@ const CreateApplicationMain = () => {
     { key: "7", value: "Mersedez Benz" },
     { key: "8", value: "Suzuki" },
     { key: "9", value: "Honda" },
-    { key: "10", value: "Waleed" },
+
   ];
 
   {
@@ -75,7 +78,7 @@ const CreateApplicationMain = () => {
     { key: "7", value: "Mersedez Benz" },
     { key: "8", value: "Suzuki" },
     { key: "9", value: "Honda" },
-    { key: "10", value: "Waleed" },
+
   ];
 
   {
@@ -105,14 +108,14 @@ const CreateApplicationMain = () => {
   const databuildyear = [];
 
   for (let i = now; i >= last; i--) {
-    databuildyear.push({ key: i, value: i });
+    databuildyear.push({ key: i, value: i.toString() });
   }
 
   {
     /Fuel Type/;
   }
 
-  const databuildfueltype = [
+  const datafueltype = [
     { key: "1", value: "Petrol" },
     { key: "2", value: "Diesel" },
     { key: "3", value: "Hybrid(Petrol/Electric)" },
@@ -159,7 +162,6 @@ const CreateApplicationMain = () => {
     /Date Picker/;
   }
   const [datePickerVisible, setDatePickerVisibility] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -169,10 +171,10 @@ const CreateApplicationMain = () => {
     setDatePickerVisibility(false);
   };
 
-  const confirmDatePicker = (date) => {
+  const confirmDatePicker = (date, setFieldValue) => {
     const date_object = new Date(date);
-    setSelectedDate(date_object.toLocaleDateString());
-    setDatePickerVisibility(false);
+    setFieldValue('estimatedDateofArrival', date_object.toISOString());
+    hideDatePicker();
   };
 
   {
@@ -191,6 +193,30 @@ const CreateApplicationMain = () => {
     }
   };
 
+  const handleSubmit = async (values) => {
+    const applicationData = {
+      chassisNumber: selectedChassisNumber,
+      estimatedDateofArrival: selectedEstimatedDateofArrival,
+      make: selectedMake,
+      model: selectedModel,
+      buildMonth: selectedBuildMonth,
+      buildYear: selectedBuildYear,
+      fuelType: selectedFuelType,
+      transmission: selectedTransmission,
+      bodyType: selectedBodyType,
+      driveType: selectedDriveType,
+      odometer: selectedODOMeter
+    };
+
+    try {
+      const response = await client.post(endpoint, applicationData);
+      console.log("Response:", response.data);
+      navigation.navigate("ApplicationSuccess");
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
   const [showDropdown, setShowDropdown] = useState(false);
   const [radioButtonvalue, setRadioButtonvalue] = React.useState("");
 
@@ -201,9 +227,11 @@ const CreateApplicationMain = () => {
     setShowDropdown(!showDropdown);
   };
   return (
+
     <Formik
       initialValues={{
         chassisNumber: "",
+        estimatedDateofArrival: "",
         make: "",
         model: "",
         buildMonth: "",
@@ -214,22 +242,13 @@ const CreateApplicationMain = () => {
         driveType: "",
         odometer: "",
       }}
-      onSubmit={(values) => {
-        client
-          .post(endpoint, values)
-          .then((response) => {
-            console.log(response.data);
-            // Perform any other actions or update the UI as needed
-          })
-          .catch((error) => {
-            // Handle any errors that occurred during the API request
-            console.error(error);
-            // Display an error message or perform error handling as needed
-          });
-      }}
+      onSubmit={handleSubmit}
       validationSchema={Yup.object().shape({
         chassisNumber: Yup.string().required(
           "Chassis/Frame Number is required"
+        ),
+        estimatedDateofArrival: Yup.string().required(
+          "Estimated Date of Arrival is required"
         ),
         make: Yup.string().required("Make is required"),
         model: Yup.string().required("Model is required"),
@@ -242,7 +261,16 @@ const CreateApplicationMain = () => {
         odometer: Yup.string().required("Odometer is required"),
       })}
     >
-      {({ handleChange, handleSubmit, values, errors }) => (
+
+      {({
+        values,
+        handleChange,
+        errors,
+        setFieldTouched,
+        setFieldValue,
+        touched,
+        handleSubmit,
+      }) => (
         <View style={styles.container}>
           <TopUserControlBg>
             {/* step progress container */}
@@ -371,12 +399,21 @@ const CreateApplicationMain = () => {
                 value={values.chassisNumber}
                 placeholderTextColor={colors.primary}
                 onChangeText={handleChange("chassisNumber")}
+                selected={selectedChassisNumber}
+                onSelectedChange={setSelectedChassisNumber}
               />
+              {touched.chassisNumber && errors.chassisNumber ? (
+                <Text style={styles.errorText}>{errors.chassisNumber}</Text>
+              ) : null}
+
               <DateTimePickerModal
                 isVisible={datePickerVisible}
                 mode="date"
-                onConfirm={confirmDatePicker}
+                onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
                 onCancel={hideDatePicker}
+                onChange={() => {
+                  console.log('date changed');
+                }}
               />
               <TouchableOpacity
                 onPress={() => {
@@ -386,15 +423,22 @@ const CreateApplicationMain = () => {
                 <TextInput
                   style={[styles.input, styles.usernameInput]}
                   placeholder="Estimated Date of Arrival *"
-                  placeholderTextColor={colors.primary}
-                  value={selectedDate}
+                  placeholderTextColor="#23A29F"
+                  value={values.estimatedDateofArrival}
+                  onChangeText={handleChange("estimatedDateofArrival")}
+                  selected={selectedEstimatedDateofArrival}
+                  onSelectedChange={setSelectedEstimatedDateofArrival}
                   editable={false}
                 />
+                {touched.estimatedDateofArrival && errors.estimatedDateofArrival ? (
+                  <Text style={styles.errorText}>{errors.estimatedDateofArrival}</Text>
+                ) : null}
               </TouchableOpacity>
               <View style={[styles.dropdown]}>
                 <SelectList
                   placeholder="Make *"
-                  setSelected={setSelectedMake}
+                  value={values.make}
+                  setSelected={handleChange("make")}
                   data={datamake}
                   save="value"
                   boxStyles={styles.dropdownBox}
@@ -402,103 +446,160 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   search={false}
+                  onSelectedChange={setSelectedMake}
+                  options={datamake}
+                  selected={selectedMake}
                 />
+                {touched.make && errors.make ? (
+                  <Text style={styles.errorText}>{errors.make}</Text>
+                ) : null}
               </View>
               <View style={[styles.dropdown]}>
                 <SelectList
                   placeholder="Model *"
-                  setSelected={setSelectedModel}
+                  setSelected={handleChange("model")}
                   data={datamodel}
                   save="value"
                   boxStyles={styles.dropdownBox}
                   inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
+                  options={datamodel}
+                  selected={selectedModel}
+                  onSelectedChange={setSelectedModel}
                 />
+                {touched.model && errors.model ? (
+                  <Text style={styles.errorText}>{errors.model}</Text>
+                ) : null}
               </View>
               <View style={[styles.dropdown]}>
                 <SelectList
                   placeholder="Build Month *"
-                  setSelected={setSelectedBuildMonth}
+                  setSelected={handleChange("buildMonth")}
                   data={databuildmonth}
                   save="value"
                   boxStyles={styles.dropdownBox}
                   inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
+                  options={databuildmonth}
+                  selected={selectedBuildMonth}
+                  onSelectedChange={setSelectedBuildMonth}
                 />
+                {touched.buildMonth && errors.buildMonth ? (
+                  <Text style={styles.errorText}>{errors.buildMonth}</Text>
+                ) : null}
               </View>
               <View style={[styles.dropdown, {}]}>
                 <SelectList
                   placeholder="Build Year *"
-                  setSelected={setSelectedBuildYear}
+                  setSelected={handleChange("buildYear")}
                   data={databuildyear}
                   save="value"
                   boxStyles={styles.dropdownBox}
                   inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
+                  options={databuildyear}
+                  selected={selectedBuildYear}
+                  onSelectedChange={setSelectedBuildYear}
                 />
+                {touched.buildYear && errors.buildYear ? (
+                  <Text style={styles.errorText}>{errors.buildYear}</Text>
+                ) : null}
               </View>
 
               <View style={[styles.dropdown]}>
                 <SelectList
                   placeholder="Fuel Type *"
-                  setSelected={setSelectedFuelType}
-                  data={databuildfueltype}
+                  setSelected={handleChange("fuelType")}
+                  data={datafueltype}
                   save="value"
                   boxStyles={styles.dropdownBox}
                   inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
+                  options={datafueltype}
+                  selected={selectedFuelType}
+                  onSelectedChange={setSelectedFuelType}
                 />
+                {touched.fuelType && errors.fuelType ? (
+                  <Text style={styles.errorText}>{errors.fuelType}</Text>
+                ) : null}
               </View>
 
               <View style={[styles.dropdown]}>
                 <SelectList
                   placeholder="Transmisson *"
-                  setSelected={setSelectedTransmission}
+                  setSelected={handleChange("transmission")}
                   data={datatransmission}
                   save="value"
                   boxStyles={styles.dropdownBox}
                   inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
+                  options={datatransmission}
+                  selected={selectedTransmission}
+                  onSelectedChange={setSelectedTransmission}
                 />
+                {touched.transmission && errors.transmission ? (
+                  <Text style={styles.errorText}>{errors.transmission}</Text>
+                ) : null}
               </View>
 
               <View style={[styles.dropdown]}>
                 <SelectList
                   placeholder="Body Type *"
-                  setSelected={setSelectedBodyType}
+                  setSelected={handleChange("bodyType")}
                   data={databodytype}
                   save="value"
                   boxStyles={styles.dropdownBox}
                   inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
+                  options={databodytype}
+                  selected={selectedBodyType}
+                  onSelectedChange={setSelectedBodyType}
                 />
+                {touched.bodyType && errors.bodyType ? (
+                  <Text style={styles.errorText}>{errors.bodyType}</Text>
+                ) : null}
               </View>
 
               <View style={[styles.dropdown]}>
                 <SelectList
                   placeholder="Drive Type *"
-                  setSelected={setSelectedDriveType}
+                  setSelected={handleChange("driveType")}
                   data={datadrivetype}
                   save="value"
                   boxStyles={styles.dropdownBox}
                   inputStyles={{ color: colors.primary }}
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
+                  options={datadrivetype}
+                  selected={selectedDriveType}
+                  onSelectedChange={setSelectedDriveType}
                 />
+                {touched.driveType && errors.driveType ? (
+                  <Text style={styles.errorText}>{errors.driveType}</Text>
+                ) : null}
               </View>
+
+
 
               <View>
                 <TextInput
                   style={[styles.input, styles.usernameInput, {}]}
                   placeholder="Odometer *"
+                  value={values.odometer}
                   placeholderTextColor={colors.primary}
+                  onChangeText={handleChange("odometer")}
+                  selected={selectedODOMeter}
+                  onSelectedChange={setSelectedODOMeter}
                 />
+                {touched.odometer && errors.odometer ? (
+                  <Text style={styles.errorText}>{errors.odometer}</Text>
+                ) : null}
               </View>
 
               <View style={styles.buttonContainer}>
@@ -509,7 +610,11 @@ const CreateApplicationMain = () => {
                   end={{ x: 1, y: 1 }}
                   style={styles.button}
                 >
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      console.log(values)
+                    }}
+                  >
                     <Text style={styles.buttonText}>Draft</Text>
                   </TouchableOpacity>
                 </LinearGradient>
@@ -522,10 +627,8 @@ const CreateApplicationMain = () => {
                   style={styles.button}
                 >
                   <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("CreateApplicationImageScreen");
-                      handleSubmit();
-                    }}
+                    style={styles.submitButton}
+                    onPress={handleSubmit}
                   >
                     <Text style={styles.buttonText}>Next</Text>
                   </TouchableOpacity>
