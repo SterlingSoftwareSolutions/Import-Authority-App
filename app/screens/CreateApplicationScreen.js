@@ -182,9 +182,10 @@ const CreateApplicationMain = () => {
     setDatePickerVisibility(false);
   };
 
-  const confirmDatePicker = (date) => {
+  const confirmDatePicker = (date, setFieldValue) => {
     const date_object = new Date(date);
-    setDatePickerVisibility(false);
+    setFieldValue('estimatedDateofArrival', date_object.toISOString());
+    hideDatePicker();
   };
 
   {
@@ -266,6 +267,7 @@ const CreateApplicationMain = () => {
         handleChange,
         errors,
         setFieldTouched,
+        setFieldValue,
         touched,
         handleSubmit,
       }) => (
@@ -373,9 +375,11 @@ const CreateApplicationMain = () => {
               <DateTimePickerModal
                 isVisible={datePickerVisible}
                 mode="date"
-                onConfirm={confirmDatePicker}
+                onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
                 onCancel={hideDatePicker}
-                onChange={selectedEstimatedDateofArrival}
+                onChange={() => {
+                  console.log('date changed');
+                }}
               />
               <TouchableOpacity
                 onPress={() => {
