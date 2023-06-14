@@ -47,31 +47,32 @@ function UpdateProfileScreen({ navigation }) {
           <View style={styles.formContainer}>
             <TextInput
               style={[styles.input, styles.usernameInput]}
-              placeholder={user.name}
+              defaultValue={user.name}
+              placeholder="Name"
               placeholderTextColor="#23A29F"
               color="#10bca"
             />
             <TextInput
               style={[styles.input, styles.usernameInput]}
-              placeholder={user.businessname}
+              defaultValue={user.businessname}
               placeholderTextColor="#23A29F"
               color="#10bca"
             />
             <TextInput
               style={[styles.input, styles.usernameInput]}
-              placeholder={user.username}
+              defaultValue={user.username}
               placeholderTextColor="#23A29F"
               color="#10bca"
             />
             <TextInput
               style={[styles.input, styles.usernameInput]}
-              placeholder={user.email}
+              defaultValue={user.email}
               placeholderTextColor="#23A29F"
               color="#10bca"
             />
             <TextInput
               style={[styles.input, styles.usernameInput]}
-              placeholder={user.phone}
+              defaultValue={user.phone}
               placeholderTextColor="#23A29F"
               color="#10bca"
             />
