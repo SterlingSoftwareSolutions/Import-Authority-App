@@ -770,13 +770,13 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     position: "absolute",
-    bottom: 1,
-    right: 0,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     paddingHorizontal: 80,
-    marginBottom: 10,
+    marginTop: 120,
+    
   },
+  
   bottomRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -784,11 +784,11 @@ const styles = StyleSheet.create({
   },
   bottomText1: {
     color: "#fff",
-    marginRight: 10,
+
   },
   bottomText2: {
     color: "#fff",
-    marginLeft: 20,
+   
   },
   carIcon1: {},
   carIcon2: {
