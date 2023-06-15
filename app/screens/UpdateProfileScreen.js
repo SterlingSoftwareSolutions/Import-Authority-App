@@ -13,6 +13,9 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
 import useAuth from "../auth/useAuth";
+import { Formik } from "formik";
+import * as Yup from "yup";
+
 
 function UpdateProfileScreen({ navigation }) {
   const { user, logOut } = useAuth();
@@ -21,6 +24,29 @@ function UpdateProfileScreen({ navigation }) {
   //   setUser(null);
   //   authstorage.removeToken();
   // };
+  const [selectedname, setSelectedname] = React.useState("");
+  const [selectedbusinessname, setSelectedbusinessname] = React.useState("");
+  const [selectedusername, setSelectedusername] = React.useState("");
+  const [selectedemail, setSelectedemail] = React.useState("");
+  const [selectedphonenumber, setSelectedphonenumber] = React.useState("");
+
+  const handleSubmit = async (values) => {
+    const applicationData = {
+      name: selectedname,
+      businessname: selectedbusinessname,
+      selectedusername: selectedbusinessname,
+      selectedemail: selectedemail,
+      selectedphonenumber: selectedphonenumber,
+    };
+
+    try {
+      const response = await client.post(endpoint, applicationData);
+      console.log("Response:", response.data);
+      navigation.navigate("ApplicationSuccess");
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
 
   return (
     <LinearGradient
@@ -43,53 +69,87 @@ function UpdateProfileScreen({ navigation }) {
               style={[styles.circleImage, { marginBottom: -200 }]}
             />
           </View>
+          <Formik
+            initialValues={{
+              name: user.name,
+              businessname: user.businessname,
+              username: user.username,
+              emailaddress: user.email,
+              phonenumber: user.phone,
+            }}
+            onSubmit={handleSubmit}
+            validationSchema={Yup.object().shape({
+              name: Yup.string().required("name is required"),
+              businessname: Yup.string().required("businessname is required"),
+              username: Yup.string().required("username is required"),
+              emailaddress: Yup.string().required("emailaddress is required"),
+              phonenumber: Yup.string().required("phonenumber is required"),
+            })}
+          >
 
-          <View style={styles.formContainer}>
-            <TextInput
-              style={[styles.input, styles.usernameInput]}
-              defaultValue={user.name}
-              placeholder="Name"
-              placeholderTextColor="#23A29F"
-              color="#10bca"
-            />
-            <TextInput
-              style={[styles.input, styles.usernameInput]}
-              defaultValue={user.businessname}
-              placeholderTextColor="#23A29F"
-              color="#10bca"
-            />
-            <TextInput
-              style={[styles.input, styles.usernameInput]}
-              defaultValue={user.username}
-              placeholderTextColor="#23A29F"
-              color="#10bca"
-            />
-            <TextInput
-              style={[styles.input, styles.usernameInput]}
-              defaultValue={user.email}
-              placeholderTextColor="#23A29F"
-              color="#10bca"
-            />
-            <TextInput
-              style={[styles.input, styles.usernameInput]}
-              defaultValue={user.phone}
-              placeholderTextColor="#23A29F"
-              color="#10bca"
-            />
+            {({ handleChange, handleSubmit, values, errors, touched}) => (
+              <View style={styles.formContainer}>
+                <TextInput
+                  style={[styles.input, styles.usernameInput]}
+                  defaultValue={values.name}
+                  placeholder="Name"
+                  placeholderTextColor="#23A29F"
+                  color="#10bca"
+                  onChangeText={handleChange("name")}
+                />
+                {touched.name && <Text>{errors.name}</Text>}
+                <TextInput
+                  style={[styles.input, styles.usernameInput]}
+                  defaultValue={values.businessname}
+                  placeholder="Business Name"
+                  placeholderTextColor="#23A29F"
+                  color="#10bca"
+                  onChangeText={handleChange("businessname")}
+                />
+                {touched.businessname && <Text>{errors.businessname}</Text>}
+                <TextInput
+                  style={[styles.input, styles.usernameInput]}
+                  defaultValue={values.username}
+                  placeholder="Username"
+                  placeholderTextColor="#23A29F"
+                  color="#10bca"
+                  onChangeText={handleChange("username")}
+                />
+                {touched.username && <Text>{errors.username}</Text>}
+                <TextInput
+                  style={[styles.input, styles.usernameInput]}
+                  defaultValue={values.emailaddress}
+                  placeholder="Email"
+                  placeholderTextColor="#23A29F"
+                  color="#10bca"
+                  onChangeText={handleChange("emailaddress")}
+                />
+                {touched.emailaddress && <Text>{errors.emailaddress}</Text>}
+                <TextInput
+                  style={[styles.input, styles.usernameInput]}
+                  defaultValue={values.phonenumber}
+                  placeholder="Phone Number"
+                  placeholderTextColor="#23A29F"
+                  color="#10bca"
+                  onChangeText={handleChange("phonenumber")}
+                />
+                {touched.phonenumber && <Text>{errors.phonenumber}</Text>}
 
-            <TouchableOpacity
-              style={{ ...styles.buttonContainer, marginBottom: 10 }}
-              onPress={() => { }}
-            >
-              <Text style={styles.buttonText}>UPDATE</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ ...styles.buttonContainer, marginBottom: 20 }}
-              onPress={() => logOut()}
-            >
-              <Text style={styles.buttonText}>LOGOUT</Text>
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity
+                  style={{ ...styles.buttonContainer, marginBottom: 10 }}
+                  onPress={handleSubmit}
+                >
+                  <Text style={styles.buttonText}>UPDATE</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ ...styles.buttonContainer, marginBottom: 20 }}
+                  onPress={logOut}
+                >
+                  <Text style={styles.buttonText}>LOGOUT</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </Formik>
           <StatusBar style="auto" />
         </SafeAreaView>
       </ScrollView>
