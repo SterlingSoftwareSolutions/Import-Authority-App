@@ -9,7 +9,7 @@ import {
   Image,
   ScrollView,
   Modal,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
@@ -20,6 +20,35 @@ import TopUserControlBg from "../components/TopUserControlBg";
 function PaymentScreen(props) {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+  const [expiryDate, setExpiryDate] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [progressText1, setProgressText1] = React.useState("");
+  const [progressText2, setProgressText2] = React.useState("");
+  const [progressText3, setProgressText3] = React.useState("");
+
+  const handleExpiryDateChange = (text) => {
+    let formattedText = text;
+
+    if (text.length === 2 && !text.includes("/")) {
+      formattedText += "/";
+    } else if (text.length === 3 && text.charAt(2) === "/") {
+      formattedText = text.slice(0, 2);
+    } else if (text.length === 5 && text.charAt(2) !== "/") {
+      formattedText = text.slice(0, 2) + "/" + text.slice(2);
+    }
+
+    setExpiryDate(formattedText);
+  };
+
+  const handleCardNumberChange = (text) => {
+    let formattedText = text.replace(/[^\d]/g, "");
+
+    if (formattedText.length > 0) {
+      formattedText = formattedText.match(new RegExp(".{1,4}", "g")).join(" ");
+    }
+
+    setCardNumber(formattedText);
+  };
 
   const handlePress = () => {
     setModalVisible(true);
@@ -36,10 +65,6 @@ function PaymentScreen(props) {
   const progress1 = 1;
   const progress2 = 1;
   const progress3 = 1;
-
-  const [progressText1, setProgressText1] = React.useState("");
-  const [progressText2, setProgressText2] = React.useState("");
-  const [progressText3, setProgressText3] = React.useState("");
 
   return (
     <View style={styles.container}>
@@ -121,7 +146,7 @@ function PaymentScreen(props) {
                 <Text>8250</Text>
               </SafeAreaView>
               <Text style={{ ...styles.row3_1, marginBottom: 10 }}>
-                RAKESH PRADHAN
+                Thafani Nawas
               </Text>
             </View>
           </View>
@@ -159,17 +184,23 @@ function PaymentScreen(props) {
           <Text style={styles.cardnumberheading}>Card Number</Text>
 
           <View style={styles.cardnumber}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
-            >
-              <Text>4242 4242 42424 4242</Text>
-              <Image source={require("../assets/card.png")}></Image>
-            </View>
-          </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Card Number"
+            keyboardType="numeric"
+            value={cardNumber}
+            onChangeText={handleCardNumberChange}
+          />
+          <Image source={require("../assets/card.png")} />
+        </View>
+      </View>
 
           <View style={styles.expiry_cvc}>
             <Text style={styles.cardnumberheading}>Expiry Date</Text>
@@ -178,19 +209,25 @@ function PaymentScreen(props) {
             </Text>
           </View>
 
-          <View 
+          <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={{ ...styles.expiry_date_box, textAlign: "left" }}>
-              05/27
-            </Text>
-            <Text style={{ ...styles.expiry_date_box, textAlign: "left" }}>
-              456
-            </Text>
+            <TextInput
+              style={styles.expiry_date_box}
+              placeholder="MM/YY"
+              keyboardType="numeric"
+              maxLength={5}
+              value={expiryDate}
+              onChangeText={handleExpiryDateChange}
+            />
+
+            <TextInput
+              style={styles.expiry_date_box}
+              placeholder="CVC"
+              keyboardType="numeric"
+            />
           </View>
-
           <Text style={styles.cardnumberheading}>Card Holder Name</Text>
-
           <View style={styles.cardnumber}>
             <View
               style={{
@@ -199,10 +236,13 @@ function PaymentScreen(props) {
                 width: "100%",
               }}
             >
-              <Text>RAKESH PRADHAN</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Card Holder Name"
+              />
             </View>
           </View>
-
+          {/* pay $ button */}
           <View>
             <LinearGradient
               colors={["#77B859", "#2DA596"]}
@@ -216,96 +256,103 @@ function PaymentScreen(props) {
               </TouchableOpacity>
             </LinearGradient>
           </View>
-
-          <Modal visible={modalVisible} animationType="slide" transparent={true}>
-        <TouchableWithoutFeedback onPress={handleOverlayPress}>
-        <View style={styles.modalContainer}>
-          <View style={styles.successbox}>
-            <Image
-              source={require("../assets/success.png")}
-              style={[styles.icon]}
-            />
-            <Text style={{ fontSize: 18 }}>Your Payment was Successfull</Text>
-            <Text>Reference No:ADV41_26013663</Text>
-            <Text>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</Text>
-
-            <View
-              style={{
-                marginBottom: 10,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "60%",
-              }}
-            >
-              <Text style={styles.paymentinfo1}>Amount</Text>
-              <Text style={styles.paymentinfo2}>$150</Text>
-            </View>
-
-            <View
-              style={{
-                marginBottom: 10,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "60%",
-              }}
-            >
-              <Text style={styles.paymentinfo1}>Application</Text>
-              <Text style={styles.paymentinfo2}>123</Text>
-            </View>
-
-            <View
-              style={{
-                marginBottom: 10,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "60%",
-              }}
-            >
-              <Text style={styles.paymentinfo1}>Card</Text>
-              <Text style={styles.paymentinfo2}>****4242</Text>
-            </View>
-
-            <View
-              style={{
-                marginBottom: 10,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "60%",
-              }}
-            >
-              <Text style={styles.paymentinfo1}>Time</Text>
-              <Text style={styles.paymentinfo2}>2023-05,18 04:26:10</Text>
-            </View>
-
-            <View style={{ width: "80%" }}>
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.button}
-              >
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Dashboard")}
-                >
-                  <Text style={styles.buttonText}>
-                    Return to Dashboard
+          {/* Payment Success Modal */}
+          <Modal
+            visible={modalVisible}
+            animationType="slide"
+            transparent={true}
+          >
+            <TouchableWithoutFeedback onPress={handleOverlayPress}>
+              <View style={styles.modalContainer}>
+                <View style={styles.successbox}>
+                  <Image
+                    source={require("../assets/success.png")}
+                    style={[styles.icon]}
+                  />
+                  <Text style={{ fontSize: 18 }}>
+                    Your Payment was Successfull
                   </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-            </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("ViewTransactions")}
-            >
-              <Text style={{ ...styles.buttonText, color: colors.darkGrey }}>
-                View Transactions
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        </TouchableWithoutFeedback>
-      </Modal>
+                  <Text>Reference No:ADV41_26013663</Text>
+                  <Text>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</Text>
 
+                  <View
+                    style={{
+                      marginBottom: 10,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      width: "60%",
+                    }}
+                  >
+                    <Text style={styles.paymentinfo1}>Amount</Text>
+                    <Text style={styles.paymentinfo2}>$150</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      marginBottom: 10,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      width: "60%",
+                    }}
+                  >
+                    <Text style={styles.paymentinfo1}>Application</Text>
+                    <Text style={styles.paymentinfo2}>123</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      marginBottom: 10,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      width: "60%",
+                    }}
+                  >
+                    <Text style={styles.paymentinfo1}>Card</Text>
+                    <Text style={styles.paymentinfo2}>****4242</Text>
+                  </View>
+
+                  <View
+                    style={{
+                      marginBottom: 10,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      width: "60%",
+                    }}
+                  >
+                    <Text style={styles.paymentinfo1}>Time</Text>
+                    <Text style={styles.paymentinfo2}>2023-05,18 04:26:10</Text>
+                  </View>
+
+                  <View style={{ width: "80%" }}>
+                    <LinearGradient
+                      colors={["#77B859", "#2DA596"]}
+                      locations={[0, 1]}
+                      start={{ x: 0.2, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.button}
+                    >
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate("Dashboard")}
+                      >
+                        <Text style={styles.buttonText}>
+                          Return to Dashboard
+                        </Text>
+                      </TouchableOpacity>
+                    </LinearGradient>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("ViewTransactions")}
+                  >
+                    <Text
+                      style={{ ...styles.buttonText, color: colors.darkGrey }}
+                    >
+                      View Transactions
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </Modal>
         </SafeAreaView>
       </ScrollView>
     </View>
@@ -353,7 +400,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#57C590",
     backgroundColor: "white",
-    padding: 20,
+    padding: 15,
     width: "100%",
     borderRadius: 10,
     marginTop: 15,
@@ -362,6 +409,17 @@ const styles = StyleSheet.create({
   cardnumberheading: {
     top: 10,
     left: 20,
+  },
+  expiry_date_box: {
+    borderWidth: 2,
+    borderColor: "#57C590",
+    backgroundColor: "white",
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    marginTop: 15,
+    width: 70,
+    padding: 10,
+    width: 70,
   },
   row3_1: {
     color: "black",
@@ -382,7 +440,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     textAlign: "center",
-    paddingVertical:10,
+    paddingVertical: 10,
   },
   progressBar1: {
     height: 8,
@@ -436,18 +494,6 @@ const styles = StyleSheet.create({
     color: "#C9C9C9",
     fontWeight: "bold",
   },
-  expiry_date_box: {
-    top: 10,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#57C590",
-    backgroundColor: "white",
-    padding: 20,
-    width: 150,
-    borderRadius: 10,
-    marginTop: 15,
-    textAlign: "center", //
-  },
   button: {
     borderRadius: 5,
     paddingVertical: 10,
@@ -493,7 +539,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#000000aa",
-    padding:20
+    padding: 20,
   },
 });
 
