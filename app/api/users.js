@@ -1,5 +1,5 @@
-import client from "./client";
+import authClient from "./authClient";
 
-const register = (userInfo) => client.post("/register", userInfo);
+const register = (userInfo) => authClient.post("/register", userInfo);
 
 export default { register, };
