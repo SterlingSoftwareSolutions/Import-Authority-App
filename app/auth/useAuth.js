@@ -12,8 +12,9 @@ export default useAuth = () => {
     authStorage.storeToken(authToken);
   };
 
-  const logOut = () => {
-    client.post("/logout").then((response) => {
+  const logOut = async () => {
+    let api = await client();
+    api.post("/logout").then((response) => {
       console.log(response);
       if (response.ok) {
         setUser(null);
