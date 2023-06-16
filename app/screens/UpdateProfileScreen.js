@@ -15,34 +15,27 @@ import colors from "../config/colors";
 import useAuth from "../auth/useAuth";
 import { Formik } from "formik";
 import * as Yup from "yup";
-
+import client from "../api/client";
+import { getToken } from "../auth/storage";
 
 function UpdateProfileScreen({ navigation }) {
+  const endpoint = "/profile";
   const { user, logOut } = useAuth();
-
-  // const handleLogout = () => {
-  //   setUser(null);
-  //   authstorage.removeToken();
-  // };
-  const [selectedname, setSelectedname] = React.useState("");
-  const [selectedbusinessname, setSelectedbusinessname] = React.useState("");
-  const [selectedusername, setSelectedusername] = React.useState("");
-  const [selectedemail, setSelectedemail] = React.useState("");
-  const [selectedphonenumber, setSelectedphonenumber] = React.useState("");
 
   const handleSubmit = async (values) => {
     const applicationData = {
-      name: selectedname,
-      businessname: selectedbusinessname,
-      selectedusername: selectedbusinessname,
-      selectedemail: selectedemail,
-      selectedphonenumber: selectedphonenumber,
+      name: values.name,
+      businessname: values.businessname,
+      selectedusername: values.username,
+      selectedemail: values.email,
+      selectedphonenumber: values.phonenumber,
     };
 
     try {
-      const response = await client.post(endpoint, applicationData);
-      console.log("Response:", response.data);
-      navigation.navigate("ApplicationSuccess");
+      const api = await client(); // Call the client function to get the API client instance
+      const response = await api.put(endpoint, applicationData); // Make the PUT request using the API client
+      console.log("Response:", response);
+      navigation.navigate("Dashboard");
     } catch (error) {
       console.log("Error:", error);
     }
@@ -57,10 +50,10 @@ function UpdateProfileScreen({ navigation }) {
         <SafeAreaView style={[styles.safeArea]}>
           <View style={{ ...styles.circleContainer, marginBottom: 150 }}>
             <View style={styles.labelsContainer}>
-              <TouchableOpacity style={styles.button} onPress={() => { }}>
+              <TouchableOpacity style={styles.button} onPress={() => {}}>
                 <Text style={styles.buttonProfile}>PROFILE</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={() => { }}>
+              <TouchableOpacity style={styles.button} onPress={() => {}}>
                 <Text style={styles.buttonPassword}>PASSWORD</Text>
               </TouchableOpacity>
             </View>
@@ -86,54 +79,63 @@ function UpdateProfileScreen({ navigation }) {
               phonenumber: Yup.string().required("phonenumber is required"),
             })}
           >
-
-            {({ handleChange, handleSubmit, values, errors, touched}) => (
+            {({ handleChange, handleSubmit, values, errors, touched }) => (
               <View style={styles.formContainer}>
                 <TextInput
                   style={[styles.input, styles.usernameInput]}
-                  defaultValue={values.name}
+                  value={values.name}
                   placeholder="Name"
                   placeholderTextColor="#23A29F"
                   color="#10bca"
                   onChangeText={handleChange("name")}
                 />
-                {touched.name && <Text>{errors.name}</Text>}
+                {touched.name && (
+                  <Text style={styles.errorText}>{errors.name}</Text>
+                )}
                 <TextInput
                   style={[styles.input, styles.usernameInput]}
-                  defaultValue={values.businessname}
+                  value={values.businessname}
                   placeholder="Business Name"
                   placeholderTextColor="#23A29F"
                   color="#10bca"
                   onChangeText={handleChange("businessname")}
                 />
-                {touched.businessname && <Text>{errors.businessname}</Text>}
+                {touched.businessname && (
+                  <Text style={styles.errorText}>{errors.businessname}</Text>
+                )}
                 <TextInput
                   style={[styles.input, styles.usernameInput]}
-                  defaultValue={values.username}
+                  value={values.username}
                   placeholder="Username"
                   placeholderTextColor="#23A29F"
                   color="#10bca"
                   onChangeText={handleChange("username")}
                 />
-                {touched.username && <Text>{errors.username}</Text>}
+                {touched.username && (
+                  <Text style={styles.errorText}>{errors.username}</Text>
+                )}
                 <TextInput
                   style={[styles.input, styles.usernameInput]}
-                  defaultValue={values.emailaddress}
+                  value={values.emailaddress}
                   placeholder="Email"
                   placeholderTextColor="#23A29F"
                   color="#10bca"
                   onChangeText={handleChange("emailaddress")}
                 />
-                {touched.emailaddress && <Text>{errors.emailaddress}</Text>}
+                {touched.emailaddress && (
+                  <Text style={styles.errorText}>{errors.emailaddress}</Text>
+                )}
                 <TextInput
                   style={[styles.input, styles.usernameInput]}
-                  defaultValue={values.phonenumber}
+                  value={values.phonenumber}
                   placeholder="Phone Number"
                   placeholderTextColor="#23A29F"
                   color="#10bca"
                   onChangeText={handleChange("phonenumber")}
                 />
-                {touched.phonenumber && <Text>{errors.phonenumber}</Text>}
+                {touched.phonenumber && (
+                  <Text style={styles.errorText}>{errors.phonenumber}</Text>
+                )}
 
                 <TouchableOpacity
                   style={{ ...styles.buttonContainer, marginBottom: 10 }}
@@ -186,7 +188,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginBottom: 10,
   },
-
   usernameInput: {
     backgroundColor: "#DBEEE4",
     justifyContent: "center",
@@ -194,13 +195,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
   },
-
   buttonText: {
     color: "#E5E5E5",
     fontSize: 16,
     fontWeight: "bold",
   },
-
   buttonContainer: {
     alignSelf: "center",
     backgroundColor: "transparent",
@@ -212,9 +211,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 120,
   },
-
   circleContainer: {
-
     marginBottom: 200,
     justifyContent: "center",
     alignItems: "center",
@@ -227,18 +224,15 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 40,
   },
-
   labelsContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
     marginBottom: 10,
   },
-
   label: {
     marginLeft: 15,
   },
-
   buttonPassword: {
     alignSelf: "flex-start",
     backgroundColor: "transparent",
@@ -254,7 +248,6 @@ const styles = StyleSheet.create({
     color: "#079BB7",
     backgroundColor: "#FFF",
   },
-
   buttonProfile: {
     alignSelf: "flex-start",
     backgroundColor: "#079BB7",
@@ -268,6 +261,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginRight: -1,
     color: "#fff",
+  },
+  errorText: {
+    color: "red",
   },
 });
 
