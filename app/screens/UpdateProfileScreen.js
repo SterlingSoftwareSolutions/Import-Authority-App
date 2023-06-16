@@ -25,6 +25,7 @@ function UpdateProfileScreen({ navigation }) {
   const handleSubmit = async (values) => {
     const applicationData = {
       name: values.name,
+      username:values.username,
       businessname: values.businessname,
       selectedusername: values.username,
       selectedemail: values.email,
