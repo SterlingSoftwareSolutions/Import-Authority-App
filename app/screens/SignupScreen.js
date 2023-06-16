@@ -144,7 +144,8 @@ const SignupScreen = (props) => {
                       autoCorrect={false}
                       name="phone"
                       placeholder="Mobile Number"
-                      textContentType="emailAddress"
+                      textContentType="telephoneNumber"
+                      keyboardType="numeric"
                     />
                     <AppFormField
                       autoCapitalize="none"
