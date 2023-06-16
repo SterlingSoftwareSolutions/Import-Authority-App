@@ -33,18 +33,12 @@ const LoginScreen = (props) => {
   const navigation = useNavigation();
 
   const handleSubmit = async ({ username, password }) => {
-    if (!isCheckboxSelected) {
-      alert("Please accept the terms of use.");
-      return;
-    }
-
     const result = await authApi.login(username, password);
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);
     logIn(result.data, result.data.data.user);
   };
 
-  const [isCheckboxSelected, setCheckboxSelected] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -92,28 +86,6 @@ const LoginScreen = (props) => {
                 />
                 <TouchableOpacity>
                   <Text style={styles.forgotPassword}>Forget password?</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.acceptTermsContainer}
-                  onPress={() => setCheckboxSelected(!isCheckboxSelected)}
-                >
-                  <View
-                    style={[
-                      styles.checkbox,
-                      {
-                        backgroundColor: isCheckboxSelected
-                          ? colors.primary
-                          : "transparent",
-                      },
-                    ]}
-                  >
-                    {isCheckboxSelected && (
-                      <Text style={styles.tick}>&#10003;</Text>
-                    )}
-                  </View>
-                  <Text style={styles.acceptTermsText}>
-                    I Accept the Terms of Use
-                  </Text>
                 </TouchableOpacity>
                 <SubmitButton title="LOGIN" alignSelf="center" />
               </AppForm>
@@ -193,23 +165,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 20,
     alignSelf: "center",
-  },
-  checkbox: {
-    width: 16,
-    height: 16,
-    borderRadius: 5,
-    borderWidth: 1,
-    marginRight: 10,
-    backgroundColor: "transparent",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  tick: {
-    color: colors.black,
-    fontSize: 10,
-  },
-  acceptTermsText: {
-    fontSize: 12,
   },
   buttonContainer: {
     width: "50%",

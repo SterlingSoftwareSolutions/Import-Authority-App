@@ -6,7 +6,7 @@ import {
   Image,
   Text,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../config/colors";
@@ -20,6 +20,8 @@ import ExtSubmitButton from "../components/forms/ExtSubmitButton";
 import { useFormikContext } from "formik";
 import apiClient from "../api/client";
 import useAuth from "../auth/useAuth";
+import { Alert } from 'react-native';
+
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -45,6 +47,7 @@ const SignupScreen = (props) => {
   const [error, setError] = useState();
   const signUpForm = useRef(null);
   const navigation = useNavigation();
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleSubmit = async (userInfo) => {
     const result = await registerApi.request(userInfo);
@@ -67,8 +70,13 @@ const SignupScreen = (props) => {
   };
 
   const submitForm = () => {
-    signUpForm.current.submitForm();
+    if (termsAccepted) {
+      signUpForm.current.submitForm();
+    } else {
+      Alert.alert('Terms and Conditions', 'Please accept the terms and conditions to proceed.');
+    }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -136,7 +144,8 @@ const SignupScreen = (props) => {
                       autoCorrect={false}
                       name="phone"
                       placeholder="Mobile Number"
-                      textContentType="emailAddress"
+                      textContentType="telephoneNumber"
+                      keyboardType="numeric"
                     />
                     <AppFormField
                       autoCapitalize="none"
@@ -161,9 +170,31 @@ const SignupScreen = (props) => {
             </View>
           </View>
         </View>
-        <ExtSubmitButton title="SIGNUP" onPress={submitForm} />
+        <View style={styles.acceptTermsContainer}>
+          <TouchableOpacity
+            style={[styles.checkbox, termsAccepted && styles.checkboxChecked]}
+            onPress={() => setTermsAccepted(!termsAccepted)}
+          >
+            {termsAccepted && <Text style={styles.checkboxText}>&#10003;</Text>}
+          </TouchableOpacity>
+          <Text style={styles.acceptTermsText}>
+            I accept the terms and conditions
+          </Text>
+        </View>
+
+        <ExtSubmitButton
+          title="SIGNUP"
+          onPress={submitForm}
+          disabled={!termsAccepted}
+        />
         <View style={styles.footerContainer}>
-          <View style={{ flexDirection: "row", alignItems: "center" , marginBottom:10}}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 10,
+            }}
+          >
             <Text style={styles.footerText}>Already have an Account?</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
               <Text style={styles.signupText}> LOGIN </Text>
@@ -172,9 +203,11 @@ const SignupScreen = (props) => {
           <View style={styles.footerContainer}>
             <Text style={styles.footerText}>Import Authority</Text>
             <Text style={styles.footerText}>All rights reserved</Text>
+            <TouchableOpacity>
             <Text style={styles.footerTextTerms}>
               Terms of use | Privacy Policy
             </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -301,6 +334,25 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textAlign: "center",
   },
+  checkbox: {
+    width: 15,
+    height: 15,
+    borderRadius: 2,
+    borderWidth: 1,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxChecked: {
+    backgroundColor: colors.primary,
+    borderWidth: 0, 
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxText: {
+    fontSize: 11,
+    color: colors.white,
+  },  
 });
 
 export default SignupScreen;
