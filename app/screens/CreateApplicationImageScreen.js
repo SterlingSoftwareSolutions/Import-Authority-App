@@ -201,7 +201,7 @@ const CreateApplicationImageScreen = (props) => {
               value={progressText2}
               onChangeText={setProgressText2}
               placeholder="Documents"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#000"
             />
             <ProgressBar
               progress={progress2}

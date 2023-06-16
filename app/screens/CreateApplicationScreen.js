@@ -35,18 +35,18 @@ const CreateApplicationMain = () => {
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
 
-  const [selected, setSelected] = React.useState("");
-  const [selectedChassisNumber, setSelectedChassisNumber] = React.useState("");
-  const [selectedEstimatedDateofArrival, setSelectedEstimatedDateofArrival] = React.useState("");
-  const [selectedMake, setSelectedMake] = useState("");
-  const [selectedModel, setSelectedModel] = useState("");
-  const [selectedBuildMonth, setSelectedBuildMonth] = useState("");
-  const [selectedBuildYear, setSelectedBuildYear] = useState("");
-  const [selectedFuelType, setSelectedFuelType] = useState("");
-  const [selectedTransmission, setSelectedTransmission] = useState("");
-  const [selectedBodyType, setSelectedBodyType] = useState("");
-  const [selectedDriveType, setSelectedDriveType] = useState("");
-  const [selectedODOMeter, setSelectedODOMeter] = useState("");
+  // const [selected, setSelected] = React.useState("");
+  // const [selectedChassisNumber, setSelectedChassisNumber] = React.useState("");
+  // const [selectedEstimatedDateofArrival, setSelectedEstimatedDateofArrival] = React.useState("");
+  // const [selectedMake, setSelectedMake] = useState("");
+  // const [selectedModel, setSelectedModel] = useState("");
+  // const [selectedBuildMonth, setSelectedBuildMonth] = useState("");
+  // const [selectedBuildYear, setSelectedBuildYear] = useState("");
+  // const [selectedFuelType, setSelectedFuelType] = useState("");
+  // const [selectedTransmission, setSelectedTransmission] = useState("");
+  // const [selectedBodyType, setSelectedBodyType] = useState("");
+  // const [selectedDriveType, setSelectedDriveType] = useState("");
+  // const [selectedODOMeter, setSelectedODOMeter] = useState("");
 
   {
     /Make/;
@@ -189,25 +189,25 @@ const CreateApplicationMain = () => {
       setShowDropdown(true);
     } else {
       setApprovalType(0);
-      setShowDropdown(false); 
+      setShowDropdown(false);
     }
   };
 
   const handleSubmit = async (values) => {
     const applicationData = {
-      chassisNumber: selectedChassisNumber,
-      estimatedDateofArrival: selectedEstimatedDateofArrival,
-      make: selectedMake,
-      model: selectedModel,
-      buildMonth: selectedBuildMonth,
-      buildYear: selectedBuildYear,
-      fuelType: selectedFuelType,
-      transmission: selectedTransmission,
-      bodyType: selectedBodyType,
-      driveType: selectedDriveType,
-      odometer: selectedODOMeter
+      chassisNumber: values.chassisNumber,
+      estimatedDateofArrival: values.estimatedDateofArrival,
+      make: values.make,
+      model: values.model,
+      buildMonth: values.buildMonth,
+      buildYear: values.buildYear,
+      fuelType: values.fuelType,
+      transmission: values.transmission,
+      bodyType: values.bodyType,
+      driveType: values.driveType,
+      odometer: values.odometer
     };
-
+    // console.log(applicationData);
     try {
       const response = await client.post(endpoint, applicationData);
       console.log("Response:", response.data);
@@ -227,7 +227,7 @@ const CreateApplicationMain = () => {
     setShowDropdown(!showDropdown);
   };
   const handleNextButton = () => {
-      navigation.navigate("PaymentScreen");
+    navigation.navigate("PaymentScreen");
   };
   return (
 
@@ -264,15 +264,7 @@ const CreateApplicationMain = () => {
         odometer: Yup.string().required("Odometer is required"),
       })}
     >
-      {({
-        values,
-        handleChange,
-        errors,
-        setFieldTouched,
-        setFieldValue,
-        touched,
-        handleSubmit,
-      }) => (
+      {({ handleChange, values, errors, setFieldTouched, setFieldValue, touched, handleSubmit, }) => (
         <View style={styles.container}>
           <TopUserControlBg>
             {/* step progress container */}
@@ -298,7 +290,7 @@ const CreateApplicationMain = () => {
                   value={progressText2}
                   onChangeText={setProgressText2}
                   placeholder="Documents"
-                  placeholderTextColor="#fff"
+                  placeholderTextColor="#000"
                 />
                 <ProgressBar
                   progress={progress2}
@@ -345,7 +337,7 @@ const CreateApplicationMain = () => {
                       styles.backgroundColorWrapper2,
                       approvalType == 1 && styles.switchItemSelected,
                     ]}
-                    onPress={toggleDropdown} 
+                    onPress={toggleDropdown}
                   >
                     <Image
                       source={require("../assets/car2.png")}
@@ -401,8 +393,8 @@ const CreateApplicationMain = () => {
                 value={values.chassisNumber}
                 placeholderTextColor={colors.primary}
                 onChangeText={handleChange("chassisNumber")}
-                selected={selectedChassisNumber}
-                onSelectedChange={setSelectedChassisNumber}
+              // selected={values.chassisNumber}
+              // onSelectedChange={setSelectedChassisNumber}
               />
               {touched.chassisNumber && errors.chassisNumber ? (
                 <Text style={styles.errorText}>{errors.chassisNumber}</Text>
@@ -428,8 +420,8 @@ const CreateApplicationMain = () => {
                   placeholderTextColor="#23A29F"
                   value={values.estimatedDateofArrival}
                   onChangeText={handleChange("estimatedDateofArrival")}
-                  selected={selectedEstimatedDateofArrival}
-                  onSelectedChange={setSelectedEstimatedDateofArrival}
+                  // selected={selectedEstimatedDateofArrival}
+                  // onSelectedChange={setSelectedEstimatedDateofArrival}
                   editable={false}
                 />
                 {touched.estimatedDateofArrival && errors.estimatedDateofArrival ? (
@@ -448,9 +440,9 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   search={false}
-                  onSelectedChange={setSelectedMake}
+                  // onSelectedChange={setSelectedMake}
                   options={datamake}
-                  selected={selectedMake}
+                // selected={selectedMake}
                 />
                 {touched.make && errors.make ? (
                   <Text style={styles.errorText}>{errors.make}</Text>
@@ -467,8 +459,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={datamodel}
-                  selected={selectedModel}
-                  onSelectedChange={setSelectedModel}
+                // selected={selectedModel}
+                // onSelectedChange={setSelectedModel}
                 />
                 {touched.model && errors.model ? (
                   <Text style={styles.errorText}>{errors.model}</Text>
@@ -485,8 +477,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={databuildmonth}
-                  selected={selectedBuildMonth}
-                  onSelectedChange={setSelectedBuildMonth}
+                // selected={selectedBuildMonth}
+                // onSelectedChange={setSelectedBuildMonth}
                 />
                 {touched.buildMonth && errors.buildMonth ? (
                   <Text style={styles.errorText}>{errors.buildMonth}</Text>
@@ -503,8 +495,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={databuildyear}
-                  selected={selectedBuildYear}
-                  onSelectedChange={setSelectedBuildYear}
+                // selected={selectedBuildYear}
+                // onSelectedChange={setSelectedBuildYear}
                 />
                 {touched.buildYear && errors.buildYear ? (
                   <Text style={styles.errorText}>{errors.buildYear}</Text>
@@ -522,8 +514,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={datafueltype}
-                  selected={selectedFuelType}
-                  onSelectedChange={setSelectedFuelType}
+                // selected={selectedFuelType}
+                // onSelectedChange={setSelectedFuelType}
                 />
                 {touched.fuelType && errors.fuelType ? (
                   <Text style={styles.errorText}>{errors.fuelType}</Text>
@@ -541,8 +533,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={datatransmission}
-                  selected={selectedTransmission}
-                  onSelectedChange={setSelectedTransmission}
+                // selected={selectedTransmission}
+                // onSelectedChange={setSelectedTransmission}
                 />
                 {touched.transmission && errors.transmission ? (
                   <Text style={styles.errorText}>{errors.transmission}</Text>
@@ -560,8 +552,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={databodytype}
-                  selected={selectedBodyType}
-                  onSelectedChange={setSelectedBodyType}
+                // selected={selectedBodyType}
+                // onSelectedChange={setSelectedBodyType}
                 />
                 {touched.bodyType && errors.bodyType ? (
                   <Text style={styles.errorText}>{errors.bodyType}</Text>
@@ -579,8 +571,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={datadrivetype}
-                  selected={selectedDriveType}
-                  onSelectedChange={setSelectedDriveType}
+                // selected={selectedDriveType}
+                // onSelectedChange={setSelectedDriveType}
                 />
                 {touched.driveType && errors.driveType ? (
                   <Text style={styles.errorText}>{errors.driveType}</Text>
@@ -596,8 +588,8 @@ const CreateApplicationMain = () => {
                   value={values.odometer}
                   placeholderTextColor={colors.primary}
                   onChangeText={handleChange("odometer")}
-                  selected={selectedODOMeter}
-                  onSelectedChange={setSelectedODOMeter}
+                // selected={selectedODOMeter}
+                // onSelectedChange={setSelectedODOMeter}
                 />
                 {touched.odometer && errors.odometer ? (
                   <Text style={styles.errorText}>{errors.odometer}</Text>
@@ -770,13 +762,13 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     position: "absolute",
+    bottom: 1,
+    right: 0,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 80,
-    marginTop: 120,
-    
+    marginBottom: 10,
   },
-  
   bottomRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -788,7 +780,7 @@ const styles = StyleSheet.create({
   },
   bottomText2: {
     color: "#fff",
-   
+
   },
   carIcon1: {},
   carIcon2: {
@@ -831,7 +823,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   errorText: {
-    color: "red", 
+    color: "red",
     fontSize: 12,
   },
 });
