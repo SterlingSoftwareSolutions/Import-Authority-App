@@ -91,7 +91,7 @@ function PaymentScreen(props) {
               value={progressText2}
               onChangeText={setProgressText2}
               placeholder="Documents"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#000"
             />
             <ProgressBar
               progress={progress2}
@@ -106,7 +106,7 @@ function PaymentScreen(props) {
               value={progressText3}
               onChangeText={setProgressText3}
               placeholder="Payment"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#000"
             />
             <ProgressBar
               progress={progress3}
