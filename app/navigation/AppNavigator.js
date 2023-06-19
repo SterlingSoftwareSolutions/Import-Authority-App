@@ -9,6 +9,7 @@ import ApplicationCreateNavigator from "../navigation/ApplicationCreateNavigator
 import AllApplicationScreen from "../screens/AllApplicationScreen";
 import PaymentHistoryScreen from "../screens/Transaction";
 import TransactionNavigator from "./TransactionNavigator";
+import PaymentHistory from "../screens/PaymentHistory";
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
@@ -62,7 +63,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Pending"
-      component={PaymentHistoryScreen}
+      component={PaymentHistory}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-clock" color={color} size={size} />
