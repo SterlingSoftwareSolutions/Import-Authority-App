@@ -18,10 +18,14 @@ import useAuth from "../auth/useAuth";
 import ProgressView from "../components/ProgressView";
 import TopUserControlBg from "../components/TopUserControlBg";
 import { useNavigation } from "@react-navigation/native";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import client from "../api/client";
+
 
 function Dashboard({ children }) {
   const navigation = useNavigation();
-  const { user } = useAuth();
+  const { user, logOut } = useAuth();
   const [showProfile, setShowProfile] = useState(false);
   const [showPassword, setShowPassword] = useState(false);// default dnot show the from when the function called.
   const [showProfile2, setProfile2] = useState(false);
@@ -42,7 +46,28 @@ function Dashboard({ children }) {
   const profileButtonStyle = profileActive ? styles.activeButton : styles.inactiveButton;
   const passwordButtonStyle = profileActive ? styles.inactiveButton : styles.activeButton;
 
+  const endpoint = "/profile";
 
+  const handleSubmit = async (values) => {
+    const applicationData = {
+      name: values.name,
+      username:values.username,
+      businessname: values.businessname,
+      selectedusername: values.username,
+      selectedemail: values.email,
+      selectedphonenumber: values.phonenumber,
+      selectedpassword: values.selectedpassword,
+    };
+
+    try {
+      const api = await client(); // Call the client function to get the API client instance
+      const response = await api.put(endpoint, applicationData); // Make the PUT request using the API client
+      console.log("Response:", response);
+      navigation.navigate("Dashboard");
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -79,86 +104,162 @@ function Dashboard({ children }) {
                     </View>
                   </View>
 
-                  {!showPassword && ( // Add this condition to hide the form when showPassword is true
-                    <View style={styles.formContainer}>
-                      <TextInput
-                        style={[styles.input, styles.usernameInput]}
-                        placeholder={user.name}
-                        placeholderTextColor="#23A29F"
-                        color="#10bca"
-                      />
-                      <TextInput
-                        style={[styles.input, styles.usernameInput]}
-                        placeholder={user.businessname}
-                        placeholderTextColor="#23A29F"
-                        color="#10bca"
-                      />
-                      <TextInput
-                        style={[styles.input, styles.usernameInput]}
-                        placeholder={user.username}
-                        placeholderTextColor="#23A29F"
-                        color="#10bca"
-                      />
-                      <TextInput
-                        style={[styles.input, styles.usernameInput]}
-                        placeholder={user.email}
-                        placeholderTextColor="#23A29F"
-                        color="#10bca"
-                      />
-                      <TextInput
-                        style={[styles.input, styles.usernameInput]}
-                        placeholder={user.phone}
-                        placeholderTextColor="#23A29F"
-                        color="#10bca"
-                      />
+                  <Formik
+                  initialValues={{
+              name: user.name,
+              businessname: user.businessname,
+              username: user.username,
+              emailaddress: user.email,
+              phonenumber: user.phone,
+            
+            }}
+            onSubmit={handleSubmit}
+            validationSchema={Yup.object().shape({
+              name: Yup.string().required("name is required"),
+              businessname: Yup.string().required("businessname is required"),
+              username: Yup.string().required("username is required"),
+              emailaddress: Yup.string().required("emailaddress is required"),
+              phonenumber: Yup.string().required("phonenumber is required"),
+            
+            })}
+          >
+           {({ handleChange, handleSubmit, values, errors, touched }) => (
+  !showPassword && (
+    <View style={styles.formContainer}>
+    <TextInput
+      style={[styles.input, styles.usernameInput]}
+      value={values.name}
+      placeholder="Name"
+      placeholderTextColor="#23A29F"
+      color="#10bca"
+      onChangeText={handleChange("name")}
+    />
+    {touched.name && (
+      <Text style={styles.errorText}>{errors.name}</Text>
+    )}
+    <TextInput
+      style={[styles.input, styles.usernameInput]}
+      value={values.businessname}
+      placeholder="Business Name"
+      placeholderTextColor="#23A29F"
+      color="#10bca"
+      onChangeText={handleChange("businessname")}
+    />
+    {touched.businessname && (
+      <Text style={styles.errorText}>{errors.businessname}</Text>
+    )}
+    <TextInput
+      style={[styles.input, styles.usernameInput]}
+      value={values.username}
+      placeholder="Username"
+      placeholderTextColor="#23A29F"
+      color="#10bca"
+      onChangeText={handleChange("username")}
+    />
+    {touched.username && (
+      <Text style={styles.errorText}>{errors.username}</Text>
+    )}
+    <TextInput
+      style={[styles.input, styles.usernameInput]}
+      value={values.emailaddress}
+      placeholder="Email"
+      placeholderTextColor="#23A29F"
+      color="#10bca"
+      onChangeText={handleChange("emailaddress")}
+    />
+    {touched.emailaddress && (
+      <Text style={styles.errorText}>{errors.emailaddress}</Text>
+    )}
+    <TextInput
+      style={[styles.input, styles.usernameInput]}
+      value={values.phonenumber}
+      placeholder="Phone Number"
+      placeholderTextColor="#23A29F"
+      color="#10bca"
+      onChangeText={handleChange("phonenumber")}
+    />
+    {touched.phonenumber && (
+      <Text style={styles.errorText}>{errors.phonenumber}</Text>
+    )}
 
-                      {/* UPDATE & PROFILE button container */}
-                      <TouchableOpacity
-                        style={{ ...styles.buttonContainer, marginBottom: 10 }}
-                        onPress={() => { }}
-                      >
-                        <Text style={styles.buttonText}>UPDATE</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={{ ...styles.buttonContainer, marginBottom: 20 }}
-                        onPress={() => logOut()}
-                      >
-                        <Text style={styles.buttonText}>LOGOUT</Text>
-                      </TouchableOpacity>
-                    </View>
+    <TouchableOpacity
+      style={{ ...styles.buttonContainer, marginBottom: 10 }}
+      onPress={handleSubmit}
+    >
+      <Text style={styles.buttonText}>UPDATE</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={{ ...styles.buttonContainer, marginBottom: 20 }}
+      onPress={logOut}
+    >
+      <Text style={styles.buttonText}>LOGOUT</Text>
+    </TouchableOpacity>
+  </View>
+  )
+)}
 
-                  )}
+                  </Formik>
 
+                  
+                
                   <View>
-                    {showPassword && (     //showpassword
-
+                 
+                 
+                      <Formik
+                      
+                      initialValues={{
+                        password: user.password,
+                        newpassword: user.newpassword,
+                        confirmpassword: user.confirmpassword,
+                      }}
+                      onSubmit={handleSubmit}
+                      validationSchema={Yup.object().shape({
+                        password: Yup.string().required("Current passwrd is required"),
+                        newpassword: Yup.string().required("New password is required"),
+                        confirmpassword: Yup.string().required("Confirm password is required"),
+                      })}
+                    >
+                        {({ handleChange, handleSubmit, values, errors, touched }) => (
+                         showPassword && (     //showpassword
                       <View style={styles.formContainer}>
                         <TextInput
                           style={[styles.input, styles.usernameInput]}
+                          value={values.password}
                           placeholder="Password"
                           placeholderTextColor="#23A29F"
                           color="#10bca"
+                          onChangeText={handleChange("password")}
                         />
+                        {touched.password && (
+      <Text style={styles.errorText}>{errors.password}</Text>
+    )}
                         <TextInput
                           style={[styles.input, styles.usernameInput]}
+                          value={values.newpassword}
                           placeholder="New Password"
                           placeholderTextColor="#23A29F"
                           color="#10bca"
+                          onChangeText={handleChange("Newpassword")}
                         />
+                        {touched.newpassword && (
+      <Text style={styles.errorText}>{errors.newpassword}</Text>
+    )}
                         <TextInput
                           style={[styles.input, styles.usernameInput]}
+                          value={values.confirmpassword}
                           placeholder="Confirm Password"
                           placeholderTextColor="#23A29F"
                           color="#10bca"
+                          onChangeText={handleChange("Confirmpassword")}
                         />
-
+{touched.confirmpassword && (
+      <Text style={styles.errorText}>{errors.confirmpassword}</Text>
+    )}
 
 
                         <TouchableOpacity
                           style={{ ...styles.buttonContainer, marginBottom: 10 }}
-                          onPress={() => {
-                            // Handle button press action here
-                          }}
+                          onPress={handleSubmit}
                         >
                           <Text style={styles.buttonText}>UPDATE</Text>
                         </TouchableOpacity>
@@ -166,21 +267,19 @@ function Dashboard({ children }) {
 
                         <TouchableOpacity
                           style={{ ...styles.buttonContainer, marginBottom: 20 }}
-                          onPress={() => {
-                            // Handle button press action here
-                          }}
+                           onPress={logOut}
+                         
                         >
                           <Text style={styles.buttonText}>LOGOUT</Text>
                         </TouchableOpacity>
-
-                      </View>
-                    )}
-
-
-                  </View>
-                </View>
-              )}
-            </View>
+                        </View>
+            )
+          )}
+        </Formik>
+      </View>
+    </View>
+  )}
+</View>
             {!showProfile && (   //true
               <View style={{ left: 20 }}>
                 <Text
