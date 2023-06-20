@@ -8,7 +8,7 @@ import TransactionNavigator from "./TransactionNavigator";
 import DraftApplicationScreen from "../screens/DraftApplicationScreen";
 import CompletedApplicationScreen from "../screens/CompletedApplicationScreen";
 import PendingApplicationScreen from "../screens/PendingApplicationScreen";
-import RejectedApplicationScreen from "../screens/RejectedApplicationScreen";
+import ViewApplicationScreen from "../screens/ViewApplicationScreen";
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
@@ -71,7 +71,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Reject"
-      component={RejectedApplicationScreen}
+      component={ViewApplicationScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons

@@ -1,9 +1,11 @@
 import React from "react";
-import { View, Text, Image, FlatList,  StyleSheet,} from "react-native";
+import { View, Text, Image, FlatList, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import ApplicationFunctionsGradientButton from "./ApplicationFunctionsGradientButton";
+import { useNavigation } from "@react-navigation/native";
 
 const ApplicationLists = ({ data }) => {
+  const navigation = useNavigation();
 
   // render item for FlatList
   const renderItem = ({ item }) => {
@@ -109,7 +111,10 @@ const ApplicationLists = ({ data }) => {
 
         {/* View, Edit, Download Buttons */}
         <View>
-          <ApplicationFunctionsGradientButton text="View" />
+          <ApplicationFunctionsGradientButton
+            text="View"
+            onPress={() => navigation.navigate("ViewApplication")}
+          />
           <ApplicationFunctionsGradientButton text="Edit" />
           <ApplicationFunctionsGradientButton text="Download" />
         </View>
@@ -128,25 +133,25 @@ const ApplicationLists = ({ data }) => {
 };
 
 const styles = StyleSheet.create({
-    dashboardapplication: {
-        flexDirection: "row",
-        borderRadius: 10,
-        backgroundColor: "#FFFFFF",
-        alignItems: "center",
-        width: "96%",
-        paddingHorizontal: 10,
-        paddingVertical: 20,
-        justifyContent: "space-between",
-        marginBottom: 10,
-        top: 20,
-        left: 8,
-      },
-      dashboardboxicon: {
-        marginLeft: 10,
-      },
-      dashboardicon: {
-        marginLeft: 10,
-      },
-})
+  dashboardapplication: {
+    flexDirection: "row",
+    borderRadius: 10,
+    backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    width: "96%",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    justifyContent: "space-between",
+    marginBottom: 10,
+    top: 20,
+    left: 8,
+  },
+  dashboardboxicon: {
+    marginLeft: 10,
+  },
+  dashboardicon: {
+    marginLeft: 10,
+  },
+});
 
 export default ApplicationLists;

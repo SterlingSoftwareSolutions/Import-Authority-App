@@ -4,6 +4,7 @@ import Dashboard from "../screens/Dashboard";
 import Transaction from "../screens/Transaction";
 import PaymentScreen from "../screens/PaymentScreen";
 import CreateApplicationScreen from "../screens/CreateApplicationScreen";
+import ViewApplicationScreen from "../screens/ViewApplicationScreen";
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,11 @@ const TransactionNavigator = ({}) => (
     <Stack.Screen
       name="CreateApplicationScreen"
       component={CreateApplicationScreen}
+      options={{ headerShown: false }}
+    />
+     <Stack.Screen
+      name="ViewApplication"
+      component={ViewApplicationScreen}
       options={{ headerShown: false }}
     />
   </Stack.Navigator>
