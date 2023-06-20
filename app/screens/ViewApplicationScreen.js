@@ -1,5 +1,4 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 import TopUserControlBg from "../components/TopUserControlBg";
 import colors from "../config/colors";
@@ -196,14 +195,12 @@ function ViewApplicationScreen(props) {
                 source={require("../assets/cam.png")}
                 style={[styles.cameraIcon]}
               />
-              <Text style={styles.frText}>FR Corner</Text>
             </View>
             <View style={styles.cameraContainer}>
               <Image
                 source={require("../assets/cam.png")}
                 style={[styles.cameraIcon]}
               />
-              <Text style={styles.frText}>RR Corner</Text>
             </View>
 
             <View style={styles.cameraContainer}>
@@ -211,14 +208,45 @@ function ViewApplicationScreen(props) {
                 source={require("../assets/cam.png")}
                 style={[styles.cameraIcon]}
               />
-              <Text style={styles.frText}>FL Corner</Text>
             </View>
             <View style={styles.cameraContainer}>
               <Image
                 source={require("../assets/cam.png")}
                 style={[styles.cameraIcon]}
               />
-              <Text style={styles.frText}>RL Corner</Text>
+            </View>
+          </View>
+
+          <Text
+            style={{ color: colors.primary, fontWeight: "bold", marginTop: 20 }}
+          >
+            Documents
+          </Text>
+
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-around" }}
+          >
+            <View style={styles.cameraContainer}>
+              <Image
+                source={require("../assets/document.png")}
+                style={[styles.cameraIcon]}
+              />
+              <Text style={styles.frText}>Invoice</Text>
+            </View>
+            <View style={styles.cameraContainer}>
+              <Image
+                source={require("../assets/document.png")}
+                style={[styles.cameraIcon]}
+              />
+              <Text style={styles.frText}>Export Certificate</Text>
+            </View>
+
+            <View style={styles.cameraContainer}>
+              <Image
+                source={require("../assets/document.png")}
+                style={[styles.cameraIcon]}
+              />
+              <Text style={styles.frText}>Auction Report</Text>
             </View>
           </View>
         </View>
@@ -253,11 +281,10 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     backgroundColor: "white",
     paddingHorizontal: 4,
-    paddingVertical: 2,
     marginTop: 25,
     borderRadius: 10,
     borderWidth: 1,
-    width: 80,
+    width: 90,
     height: 90,
     alignItems: "center",
     borderColor: colors.lightGrey,

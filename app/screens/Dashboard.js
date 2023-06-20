@@ -81,7 +81,7 @@ function Dashboard() {
       buildDate: "2020/03",
       odo: "15000",
       imageSource: require("../assets/carpay5.png"),
-      state: "pending",
+      state: "draft",
     },
   ];
   const handleSubmit = async (values) => {

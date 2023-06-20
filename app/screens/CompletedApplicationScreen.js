@@ -37,6 +37,42 @@ function CompletedApplicationScreen(props) {
       imageSource: require("../assets/carpay3.png"),
       state: "completed",
     },
+    {
+      id: "4",
+      name: "Another Car",
+      chassis: "789012M",
+      buildDate: "2020/03",
+      odo: "15000",
+      imageSource: require("../assets/carpay2.png"),
+      state: "completed",
+    },
+    {
+      id: "5",
+      name: "Toyoya Supra",
+      chassis: "123456M",
+      buildDate: "2016/07",
+      odo: "20350",
+      imageSource: require("../assets/carpay.png"),
+      state: "completed",
+    },
+    {
+      id: "6",
+      name: "Another Car",
+      chassis: "789012M",
+      buildDate: "2020/03",
+      odo: "15000",
+      imageSource: require("../assets/carpay2.png"),
+      state: "completed",
+    },
+    {
+      id: "7",
+      name: "Toyoya Supra",
+      chassis: "123456M",
+      buildDate: "2016/07",
+      odo: "20350",
+      imageSource: require("../assets/carpay3.png"),
+      state: "completed",
+    },
   
   ];
   return (
