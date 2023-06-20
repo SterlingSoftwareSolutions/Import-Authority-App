@@ -33,6 +33,7 @@ const LoginScreen = (props) => {
   const navigation = useNavigation();
 
   const handleSubmit = async ({ username, password }) => {
+    
     const result = await authApi.login(username, password);
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);

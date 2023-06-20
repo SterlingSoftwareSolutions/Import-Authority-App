@@ -8,8 +8,10 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@babel/runtime": "^7.22.5",
     "@expo/vector-icons": "^13.0.0",
-    "@react-native-community/datetimepicker": "6.7.3",
+    "@react-native-community/cli-server-api": "^11.3.2",
+    "@react-native-community/datetimepicker": "^6.7.3",
     "@react-native-community/hooks": "^3.0.0",
     "@react-native-picker/picker": "2.4.8",
     "@react-navigation/bottom-tabs": "^5.11.15",
@@ -28,13 +30,14 @@
     "jwt-decode": "^3.1.2",
     "native-base": "^3.4.28",
     "react": "18.2.0",
-    "react-native": "0.71.8",
+    "react-native": "^0.71.8",
     "react-native-datepicker": "^1.7.2",
     "react-native-document-picker": "^9.0.1",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-dropdown-select-list": "^2.0.4",
     "react-native-element-dropdown": "^2.9.0",
     "react-native-elements": "^3.4.3",
+    "react-native-gesture-handler": "~2.9.0",
     "react-native-image-crop-picker": "^0.40.0",
     "react-native-image-picker": "^5.4.0",
     "react-native-linear-gradient": "^2.6.2",
@@ -47,8 +50,7 @@
     "react-native-switch": "^1.5.1",
     "react-native-vector-icons": "^9.2.0",
     "typescript": "^4.9.4",
-    "yup": "^1.2.0",
-    "react-native-gesture-handler": "~2.9.0"
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

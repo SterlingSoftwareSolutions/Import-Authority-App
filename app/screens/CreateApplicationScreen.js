@@ -16,7 +16,8 @@ import { ProgressBar } from "react-native-paper";
 import { SelectList } from "react-native-dropdown-select-list";
 import { RadioButton } from "react-native-paper";
 import colors from "../config/colors";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePickerModal from "@react-native-community/datetimepicker";
+//import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import client from "../api/client";
@@ -392,17 +393,21 @@ const CreateApplicationMain = () => {
                 <Text style={styles.errorText}>{errors.chassisNumber}</Text>
               ) : null}
 
-              <DateTimePickerModal
-                isVisible={datePickerVisible}
-                mode="date"
-                onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
-                onCancel={hideDatePicker}
-                onChange={() => {
-                  console.log("date changed");
-                }}
-                color={colors.primary}
-
-              />
+<DateTimePickerModal
+  isVisible={datePickerVisible}
+  mode="date"
+  value={new Date()} // Pass the initial date value
+  onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
+  onCancel={hideDatePicker}
+  onChange={(event, date) => {
+    if (event.type === "set") {
+      confirmDatePicker(date, setFieldValue);
+    } else {
+      hideDatePicker();
+    }
+  }}
+  textColor={colors.primary} // Set the text color
+/>
               <TouchableOpacity
                 onPress={() => {
                   showDatePicker();

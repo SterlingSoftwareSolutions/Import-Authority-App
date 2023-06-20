@@ -11,11 +11,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.importauthority.portal"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,6 +30,9 @@
       "eas": {
         "projectId": "117814d0-bfc9-4164-83d1-4a58298d6f5d"
       }
+    },
+    "infoPlist": {
+      "NSCalendarsUsageDescription": "Your description here"
     }
   }
 }
