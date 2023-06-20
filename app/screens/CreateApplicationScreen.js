@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { ProgressBar } from "react-native-paper";
+import { Modal, ProgressBar } from "react-native-paper";
 import { SelectList } from "react-native-dropdown-select-list";
 import { RadioButton } from "react-native-paper";
 import colors from "../config/colors";
@@ -149,9 +149,9 @@ const CreateApplicationMain = () => {
   }
   const [datePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const showDatePicker = () => {
+  function showDatePicker() {
     setDatePickerVisibility(true);
-  };
+  }
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
@@ -159,7 +159,8 @@ const CreateApplicationMain = () => {
 
   const confirmDatePicker = (date, setFieldValue) => {
     const date_object = new Date(date);
-    setFieldValue("estimatedDateofArrival", date_object.toISOString());
+    setFieldValue("estimatedDateofArrival", date_object.toDateString());
+
     hideDatePicker();
   };
 
@@ -392,22 +393,18 @@ const CreateApplicationMain = () => {
               {touched.chassisNumber && errors.chassisNumber ? (
                 <Text style={styles.errorText}>{errors.chassisNumber}</Text>
               ) : null}
-
-<DateTimePickerModal
-  isVisible={datePickerVisible}
-  mode="date"
-  value={new Date()} // Pass the initial date value
-  onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
-  onCancel={hideDatePicker}
-  onChange={(event, date) => {
-    if (event.type === "set") {
-      confirmDatePicker(date, setFieldValue);
-    } else {
-      hideDatePicker();
-    }
-  }}
-  textColor={colors.primary} // Set the text color
-/>
+              <DateTimePickerModal
+                value={new Date(0)}
+                onCancel={hideDatePicker}
+                onChange={(event, date) => {
+                  if (event.type === "set") {
+                    confirmDatePicker(date, setFieldValue);
+                  } else {
+                    hideDatePicker();
+                  }
+                }}
+                textColor={colors.primary} // Set the text color
+              />
               <TouchableOpacity
                 onPress={() => {
                   showDatePicker();
@@ -431,6 +428,7 @@ const CreateApplicationMain = () => {
                   </Text>
                 ) : null}
               </TouchableOpacity>
+
               <View style={[styles.dropdown]}>
                 <SelectList
                   placeholder="Make *"
