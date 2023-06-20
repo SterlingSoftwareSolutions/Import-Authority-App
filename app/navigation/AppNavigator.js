@@ -3,13 +3,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import colors from "../config/colors";
-import UpdatePassword from "../screens/UpdatePasswordScreen";
-import UpdateProfileScreen from "../screens/UpdateProfileScreen";
 import ApplicationCreateNavigator from "../navigation/ApplicationCreateNavigator";
-import AllApplicationScreen from "../screens/AllApplicationScreen";
-import PaymentHistoryScreen from "../screens/Transaction";
 import TransactionNavigator from "./TransactionNavigator";
-import PaymentHistory from "../screens/PaymentHistory";
+import DraftApplicationScreen from "../screens/DraftApplicationScreen";
+import CompletedApplicationScreen from "../screens/CompletedApplicationScreen";
+import PendingApplicationScreen from "../screens/PendingApplicationScreen";
+import RejectedApplicationScreen from "../screens/RejectedApplicationScreen";
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
@@ -41,7 +40,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Complete"
-      component={AllApplicationScreen}
+      component={CompletedApplicationScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-check" color={color} size={size} />
@@ -50,7 +49,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Draft"
-      component={PaymentHistoryScreen}
+      component={DraftApplicationScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
@@ -63,7 +62,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Pending"
-      component={PaymentHistory}
+      component={PendingApplicationScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="file-clock" color={color} size={size} />
@@ -72,7 +71,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Reject"
-      component={UpdateProfileScreen}
+      component={RejectedApplicationScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons

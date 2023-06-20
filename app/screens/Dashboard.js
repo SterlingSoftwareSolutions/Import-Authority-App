@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   SafeAreaView,
@@ -8,8 +7,6 @@ import {
   TouchableOpacity,
   Text,
   Image,
-  Switch,
-  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -22,32 +19,74 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import client from "../api/client";
 
+import ApplicationLists from "../components/ApplicationLists";
 
 function Dashboard({ children }) {
   const navigation = useNavigation();
   const { user, logOut } = useAuth();
   const [showProfile, setShowProfile] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);// default dnot show the from when the function called.
-  const [showProfile2, setProfile2] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const toggleProfile = () => {
     setShowProfile(!showProfile); //true
-    // setShowPassword(false);
   };
 
   const togglePassword = () => {
-    setShowPassword(!showPassword);//true
+    setShowPassword(!showPassword); //true
     setProfileActive(!profileActive);
   };
 
-
   const [profileActive, setProfileActive] = useState(true);
 
-  const profileButtonStyle = profileActive ? styles.activeButton : styles.inactiveButton;
-  const passwordButtonStyle = profileActive ? styles.inactiveButton : styles.activeButton;
+  const profileButtonStyle = profileActive
+    ? styles.activeButton
+    : styles.inactiveButton;
+  const passwordButtonStyle = profileActive
+    ? styles.inactiveButton
+    : styles.activeButton;
 
   const endpoint = "/profile";
+  // Application data
+  const data = [
+    {
+      id: "1",
+      name: "Toyota Supra",
+      chassis: "123456M",
+      buildDate: "2016/07",
+      odo: "20350",
+      imageSource: require("../assets/carpay.png"),
+      state: "rejected",
+    },
+    {
+      id: "2",
+      name: "Another Car",
+      chassis: "789012M",
+      buildDate: "2020/03",
+      odo: "15000",
+      imageSource: require("../assets/carpay2.png"),
+      state: "completed",
 
+    },
+    {
+      id: "3",
+      name: "Toyoya Supra",
+      chassis: "123456M",
+      buildDate: "2016/07",
+      odo: "20350",
+      imageSource: require("../assets/carpay3.png"),
+      state: "pending",
+    },
+    {
+      id: "4",
+      name: "Another Car",
+      chassis: "789012M",
+      buildDate: "2020/03",
+      odo: "15000",
+      imageSource: require("../assets/carpay5.png"),
+      state: "pending",
+
+    },
+  ];
   const handleSubmit = async (values) => {
     const applicationData = {
       name: values.name,
@@ -71,30 +110,25 @@ function Dashboard({ children }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
         {/* User control component */}
         <TopUserControlBg>
           <View style={{ flexDirection: "row" }}>
             <View>
               <TouchableOpacity onPress={toggleProfile}>
-
                 <Image
                   source={require("../assets/Group1.png")}
                   style={[
                     styles.profileImage,
                     showProfile && styles.profileImageCenter,
                   ]}
-
                 />
               </TouchableOpacity>
-
 
               {/* user details section once the user profile pic is clicked */}
               {showProfile && (
                 <View style={styles.profileDetails}>
-
                   <View style={styles.labelsContainer}>
-                    <View style={{ flexDirection: 'row', marginLeft: 80 }}>
+                    <View style={{ flexDirection: "row", marginLeft: 80 }}>
                       <TouchableOpacity onPress={togglePassword}>
                         <Text style={profileButtonStyle}>PROFILE</Text>
                       </TouchableOpacity>
@@ -258,12 +292,14 @@ function Dashboard({ children }) {
 
 
                         <TouchableOpacity
-                          style={{ ...styles.buttonContainer, marginBottom: 10 }}
+                          style={{
+                            ...styles.buttonContainer,
+                            marginBottom: 10,
+                          }}
                           onPress={handleSubmit}
                         >
                           <Text style={styles.buttonText}>UPDATE</Text>
                         </TouchableOpacity>
-
 
                         <TouchableOpacity
                           style={{ ...styles.buttonContainer, marginBottom: 20 }}
@@ -291,25 +327,20 @@ function Dashboard({ children }) {
                 >
                   Hi {user.name} !
                 </Text>
-                <Text style={{ fontSize: 12, fontWeight: "bold", color: "#FFF" }}>
+                <Text
+                  style={{ fontSize: 12, fontWeight: "bold", color: "#FFF" }}
+                >
                   Welcome to Import Authority
                 </Text>
               </View>
             )}
-
-
-
           </View>
-
-
-
-
         </TopUserControlBg>
 
         {/* Progress View Component */}
         <ProgressView />
 
-        {/* Recent Application View */}
+        {/* Recent Quick Application View */}
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <View>
             <TouchableOpacity
@@ -374,576 +405,10 @@ function Dashboard({ children }) {
           }}
         >
 
-          {/* Sample application listing BOX 1*/}
-          <View
-            style={{
-              ...styles.dashboardapplication,
-              borderLeftWidth: 10,
-              borderStartColor: colors.pending,
-            }}
-          >
-            <View style={{ flexDirection: "row", marginLeft: -13 }}>
-              <Image
-                source={require("../assets/carpay.png")}
-                style={[
-                  styles.dashboardboxicon,
-                  {
-                    width: 80,
-                    height: 80,
-                    borderColor: colors.pending,
-                    borderRadius: 10,
-                    borderWidth: 2,
-                  },
-                ]}
-              />
-              <View style={{ paddingLeft: 10 }}>
-                <Text>Toyoya Supra</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <View>
-                    <Image
-                      source={require("../assets/chassis.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 4,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                    <Image
-                      source={require("../assets/built.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 6,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                    <Image
-                      source={require("../assets/odo.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 9,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                  </View>
-
-                  <View>
-                    <View>
-                      <Text>Chassis:</Text>
-                      <Text>Build Date:</Text>
-                      <Text>ODO:</Text>
-                    </View>
-                  </View>
-
-                  <View style={{ left: 10 }}>
-                    <Text>123456M</Text>
-                    <Text>2016/07</Text>
-                    <Text>20350</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            {/* View,Edit,Download Buttons */}
-            <View style={{}}>
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[
-                  styles.dashboardalapplicationbuttons,
-                  { marginBottom: 7 },
-                ]}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    View
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[
-                  styles.dashboardalapplicationbuttons,
-                  { marginBottom: 7 },
-                ]}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    Edit
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.dashboardalapplicationbuttons}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    Download
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-            </View>
-          </View>
-
-          {/*Sample application listing box 2 */}
-          <View
-            style={{
-              ...styles.dashboardapplication,
-              borderLeftWidth: 10,
-              borderStartColor: colors.rejected,
-            }}
-          >
-            <View style={{ flexDirection: "row", marginLeft: -13 }}>
-              <Image
-                source={require("../assets/carpay.png")}
-                style={[
-                  styles.dashboardboxicon,
-                  {
-                    width: 80,
-                    height: 80,
-                    borderColor: colors.rejected,
-                    borderRadius: 10,
-                    borderWidth: 2,
-                  },
-                ]}
-              />
-              <View style={{ paddingLeft: 10 }}>
-                <Text>Toyoya Supra</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <View>
-                    <Image
-                      source={require("../assets/chassis.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 4,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                    <Image
-                      source={require("../assets/built.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 6,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                    <Image
-                      source={require("../assets/odo.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 9,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                  </View>
-
-                  <View>
-                    <View>
-                      <Text>Chassis:</Text>
-                      <Text>Build Date:</Text>
-                      <Text>ODO:</Text>
-                    </View>
-                  </View>
-
-                  <View style={{ left: 10 }}>
-                    <Text>123456M</Text>
-                    <Text>2016/07</Text>
-                    <Text>20350</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            {/* View,Edit,Download Buttons */}
-            <View style={{}}>
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[
-                  styles.dashboardalapplicationbuttons,
-                  { marginBottom: 7 },
-                ]}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    View
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[
-                  styles.dashboardalapplicationbuttons,
-                  { marginBottom: 7 },
-                ]}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    Edit
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.dashboardalapplicationbuttons}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    Download
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-            </View>
-          </View>
-
-          {/*Sample application listingbox 3 */}
-          <View
-            style={{
-              ...styles.dashboardapplication,
-              borderLeftWidth: 10,
-              borderStartColor: colors.pending,
-            }}
-          >
-            <View style={{ flexDirection: "row", marginLeft: -13 }}>
-              <Image
-                source={require("../assets/carpay.png")}
-                style={[
-                  styles.dashboardboxicon,
-                  {
-                    width: 80,
-                    height: 80,
-                    borderColor: colors.pending,
-                    borderRadius: 10,
-                    borderWidth: 2,
-                  },
-                ]}
-              />
-              <View style={{ paddingLeft: 10 }}>
-                <Text>Toyoya Supra</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <View>
-                    <Image
-                      source={require("../assets/chassis.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 4,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                    <Image
-                      source={require("../assets/built.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 6,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                    <Image
-                      source={require("../assets/odo.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 9,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                  </View>
-
-                  <View>
-                    <View>
-                      <Text>Chassis:</Text>
-                      <Text>Build Date:</Text>
-                      <Text>ODO:</Text>
-                    </View>
-                  </View>
-
-                  <View style={{ left: 10 }}>
-                    <Text>123456M</Text>
-                    <Text>2016/07</Text>
-                    <Text>20350</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            {/* View,Edit,Download Buttons */}
-            <View style={{}}>
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[
-                  styles.dashboardalapplicationbuttons,
-                  { marginBottom: 7 },
-                ]}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    View
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[
-                  styles.dashboardalapplicationbuttons,
-                  { marginBottom: 7 },
-                ]}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    Edit
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.dashboardalapplicationbuttons}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    Download
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-            </View>
-          </View>
-
-          {/*Sample application listingbox 4 */}
-          <View
-            style={{
-              ...styles.dashboardapplication,
-              borderLeftWidth: 10,
-              borderStartColor: colors.pending,
-            }}
-          >
-            <View style={{ flexDirection: "row", marginLeft: -13 }}>
-              <Image
-                source={require("../assets/carpay.png")}
-                style={[
-                  styles.dashboardboxicon,
-                  {
-                    width: 80,
-                    height: 80,
-                    borderColor: colors.pending,
-                    borderRadius: 10,
-                    borderWidth: 2,
-                  },
-                ]}
-              />
-              <View style={{ paddingLeft: 10 }}>
-                <Text>Toyoya Supra</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <View>
-                    <Image
-                      source={require("../assets/chassis.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 4,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                    <Image
-                      source={require("../assets/built.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 6,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                    <Image
-                      source={require("../assets/odo.png")}
-                      style={[
-                        styles.dashboardicon,
-                        {
-                          width: 16,
-                          height: 16,
-                          tintColor: "#000",
-                          top: 9,
-                          right: 10,
-                        },
-                      ]}
-                    />
-                  </View>
-
-                  <View>
-                    <View>
-                      <Text>Chassis:</Text>
-                      <Text>Build Date:</Text>
-                      <Text>ODO:</Text>
-                    </View>
-                  </View>
-
-                  <View style={{ left: 10 }}>
-                    <Text>123456M</Text>
-                    <Text>2016/07</Text>
-                    <Text>20350</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            {/* View,Edit,Download Buttons */}
-            <View style={{}}>
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[
-                  styles.dashboardalapplicationbuttons,
-                  { marginBottom: 7 },
-                ]}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    View
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[
-                  styles.dashboardalapplicationbuttons,
-                  { marginBottom: 7 },
-                ]}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    Edit
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-
-              <LinearGradient
-                colors={["#77B859", "#2DA596"]}
-                locations={[0, 1]}
-                start={{ x: 0.2, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.dashboardalapplicationbuttons}
-              >
-                <TouchableOpacity>
-                  <Text
-                    style={{ color: "#FFF", textAlign: "center", fontSize: 12 }}
-                  >
-                    Download
-                  </Text>
-                </TouchableOpacity>
-              </LinearGradient>
-            </View>
-          </View>
-
+          {/* Calling FlatList  */}
+         <ApplicationLists data={data}/>
+       
         </View>
-      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -994,15 +459,14 @@ const styles = StyleSheet.create({
   dashboardicon: {
     marginLeft: 10,
   },
-
   profileImage: {
     width: 60,
     height: 60,
     borderRadius: 30,
   },
   profileImageCenter: {
-    alignSelf: 'center',
-    alignItems: 'center',
+    alignSelf: "center",
+    alignItems: "center",
     marginLeft: 60,
     width: 90,
     height: 90,
@@ -1019,31 +483,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
-  },
-  buttonProfile: {
-    // // backgroundColor: "#079BB7",
-    // borderWidth: 1,
-    // // borderColor: "#079BB7",
-    // borderTopLeftRadius: 5,
-    // borderTopRightRadius: 0,
-    // borderBottomLeftRadius: 5,
-    // borderBottomRightRadius: 0,
-    // paddingVertical: 5,
-    // paddingHorizontal: 10,
-    // color: "#fff",
-  },
-  buttonPassword: {
-    //   backgroundColor: "transparent",
-    //   borderWidth: 1,
-    //   // borderColor: "#fff",
-    //   borderTopLeftRadius: 0,
-    //   borderTopRightRadius: 5,
-    //   borderBottomLeftRadius: 0,
-    //   borderBottomRightRadius: 5,
-    //   paddingVertical: 5,
-    //   paddingHorizontal: 10,
-    //   color: "#079BB7",
-    //   // backgroundColor: "#FFF",
   },
   formContainer: {
     paddingHorizontal: 20,
@@ -1081,10 +520,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-
   activeButton: {
-    backgroundColor: '#079BB7',
-    color: 'white',
+    backgroundColor: "#079BB7",
+    color: "white",
     borderWidth: 1,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 0,
@@ -1093,11 +531,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderColor: "#079BB7",
-
   },
   inactiveButton: {
-    backgroundColor: 'white',
-    color: '#079BB7',
+    backgroundColor: "white",
+    color: "#079BB7",
     borderWidth: 1,
     borderColor: "#fff",
     borderTopLeftRadius: 0,
@@ -1106,7 +543,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
     paddingVertical: 5,
     paddingHorizontal: 10,
-
   },
 });
 

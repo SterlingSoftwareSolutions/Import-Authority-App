@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   View,
   Text,
-  ScrollView,
   FlatList,
 } from "react-native";
 import TopUserControlBg from "../components/TopUserControlBg";
@@ -91,35 +90,19 @@ function PaymentHistory(props) {
             Payment History
           </Text>
         </View>
-
-        {/* Filtering sort by date should be done */}
-        {/* <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginTop: 12,
-            alignItems: "center",
-          }}
-        >
-          <Text>Search By Date</Text>
-          <TouchableOpacity onPress={() => handleTransactionPress()}>
-            <Image
-              source={require("../assets/search.png")}
-              style={[{ width: 32, height: 32, tintColor: "#fff" }]}
-            />
-          </TouchableOpacity>
-        </View> */}
+        {/* Filtering-sort by date should be done */}
       </TopUserControlBg>
 
-      <ScrollView contentContainerStyle={styles.transactionBoxContainer}>
-        <Text style={styles.transactionCategory}>Today</Text>
-        <FlatList
-          data={transactions}
-          renderItem={renderTransactionItem}
-          keyExtractor={(item) => item.id.toString()}
-          style={styles.flatListContainer}
-        />
-      </ScrollView>
+      <FlatList
+        contentContainerStyle={styles.transactionBoxContainer}
+        ListHeaderComponent={
+          <Text style={styles.transactionCategory}>Today</Text>
+        }
+        data={transactions}
+        renderItem={renderTransactionItem}
+        keyExtractor={(item) => item.id.toString()}
+        style={styles.flatListContainer}
+      />
     </SafeAreaView>
   );
 }
@@ -138,11 +121,6 @@ const styles = StyleSheet.create({
   icon: {
     marginLeft: 10,
   },
-  data_and_searchicon: {
-    justifyContent: "space-around",
-    flexDirection: "row",
-    width: "100%",
-  },
   transcationtoday: {
     marginTop: 10,
   },
@@ -155,7 +133,7 @@ const styles = StyleSheet.create({
   },
   transactionBoxContainer: {
     marginHorizontal: 20,
-    marginTop: 25,
+    marginTop: 10,
   },
   flatListContainer: {
     paddingVertical: 10,
@@ -174,7 +152,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   amountText: {
-    color: colors.completed, 
+    color: colors.completed,
     fontWeight: "bold",
   },
   timestampText: {
