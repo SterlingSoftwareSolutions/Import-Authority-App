@@ -204,14 +204,55 @@ const CreateApplicationMain = () => {
   };
 
   const [showDropdown, setShowDropdown] = useState(false);
-  const [radioButtonvalue, setRadioButtonvalue] = React.useState("");
 
-  const handleRadioButtonChange = (newValue) => {
-    setRadioButtonvalue(newValue);
+  const [radioButtonValue, setRadioButtonValue] = useState('');
+
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const handleRadioButtonChange = (value) => {
+    setRadioButtonValue(value);
   };
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
+
+  // increasing decreasing once i pressed the arrow up and arrow down .other stuffs
+
+  const [value, setValue] = useState(0);
+
+  const handleIncrement = () => {
+    setValue(value + 1);
+  };
+
+  const handleDecrement = () => {
+    if (value > 0) {
+      setValue(value - 1);
+    }
+  };
+  ///
+
+
+  // increasing decreasing once i pressed the + button  up and - button other stuffs.
+  const [rows, setRows] = useState([1]);
+
+  const handleAddRow = () => {
+    const newRow = rows.length + 1;
+    setRows([...rows, newRow]);
+  };
+
+  //decreasing
+
+
+  const handleremoveRow = (index) => {
+
+    const updatedRows = [...rows];
+    updatedRows.splice(index, 1);
+    setRows(updatedRows);
+  };
+
+  //
+
+
 
   return (
     <Formik
@@ -349,15 +390,15 @@ const CreateApplicationMain = () => {
                 <View>
                   <RadioButton.Group
                     onValueChange={handleRadioButtonChange}
-                    value={radioButtonvalue}
+                    value={radioButtonValue}
                   >
-                    <View style={{ flexDirection: "row" }}>
+                    <View style={{ flexDirection: 'row' }}>
                       <RadioButton.Item
                         style={{
-                          flexDirection: "row-reverse",
+                          flexDirection: 'row-reverse',
                           marginRight: -19,
                         }}
-                        label="I need an Engineer"
+                        label="SEVs Entry /RAWs "
                         value="needEngineer"
                         labelStyle={{ color: colors.primary, fontSize: 14 }}
                         uncheckedColor={colors.primary}
@@ -365,10 +406,10 @@ const CreateApplicationMain = () => {
                       />
                       <RadioButton.Item
                         style={{
-                          flexDirection: "row-reverse",
+                          flexDirection: 'row-reverse',
                           marginRight: -25,
                         }}
-                        label="I have my Own Engineer"
+                        label="Older Vehicles (25Yrs)"
                         value="ownEngineer"
                         labelStyle={{ color: colors.primary, fontSize: 14 }}
                         uncheckedColor={colors.primary}
@@ -376,8 +417,44 @@ const CreateApplicationMain = () => {
                       />
                     </View>
                   </RadioButton.Group>
+
+                  {radioButtonValue === 'ownEngineer' && (
+                    <View style={{ flexDirection: 'row' }}>
+                      <RadioButton.Item
+                        style={{
+                          flexDirection: 'row-reverse',
+                          marginRight: -19,
+                        }}
+                        label="I need an Engineer"
+                        value="option1"
+                        status={selectedOption === 'option1' ? 'checked' : 'unchecked'}
+                        onPress={() => setSelectedOption('option1')}
+                        labelStyle={{ color: colors.primary, fontSize: 14 }}
+                        uncheckedColor={colors.primary}
+                        color={colors.primary}
+                      />
+                      <RadioButton.Item
+                        style={{
+                          flexDirection: 'row-reverse',
+                          marginRight: -25,
+                        }}
+                        label="I have My own Engineer"
+                        value="option2"
+                        status={selectedOption === 'option2' ? 'checked' : 'unchecked'}
+                        onPress={() => setSelectedOption('option2')}
+                        labelStyle={{ color: colors.primary, fontSize: 14 }}
+                        uncheckedColor={colors.primary}
+                        color={colors.primary}
+                      />
+
+                    </View>
+                  )}
+
+
                 </View>
               )}
+
+
               <TextInput
                 style={[styles.input, styles.usernameInput, { marginTop: 10 }]}
                 placeholder="Chassis/ Frame Number *"
@@ -385,8 +462,8 @@ const CreateApplicationMain = () => {
                 placeholderTextColor={colors.primary}
                 color={colors.primary}
                 onChangeText={handleChange("chassisNumber")}
-                // selected={values.chassisNumber}
-                // onSelectedChange={setSelectedChassisNumber}
+              // selected={values.chassisNumber}
+              // onSelectedChange={setSelectedChassisNumber}
               />
               {touched.chassisNumber && errors.chassisNumber ? (
                 <Text style={styles.errorText}>{errors.chassisNumber}</Text>
@@ -420,7 +497,7 @@ const CreateApplicationMain = () => {
                   editable={false}
                 />
                 {touched.estimatedDateofArrival &&
-                errors.estimatedDateofArrival ? (
+                  errors.estimatedDateofArrival ? (
                   <Text style={styles.errorText}>
                     {errors.estimatedDateofArrival}
                   </Text>
@@ -440,7 +517,7 @@ const CreateApplicationMain = () => {
                   search={false}
                   // onSelectedChange={setSelectedMake}
                   options={datamake}
-                  // selected={selectedMake}
+                // selected={selectedMake}
                 />
                 {touched.make && errors.make ? (
                   <Text style={styles.errorText}>{errors.make}</Text>
@@ -457,8 +534,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={datamodel}
-                  // selected={selectedModel}
-                  // onSelectedChange={setSelectedModel}
+                // selected={selectedModel}
+                // onSelectedChange={setSelectedModel}
                 />
                 {touched.model && errors.model ? (
                   <Text style={styles.errorText}>{errors.model}</Text>
@@ -475,8 +552,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={databuildmonth}
-                  // selected={selectedBuildMonth}
-                  // onSelectedChange={setSelectedBuildMonth}
+                // selected={selectedBuildMonth}
+                // onSelectedChange={setSelectedBuildMonth}
                 />
                 {touched.buildMonth && errors.buildMonth ? (
                   <Text style={styles.errorText}>{errors.buildMonth}</Text>
@@ -493,8 +570,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={databuildyear}
-                  // selected={selectedBuildYear}
-                  // onSelectedChange={setSelectedBuildYear}
+                // selected={selectedBuildYear}
+                // onSelectedChange={setSelectedBuildYear}
                 />
                 {touched.buildYear && errors.buildYear ? (
                   <Text style={styles.errorText}>{errors.buildYear}</Text>
@@ -512,8 +589,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={datafueltype}
-                  // selected={selectedFuelType}
-                  // onSelectedChange={setSelectedFuelType}
+                // selected={selectedFuelType}
+                // onSelectedChange={setSelectedFuelType}
                 />
                 {touched.fuelType && errors.fuelType ? (
                   <Text style={styles.errorText}>{errors.fuelType}</Text>
@@ -531,8 +608,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={datatransmission}
-                  // selected={selectedTransmission}
-                  // onSelectedChange={setSelectedTransmission}
+                // selected={selectedTransmission}
+                // onSelectedChange={setSelectedTransmission}
                 />
                 {touched.transmission && errors.transmission ? (
                   <Text style={styles.errorText}>{errors.transmission}</Text>
@@ -550,8 +627,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={databodytype}
-                  // selected={selectedBodyType}
-                  // onSelectedChange={setSelectedBodyType}
+                // selected={selectedBodyType}
+                // onSelectedChange={setSelectedBodyType}
                 />
                 {touched.bodyType && errors.bodyType ? (
                   <Text style={styles.errorText}>{errors.bodyType}</Text>
@@ -569,8 +646,8 @@ const CreateApplicationMain = () => {
                   dropdownStyles={{ ...styles.dropDownListStyle }}
                   dropdownTextStyles={{ color: colors.primary }}
                   options={datadrivetype}
-                  // selected={selectedDriveType}
-                  // onSelectedChange={setSelectedDriveType}
+                // selected={selectedDriveType}
+                // onSelectedChange={setSelectedDriveType}
                 />
                 {touched.driveType && errors.driveType ? (
                   <Text style={styles.errorText}>{errors.driveType}</Text>
@@ -585,13 +662,82 @@ const CreateApplicationMain = () => {
                   placeholderTextColor={colors.primary}
                   color={colors.primary}
                   onChangeText={handleChange("odometer")}
-                  // selected={selectedODOMeter}
-                  // onSelectedChange={setSelectedODOMeter}
+                // selected={selectedODOMeter}
+                // onSelectedChange={setSelectedODOMeter}
                 />
                 {touched.odometer && errors.odometer ? (
                   <Text style={styles.errorText}>{errors.odometer}</Text>
                 ) : null}
               </View>
+
+
+
+              <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={styles.seatingText}>Seating Arrangement</Text>
+                <View style={styles.seating}>
+                  <TouchableOpacity
+                    style={styles.minusbutton}
+                    onPress={handleremoveRow}
+                    disabled={rows.length === 1}
+                  >
+                    <Text style={styles.buttonText}>-</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.plusbutton}
+                    onPress={handleAddRow}
+                  >
+                    <Text style={styles.buttonText}>+</Text>
+                  </TouchableOpacity>
+
+                </View>
+              </View>
+
+              <View style={{}}>
+                {rows.map((row, index) => (
+                  <View key={index}>
+
+
+
+
+
+                    <Text style={{ ...styles.seatingText, marginTop: -5 }}>Row {row} </Text>
+
+
+                    <View style={styles.inputLabelBox}>
+                      <TextInput
+                        style={styles.inputseat}
+                        placeholder={value.toString()}
+                        placeholderTextColor="black"
+                      />
+
+                      <View style={{ top: -44, right: 20 }}>
+                        <TouchableOpacity
+                          style={styles.arrowButton}
+                          onPress={handleIncrement}
+                        >
+                          <Text style={styles.arrowup}>+</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={[styles.arrowButton, { opacity: value === 0 ? 0.5 : 1 }]} // if the value is equal to 0 set opacity to 0.5 else keep 1 
+                          onPress={handleDecrement}
+                          disabled={value === 0}
+                        >
+                          <Text style={styles.arrowdown}>-</Text>
+                        </TouchableOpacity>
+
+                      </View>
+                    </View>
+                  </View>
+
+                ))}
+              </View>
+
+
+
+
+
 
               <View style={styles.buttonContainer}>
                 <LinearGradient
@@ -601,11 +747,13 @@ const CreateApplicationMain = () => {
                   end={{ x: 1, y: 1 }}
                   style={styles.button}
                 >
+
                   <TouchableOpacity
                     onPress={() => {
                       console.log(values);
                     }}
                   >
+
                     <Text style={styles.buttonText}>Draft</Text>
                   </TouchableOpacity>
                 </LinearGradient>
@@ -668,10 +816,9 @@ const styles = StyleSheet.create({
   input: {
     borderRadius: 5,
     paddingHorizontal: 20,
-    paddingHorizontal: 20,
     paddingVertical: 10,
     color: "black",
-    marginBottom: 10,
+    marginBottom: 5,
   },
   dropdown: {
     backgroundColor: "#fff0",
@@ -701,6 +848,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginTop: 20
   },
   button: {
     borderRadius: 5,
@@ -716,7 +864,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    color: "#fff",
+
   },
   progressBar1: {
     height: 8,
@@ -821,6 +969,89 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 12,
   },
+
+  seatingText: {
+    marginTop: 10,
+    fontSize: 15,
+    marginLeft: 20,
+    color: '#23A29F'
+  },
+  seating: {
+    flexDirection: 'row',
+    marginTop: 10,
+
+  },
+  plusbutton: {
+    backgroundColor: '#198754',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    marginHorizontal: 5,
+    borderRadius: 5,
+  },
+
+  minusbutton: {
+    backgroundColor: '#E87C86',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    marginHorizontal: 5,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+
+  rowText: {
+    fontSize: 15,
+    marginLeft: 20,
+    marginBottom: 5,
+    color: '#23A29F'
+  },
+  inputLabelBox: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    fontSize: 16,
+    width: '40%',
+    height: 49,
+    marginTop: 10,
+
+  },
+
+  inputseat: {
+    borderRadius: 5,
+    paddingVertical: 10,
+    color: "black",
+    marginBottom: 5,
+    marginLeft: 60,
+    fontSize: 20
+  },
+
+  arrowup: {
+    marginLeft: 120,
+    marginBottom: -15,
+    fontSize: 24,
+    backgroundColor: 'grey',
+    borderRadius: 4,
+    width: '20%',
+    textAlign: 'center', // Center align the plus symbol
+  },
+
+  arrowdown: {
+    marginLeft: 30,
+    fontSize: 24,
+    marginBottom: 20,
+    backgroundColor: 'grey',
+    borderRadius: 4,
+    width: '20%',
+    bottom: 15,
+    textAlign: 'center',
+    fontWeight: 'bold'
+  }
+
+
+
 });
 
 export default CreateApplicationMain;
