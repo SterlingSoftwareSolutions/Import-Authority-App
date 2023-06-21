@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Text,
   Image,
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -89,10 +90,8 @@ function Dashboard() {
       name: values.name,
       username: values.username,
       businessname: values.businessname,
-      selectedusername: values.username,
-      selectedemail: values.email,
-      selectedphonenumber: values.phonenumber,
-      selectedpassword: values.selectedpassword,
+      email: values.email,
+      phone: values.phone,
     };
 
     try {
@@ -104,6 +103,15 @@ function Dashboard() {
       console.log("Error:", error);
     }
   };
+
+  const handleUpdatePassword = async (values) => {
+    const updatedPasswordValue = {
+      current_password:values.current_password,
+      password:values.password,
+      password_confirmation:values.password_confirmation,
+    };
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -134,14 +142,13 @@ function Dashboard() {
                     </TouchableOpacity>
                   </View>
                 </View>
-
                 <Formik
                   initialValues={{
                     name: user.name,
                     businessname: user.businessname,
                     username: user.username,
-                    emailaddress: user.email,
-                    phonenumber: user.phone,
+                    email: user.email,
+                    phone: user.phone,
                   }}
                   onSubmit={handleSubmit}
                   validationSchema={Yup.object().shape({
@@ -150,11 +157,11 @@ function Dashboard() {
                       "businessname is required"
                     ),
                     username: Yup.string().required("username is required"),
-                    emailaddress: Yup.string().required(
+                    email: Yup.string().required(
                       "emailaddress is required"
                     ),
-                    phonenumber: Yup.string().required(
-                      "phonenumber is required"
+                    phone: Yup.string().required(
+                      "phone is required"
                     ),
                   })}
                 >
@@ -200,28 +207,28 @@ function Dashboard() {
                         )}
                         <TextInput
                           style={[styles.input, styles.usernameInput]}
-                          value={values.emailaddress}
+                          value={values.email}
                           placeholder="Email"
                           placeholderTextColor="#23A29F"
                           color="#10bca"
-                          onChangeText={handleChange("emailaddress")}
+                          onChangeText={handleChange("email")}
                         />
-                        {touched.emailaddress && (
+                        {touched.email && (
                           <Text style={styles.errorText}>
-                            {errors.emailaddress}
+                            {errors.email}
                           </Text>
                         )}
                         <TextInput
                           style={[styles.input, styles.usernameInput]}
-                          value={values.phonenumber}
+                          value={values.phone}
                           placeholder="Phone Number"
                           placeholderTextColor="#23A29F"
                           color="#10bca"
-                          onChangeText={handleChange("phonenumber")}
+                          onChangeText={handleChange("phone")}
                         />
-                        {touched.phonenumber && (
+                        {touched.phone && (
                           <Text style={styles.errorText}>
-                            {errors.phonenumber}
+                            {errors.phone}
                           </Text>
                         )}
 
@@ -247,7 +254,6 @@ function Dashboard() {
                     )
                   }
                 </Formik>
-
                 <View>
                   <Formik
                     initialValues={{
@@ -575,6 +581,11 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
     paddingVertical: 5,
     paddingHorizontal: 10,
+  },
+  errorText: {
+    color: "red",
+    marginBottom:5
+    
   },
 });
 

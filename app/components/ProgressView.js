@@ -1,6 +1,6 @@
 import React from 'react';
 import colors from '../config/colors';
-import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch, ScrollView } from 'react-native';
+import { StyleSheet, View,  Text, } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 function ProgressView(props) {
