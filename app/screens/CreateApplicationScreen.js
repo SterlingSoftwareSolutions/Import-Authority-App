@@ -149,6 +149,7 @@ const CreateApplicationMain = () => {
   const [datePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
+    console.log("Test");
     setDatePickerVisibility(true);
   };
 
@@ -403,11 +404,6 @@ const CreateApplicationMain = () => {
                 color={colors.primary}
 
               />
-              <TouchableOpacity
-                onPress={() => {
-                  showDatePicker();
-                }}
-              >
                 <TextInput
                   style={[styles.input, styles.usernameInput]}
                   placeholder="Estimated Date of Arrival *"
@@ -418,6 +414,7 @@ const CreateApplicationMain = () => {
                   // selected={selectedEstimatedDateofArrival}
                   // onSelectedChange={setSelectedEstimatedDateofArrival}
                   editable={false}
+                  onPressIn={showDatePicker}
                 />
                 {touched.estimatedDateofArrival &&
                 errors.estimatedDateofArrival ? (
@@ -425,7 +422,6 @@ const CreateApplicationMain = () => {
                     {errors.estimatedDateofArrival}
                   </Text>
                 ) : null}
-              </TouchableOpacity>
               <View style={[styles.dropdown]}>
                 <SelectList
                   placeholder="Make *"
