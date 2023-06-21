@@ -169,13 +169,7 @@ const CreateApplicationMain = () => {
   const [approvalType, setApprovalType] = useState(0);
 
   const switchApprovalType = () => {
-    if (approvalType == 0) {
-      setApprovalType(1);
-      setShowDropdown(true);
-    } else {
-      setApprovalType(0);
-      setShowDropdown(false);
-    }
+    setApprovalType(approvalType == 0 ? 1 : 0);
   };
 
   const handleSubmit = async (values) => {
@@ -191,6 +185,8 @@ const CreateApplicationMain = () => {
       body_type: values.bodyType,
       drive_type: values.driveType,
       odo_meter: values.odometer,
+      approval_type: values.approvalType,
+      vass_engineering: values.vassEngineering,
     };
     // console.log(applicationData);
     try {
@@ -201,19 +197,6 @@ const CreateApplicationMain = () => {
     } catch (error) {
       console.log("Error:", error);
     }
-  };
-
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  const [radioButtonValue, setRadioButtonValue] = useState('');
-
-  const [selectedOption, setSelectedOption] = useState('');
-
-  const handleRadioButtonChange = (value) => {
-    setRadioButtonValue(value);
-  };
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
   };
 
   // increasing decreasing once i pressed the arrow up and arrow down .other stuffs
@@ -244,11 +227,32 @@ const CreateApplicationMain = () => {
 
 
   const handleremoveRow = (index) => {
-
     const updatedRows = [...rows];
     updatedRows.splice(index, 1);
     setRows(updatedRows);
   };
+
+  const validationSchema = Yup.object().shape({
+    chassisNumber: Yup.string().required(
+      "Chassis/Frame Number is required"
+    ),
+    estimatedDateofArrival: Yup.string().required(
+      "Estimated Date of Arrival is required"
+    ),
+    make: Yup.string().required("Make is required"),
+    model: Yup.string().required("Model is required"),
+    buildMonth: Yup.string().required("Build Month is required"),
+    buildYear: Yup.string().required("Build Year is required"),
+    fuelType: Yup.string().required("Fuel Type is required"),
+    transmission: Yup.string().required("Transmission is required"),
+    bodyType: Yup.string().required("Body Type is required"),
+    driveType: Yup.string().required("Drive Type is required"),
+    odometer: Yup.string().required("Odometer is required"),
+  });
+
+  const additionalValidations = Yup.object().shape({
+    vassEngineering: Yup.string().required("Vass engineering is required")
+  });
 
   //
 
@@ -257,6 +261,7 @@ const CreateApplicationMain = () => {
   return (
     <Formik
       initialValues={{
+        vassEngineering: "",
         chassisNumber: "",
         estimatedDateofArrival: "",
         make: "",
@@ -270,23 +275,7 @@ const CreateApplicationMain = () => {
         odometer: "",
       }}
       onSubmit={handleSubmit}
-      validationSchema={Yup.object().shape({
-        chassisNumber: Yup.string().required(
-          "Chassis/Frame Number is required"
-        ),
-        estimatedDateofArrival: Yup.string().required(
-          "Estimated Date of Arrival is required"
-        ),
-        make: Yup.string().required("Make is required"),
-        model: Yup.string().required("Model is required"),
-        buildMonth: Yup.string().required("Build Month is required"),
-        buildYear: Yup.string().required("Build Year is required"),
-        fuelType: Yup.string().required("Fuel Type is required"),
-        transmission: Yup.string().required("Transmission is required"),
-        bodyType: Yup.string().required("Body Type is required"),
-        driveType: Yup.string().required("Drive Type is required"),
-        odometer: Yup.string().required("Odometer is required"),
-      })}
+      validationSchema={approvalType == 0 ? validationSchema : validationSchema.concat(additionalValidations)}
     >
       {({
         handleChange,
@@ -354,7 +343,7 @@ const CreateApplicationMain = () => {
                   <View
                     style={[
                       styles.backgroundColorWrapper1,
-                      approvalType == 0 && styles.switchItemSelected,
+                      approvalType == 1 && styles.switchItemSelected,
                     ]}
                   >
                     <Image
@@ -367,9 +356,8 @@ const CreateApplicationMain = () => {
                   <View
                     style={[
                       styles.backgroundColorWrapper2,
-                      approvalType == 1 && styles.switchItemSelected,
+                      approvalType == 0 && styles.switchItemSelected,
                     ]}
-                    onPress={toggleDropdown}
                   >
                     <Image
                       source={require("../assets/car2.png")}
@@ -386,11 +374,11 @@ const CreateApplicationMain = () => {
             <ScrollView
               contentContainerStyle={{ marginTop: 10, paddingBottom: 180 }}
             >
-              {showDropdown && (
+              {approvalType == 1 ? (
                 <View>
                   <RadioButton.Group
-                    onValueChange={handleRadioButtonChange}
-                    value={radioButtonValue}
+                    onValueChange={handleChange("vassEngineering")}
+                    value={values.vassEngineering}
                   >
                     <View style={{ flexDirection: 'row' }}>
                       <RadioButton.Item
@@ -398,8 +386,8 @@ const CreateApplicationMain = () => {
                           flexDirection: 'row-reverse',
                           marginRight: -19,
                         }}
-                        label="SEVs Entry /RAWs "
-                        value="needEngineer"
+                        label="I need an Engineer "
+                        value="ours"
                         labelStyle={{ color: colors.primary, fontSize: 14 }}
                         uncheckedColor={colors.primary}
                         color={colors.primary}
@@ -409,50 +397,19 @@ const CreateApplicationMain = () => {
                           flexDirection: 'row-reverse',
                           marginRight: -25,
                         }}
-                        label="Older Vehicles (25Yrs)"
-                        value="ownEngineer"
+                        label="I have my Own Engineer"
+                        value="own"
                         labelStyle={{ color: colors.primary, fontSize: 14 }}
                         uncheckedColor={colors.primary}
                         color={colors.primary}
                       />
                     </View>
                   </RadioButton.Group>
-
-                  {radioButtonValue === 'ownEngineer' && (
-                    <View style={{ flexDirection: 'row' }}>
-                      <RadioButton.Item
-                        style={{
-                          flexDirection: 'row-reverse',
-                          marginRight: -19,
-                        }}
-                        label="I need an Engineer"
-                        value="option1"
-                        status={selectedOption === 'option1' ? 'checked' : 'unchecked'}
-                        onPress={() => setSelectedOption('option1')}
-                        labelStyle={{ color: colors.primary, fontSize: 14 }}
-                        uncheckedColor={colors.primary}
-                        color={colors.primary}
-                      />
-                      <RadioButton.Item
-                        style={{
-                          flexDirection: 'row-reverse',
-                          marginRight: -25,
-                        }}
-                        label="I have My own Engineer"
-                        value="option2"
-                        status={selectedOption === 'option2' ? 'checked' : 'unchecked'}
-                        onPress={() => setSelectedOption('option2')}
-                        labelStyle={{ color: colors.primary, fontSize: 14 }}
-                        uncheckedColor={colors.primary}
-                        color={colors.primary}
-                      />
-
-                    </View>
-                  )}
-
-
+                  {touched.vassEngineering && errors.vassEngineering ? (
+                    <Text style={styles.errorText}>{errors.vassEngineering}</Text>
+                  ) : null}
                 </View>
-              )}
+              ) : null}
 
 
               <TextInput
@@ -747,13 +704,11 @@ const CreateApplicationMain = () => {
                   end={{ x: 1, y: 1 }}
                   style={styles.button}
                 >
-
                   <TouchableOpacity
                     onPress={() => {
-                      console.log(values);
+                      console.log(errors);
                     }}
                   >
-
                     <Text style={styles.buttonText}>Draft</Text>
                   </TouchableOpacity>
                 </LinearGradient>
