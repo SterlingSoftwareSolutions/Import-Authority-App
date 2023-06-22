@@ -215,448 +215,430 @@ const CreateApplicationMain = () => {
   };
 
   return (
-    <Formik
-      initialValues={{
-        chassisNumber: "",
-        estimatedDateofArrival: "",
-        make: "",
-        model: "",
-        buildMonth: "",
-        buildYear: "",
-        fuelType: "",
-        transmission: "",
-        bodyType: "",
-        driveType: "",
-        odometer: "",
-      }}
-      onSubmit={handleSubmit}
-      validationSchema={Yup.object().shape({
-        chassisNumber: Yup.string().required(
-          "Chassis/Frame Number is required"
-        ),
-        estimatedDateofArrival: Yup.string().required(
-          "Estimated Date of Arrival is required"
-        ),
-        make: Yup.string().required("Make is required"),
-        model: Yup.string().required("Model is required"),
-        buildMonth: Yup.string().required("Build Month is required"),
-        buildYear: Yup.string().required("Build Year is required"),
-        fuelType: Yup.string().required("Fuel Type is required"),
-        transmission: Yup.string().required("Transmission is required"),
-        bodyType: Yup.string().required("Body Type is required"),
-        driveType: Yup.string().required("Drive Type is required"),
-        odometer: Yup.string().required("Odometer is required"),
-      })}
-    >
-      {({
-        handleChange,
-        values,
-        errors,
-        setFieldTouched,
-        setFieldValue,
-        touched,
-        handleSubmit,
-      }) => (
-        <View style={styles.container}>
-          <TopUserControlBg>
-            {/* step progress container */}
-            <View style={styles.progressContainer}>
-              <View style={styles.progressBarWrapper}>
-                <TextInput
-                  style={[styles.headingText, styles.progressText]}
-                  value={progressText1}
-                  onChangeText={setProgressText1}
-                  placeholder="Car Info"
-                  placeholderTextColor="#fff"
-                />
-                <ProgressBar
-                  progress={progress1}
-                  color="#000"
-                  style={styles.progressBar1}
-                />
-              </View>
+    <SafeAreaView style={styles.container}>
+      <TopUserControlBg>
+        {/* step progress container */}
+        <View style={styles.progressContainer}>
+          <View style={styles.progressBarWrapper}>
+            <TextInput
+              style={[styles.headingText, styles.progressText]}
+              value={progressText1}
+              onChangeText={setProgressText1}
+              placeholder="Car Info"
+              placeholderTextColor="#fff"
+            />
+            <ProgressBar
+              progress={progress1}
+              color="#000"
+              style={styles.progressBar1}
+            />
+          </View>
 
-              <View style={styles.progressBarWrapper}>
-                <TextInput
-                  style={[styles.headingText, styles.progressText]}
-                  value={progressText2}
-                  onChangeText={setProgressText2}
-                  placeholder="Documents"
-                  placeholderTextColor="#000"
-                />
-                <ProgressBar
-                  progress={progress2}
-                  color="#079BB7"
-                  style={styles.progressBar2}
-                />
-              </View>
+          <View style={styles.progressBarWrapper}>
+            <TextInput
+              style={[styles.headingText, styles.progressText]}
+              value={progressText2}
+              onChangeText={setProgressText2}
+              placeholder="Documents"
+              placeholderTextColor="#000"
+            />
+            <ProgressBar
+              progress={progress2}
+              color="#079BB7"
+              style={styles.progressBar2}
+            />
+          </View>
 
-              <View style={styles.progressBarWrapper}>
-                <TextInput
-                  style={[styles.headingText, styles.progressText]}
-                  value={progressText3}
-                  onChangeText={setProgressText3}
-                  placeholder="Payment"
-                  placeholderTextColor="#fff"
-                />
-                <ProgressBar
-                  progress={progress3}
-                  color="#079BB7"
-                  style={styles.progressBar3}
+          <View style={styles.progressBarWrapper}>
+            <TextInput
+              style={[styles.headingText, styles.progressText]}
+              value={progressText3}
+              onChangeText={setProgressText3}
+              placeholder="Payment"
+              placeholderTextColor="#fff"
+            />
+            <ProgressBar
+              progress={progress3}
+              color="#079BB7"
+              style={styles.progressBar3}
+            />
+          </View>
+        </View>
+        {/* Switch container */}
+        <TouchableWithoutFeedback onPress={switchApprovalType}>
+          <View style={styles.bottomContainer}>
+            <View style={styles.bottomRow}>
+              <Text style={styles.bottomText1}>SEVs / RAWs</Text>
+              <View
+                style={[
+                  styles.backgroundColorWrapper1,
+                  approvalType == 0 && styles.switchItemSelected,
+                ]}
+              >
+                <Image
+                  source={require("../assets/car1.png")}
+                  style={styles.carIcon1}
                 />
               </View>
             </View>
-            {/* Switch container */}
-            <TouchableWithoutFeedback onPress={switchApprovalType}>
-              <View style={styles.bottomContainer}>
-                <View style={styles.bottomRow}>
-                  <Text style={styles.bottomText1}>SEVs / RAWs</Text>
-                  <View
-                    style={[
-                      styles.backgroundColorWrapper1,
-                      approvalType == 0 && styles.switchItemSelected,
-                    ]}
-                  >
-                    <Image
-                      source={require("../assets/car1.png")}
-                      style={styles.carIcon1}
-                    />
+            <View style={styles.bottomRow}>
+              <View
+                style={[
+                  styles.backgroundColorWrapper2,
+                  approvalType == 1 && styles.switchItemSelected,
+                ]}
+                onPress={toggleDropdown}
+              >
+                <Image
+                  source={require("../assets/car2.png")}
+                  style={styles.carIcon2}
+                />
+              </View>
+
+              <Text style={styles.bottomText2}>Old Vehicle</Text>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </TopUserControlBg>
+      <Formik
+        initialValues={{
+          chassisNumber: "",
+          estimatedDateofArrival: "",
+          make: "",
+          model: "",
+          buildMonth: "",
+          buildYear: "",
+          fuelType: "",
+          transmission: "",
+          bodyType: "",
+          driveType: "",
+          odometer: "",
+        }}
+        onSubmit={handleSubmit}
+        validationSchema={Yup.object().shape({
+          chassisNumber: Yup.string().required(
+            "Chassis/Frame Number is required"
+          ),
+          estimatedDateofArrival: Yup.string().required(
+            "Estimated Date of Arrival is required"
+          ),
+          make: Yup.string().required("Make is required"),
+          model: Yup.string().required("Model is required"),
+          buildMonth: Yup.string().required("Build Month is required"),
+          buildYear: Yup.string().required("Build Year is required"),
+          fuelType: Yup.string().required("Fuel Type is required"),
+          transmission: Yup.string().required("Transmission is required"),
+          bodyType: Yup.string().required("Body Type is required"),
+          driveType: Yup.string().required("Drive Type is required"),
+          odometer: Yup.string().required("Odometer is required"),
+        })}
+      >
+        {({
+          handleChange,
+          values,
+          errors,
+          setFieldTouched,
+          setFieldValue,
+          touched,
+          handleSubmit,
+        }) => (
+          <View style={styles.container}>
+            <View style={styles.formContainer}>
+              <ScrollView
+                contentContainerStyle={{ marginTop: 5, paddingBottom: 15 }}
+              >
+                {showDropdown && (
+                  <View>
+                    <RadioButton.Group
+                      onValueChange={handleRadioButtonChange}
+                      value={radioButtonvalue}
+                    >
+                      <View style={{ flexDirection: "row" }}>
+                        <RadioButton.Item
+                          style={{
+                            flexDirection: "row-reverse",
+                            marginRight: -19,
+                          }}
+                          label="I need an Engineer"
+                          value="needEngineer"
+                          labelStyle={{ color: colors.primary, fontSize: 14 }}
+                          uncheckedColor={colors.primary}
+                          color={colors.primary}
+                        />
+                        <RadioButton.Item
+                          style={{
+                            flexDirection: "row-reverse",
+                            marginRight: -25,
+                          }}
+                          label="I have my Own Engineer"
+                          value="ownEngineer"
+                          labelStyle={{ color: colors.primary, fontSize: 14 }}
+                          uncheckedColor={colors.primary}
+                          color={colors.primary}
+                        />
+                      </View>
+                    </RadioButton.Group>
                   </View>
-                </View>
-                <View style={styles.bottomRow}>
-                  <View
-                    style={[
-                      styles.backgroundColorWrapper2,
-                      approvalType == 1 && styles.switchItemSelected,
-                    ]}
-                    onPress={toggleDropdown}
-                  >
-                    <Image
-                      source={require("../assets/car2.png")}
-                      style={styles.carIcon2}
-                    />
-                  </View>
-
-                  <Text style={styles.bottomText2}>Old Vehicle</Text>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </TopUserControlBg>
-          <SafeAreaView style={styles.formContainer}>
-            <ScrollView
-              contentContainerStyle={{ marginTop: 10, paddingBottom: 180 }}
-            >
-              {showDropdown && (
-                <View>
-                  <RadioButton.Group
-                    onValueChange={handleRadioButtonChange}
-                    value={radioButtonvalue}
-                  >
-                    <View style={{ flexDirection: "row" }}>
-                      <RadioButton.Item
-                        style={{
-                          flexDirection: "row-reverse",
-                          marginRight: -19,
-                        }}
-                        label="I need an Engineer"
-                        value="needEngineer"
-                        labelStyle={{ color: colors.primary, fontSize: 14 }}
-                        uncheckedColor={colors.primary}
-                        color={colors.primary}
-                      />
-                      <RadioButton.Item
-                        style={{
-                          flexDirection: "row-reverse",
-                          marginRight: -25,
-                        }}
-                        label="I have my Own Engineer"
-                        value="ownEngineer"
-                        labelStyle={{ color: colors.primary, fontSize: 14 }}
-                        uncheckedColor={colors.primary}
-                        color={colors.primary}
-                      />
-                    </View>
-                  </RadioButton.Group>
-                </View>
-              )}
-              <TextInput
-                style={[styles.input, styles.usernameInput, { marginTop: 10 }]}
-                placeholder="Chassis/ Frame Number *"
-                value={values.chassisNumber}
-                placeholderTextColor={colors.primary}
-                color={colors.primary}
-                onChangeText={handleChange("chassisNumber")}
-                // selected={values.chassisNumber}
-                // onSelectedChange={setSelectedChassisNumber}
-              />
-              {touched.chassisNumber && errors.chassisNumber ? (
-                <Text style={styles.errorText}>{errors.chassisNumber}</Text>
-              ) : null}
-
-{/* Datepicker starts */}
-{Platform.OS === 'ios' ? (
-  <>
-    <DateTimePickerModal
-      isVisible={datePickerVisible}
-      mode="date"
-      onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
-      onCancel={hideDatePicker}
-      onChange={() => {
-        console.log("date changed");
-      }}
-      color={colors.primary}
-    />
-    <TextInput
-      style={[styles.input, styles.usernameInput]}
-      placeholder="Estimated Date of Arrival *"
-      placeholderTextColor={colors.primary}
-      value={values.estimatedDateofArrival}
-      onChangeText={handleChange("estimatedDateofArrival")}
-      color={colors.primary}
-      editable={false}
-      onPressIn={showDatePicker}
-    />
-    {touched.estimatedDateofArrival && errors.estimatedDateofArrival ? (
-      <Text style={styles.errorText}>
-        {errors.estimatedDateofArrival}
-      </Text>
-    ) : null}
-  </>
-) : (
-  <>
-    <DateTimePickerModal
-      isVisible={datePickerVisible}
-      mode="date"
-      onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
-      onCancel={hideDatePicker}
-      onChange={() => {
-        console.log("date changed");
-      }}
-      color={colors.primary}
-    />
-    <TouchableOpacity onPress={() => showDatePicker()}>
-      <TextInput
-        style={[styles.input, styles.usernameInput]}
-        placeholder="Estimated Date of Arrival *"
-        placeholderTextColor={colors.primary}
-        value={values.estimatedDateofArrival}
-        onChangeText={handleChange("estimatedDateofArrival")}
-        color={colors.primary}
-        editable={false}
-      />
-      {touched.estimatedDateofArrival && errors.estimatedDateofArrival ? (
-        <Text style={styles.errorText}>
-          {errors.estimatedDateofArrival}
-        </Text>
-      ) : null}
-    </TouchableOpacity>
-  </>
-)}
-{/* Datepicker ends */}
-              <View style={[styles.dropdown]}>
-                <SelectList
-                  placeholder="Make *"
-                  value={values.make}
-                  setSelected={handleChange("make")}
-                  data={datamake}
-                  save="value"
-                  boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: colors.primary }}
-                  dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: colors.primary }}
-                  search={false}
-                  // onSelectedChange={setSelectedMake}
-                  options={datamake}
-                  // selected={selectedMake}
-                />
-                {touched.make && errors.make ? (
-                  <Text style={styles.errorText}>{errors.make}</Text>
-                ) : null}
-              </View>
-              <View style={[styles.dropdown]}>
-                <SelectList
-                  placeholder="Model *"
-                  setSelected={handleChange("model")}
-                  data={datamodel}
-                  save="value"
-                  boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: colors.primary }}
-                  dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: colors.primary }}
-                  options={datamodel}
-                  // selected={selectedModel}
-                  // onSelectedChange={setSelectedModel}
-                />
-                {touched.model && errors.model ? (
-                  <Text style={styles.errorText}>{errors.model}</Text>
-                ) : null}
-              </View>
-              <View style={[styles.dropdown]}>
-                <SelectList
-                  placeholder="Build Month *"
-                  setSelected={handleChange("buildMonth")}
-                  data={databuildmonth}
-                  save="value"
-                  boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: colors.primary }}
-                  dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: colors.primary }}
-                  options={databuildmonth}
-                  // selected={selectedBuildMonth}
-                  // onSelectedChange={setSelectedBuildMonth}
-                />
-                {touched.buildMonth && errors.buildMonth ? (
-                  <Text style={styles.errorText}>{errors.buildMonth}</Text>
-                ) : null}
-              </View>
-              <View style={[styles.dropdown, {}]}>
-                <SelectList
-                  placeholder="Build Year *"
-                  setSelected={handleChange("buildYear")}
-                  data={databuildyear}
-                  save="value"
-                  boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: colors.primary }}
-                  dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: colors.primary }}
-                  options={databuildyear}
-                  // selected={selectedBuildYear}
-                  // onSelectedChange={setSelectedBuildYear}
-                />
-                {touched.buildYear && errors.buildYear ? (
-                  <Text style={styles.errorText}>{errors.buildYear}</Text>
-                ) : null}
-              </View>
-
-              <View style={[styles.dropdown]}>
-                <SelectList
-                  placeholder="Fuel Type *"
-                  setSelected={handleChange("fuelType")}
-                  data={datafueltype}
-                  save="value"
-                  boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: colors.primary }}
-                  dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: colors.primary }}
-                  options={datafueltype}
-                  // selected={selectedFuelType}
-                  // onSelectedChange={setSelectedFuelType}
-                />
-                {touched.fuelType && errors.fuelType ? (
-                  <Text style={styles.errorText}>{errors.fuelType}</Text>
-                ) : null}
-              </View>
-
-              <View style={[styles.dropdown]}>
-                <SelectList
-                  placeholder="Transmisson *"
-                  setSelected={handleChange("transmission")}
-                  data={datatransmission}
-                  save="value"
-                  boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: colors.primary }}
-                  dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: colors.primary }}
-                  options={datatransmission}
-                  // selected={selectedTransmission}
-                  // onSelectedChange={setSelectedTransmission}
-                />
-                {touched.transmission && errors.transmission ? (
-                  <Text style={styles.errorText}>{errors.transmission}</Text>
-                ) : null}
-              </View>
-
-              <View style={[styles.dropdown]}>
-                <SelectList
-                  placeholder="Body Type *"
-                  setSelected={handleChange("bodyType")}
-                  data={databodytype}
-                  save="value"
-                  boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: colors.primary }}
-                  dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: colors.primary }}
-                  options={databodytype}
-                  // selected={selectedBodyType}
-                  // onSelectedChange={setSelectedBodyType}
-                />
-                {touched.bodyType && errors.bodyType ? (
-                  <Text style={styles.errorText}>{errors.bodyType}</Text>
-                ) : null}
-              </View>
-
-              <View style={[styles.dropdown]}>
-                <SelectList
-                  placeholder="Drive Type *"
-                  setSelected={handleChange("driveType")}
-                  data={datadrivetype}
-                  save="value"
-                  boxStyles={styles.dropdownBox}
-                  inputStyles={{ color: colors.primary }}
-                  dropdownStyles={{ ...styles.dropDownListStyle }}
-                  dropdownTextStyles={{ color: colors.primary }}
-                  options={datadrivetype}
-                  // selected={selectedDriveType}
-                  // onSelectedChange={setSelectedDriveType}
-                />
-                {touched.driveType && errors.driveType ? (
-                  <Text style={styles.errorText}>{errors.driveType}</Text>
-                ) : null}
-              </View>
-
-              <View>
+                )}
                 <TextInput
-                  style={[styles.input, styles.usernameInput, {}]}
-                  placeholder="Odometer *"
-                  value={values.odometer}
+                  style={[styles.input, styles.usernameInput, { marginTop: 10 }]}
+                  placeholder="Chassis/ Frame Number *"
+                  value={values.chassisNumber}
                   placeholderTextColor={colors.primary}
                   color={colors.primary}
-                  onChangeText={handleChange("odometer")}
-                  // selected={selectedODOMeter}
-                  // onSelectedChange={setSelectedODOMeter}
+                  onChangeText={handleChange("chassisNumber")}
                 />
-                {touched.odometer && errors.odometer ? (
-                  <Text style={styles.errorText}>{errors.odometer}</Text>
+                {touched.chassisNumber && errors.chassisNumber ? (
+                  <Text style={styles.errorText}>{errors.chassisNumber}</Text>
                 ) : null}
-              </View>
 
-              <View style={styles.buttonContainer}>
-                <LinearGradient
-                  colors={["#4B4B4B", "#9F9F9F"]}
-                  locations={[0, 1]}
-                  start={{ x: 0.2, y: 0.5 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.button}
-                >
-                  <TouchableOpacity
-                    onPress={() => {
-                      console.log(values);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>Draft</Text>
-                  </TouchableOpacity>
-                </LinearGradient>
+                {/* Datepicker starts */}
+                {Platform.OS === 'ios' ? (
+                  <>
+                    <DateTimePickerModal
+                      isVisible={datePickerVisible}
+                      mode="date"
+                      onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
+                      onCancel={hideDatePicker}
+                      onChange={() => {
+                        console.log("date changed");
+                      }}
+                      color={colors.primary}
+                    />
+                    <TextInput
+                      style={[styles.input, styles.usernameInput]}
+                      placeholder="Estimated Date of Arrival *"
+                      placeholderTextColor={colors.primary}
+                      value={values.estimatedDateofArrival}
+                      onChangeText={handleChange("estimatedDateofArrival")}
+                      color={colors.primary}
+                      editable={false}
+                      onPressIn={showDatePicker}
+                    />
+                    {touched.estimatedDateofArrival && errors.estimatedDateofArrival ? (
+                      <Text style={styles.errorText}>
+                        {errors.estimatedDateofArrival}
+                      </Text>
+                    ) : null}
+                  </>
+                ) : (
+                  <>
+                    <DateTimePickerModal
+                      isVisible={datePickerVisible}
+                      mode="date"
+                      onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
+                      onCancel={hideDatePicker}
+                      onChange={() => {
+                        console.log("date changed");
+                      }}
+                      color={colors.primary}
+                    />
+                    <TouchableOpacity onPress={() => showDatePicker()}>
+                      <TextInput
+                        style={[styles.input, styles.usernameInput]}
+                        placeholder="Estimated Date of Arrival *"
+                        placeholderTextColor={colors.primary}
+                        value={values.estimatedDateofArrival}
+                        onChangeText={handleChange("estimatedDateofArrival")}
+                        color={colors.primary}
+                        editable={false}
+                      />
+                      {touched.estimatedDateofArrival && errors.estimatedDateofArrival ? (
+                        <Text style={styles.errorText}>
+                          {errors.estimatedDateofArrival}
+                        </Text>
+                      ) : null}
+                    </TouchableOpacity>
+                  </>
+                )}
+                {/* Datepicker ends */}
+                <View style={[styles.dropdown]}>
+                  <SelectList
+                    placeholder="Make *"
+                    value={values.make}
+                    setSelected={handleChange("make")}
+                    data={datamake}
+                    save="value"
+                    boxStyles={styles.dropdownBox}
+                    inputStyles={{ color: colors.primary }}
+                    dropdownStyles={{ ...styles.dropDownListStyle }}
+                    dropdownTextStyles={{ color: colors.primary }}
+                    search={false}
+                    options={datamake}
+                  />
+                  {touched.make && errors.make ? (
+                    <Text style={styles.errorText}>{errors.make}</Text>
+                  ) : null}
+                </View>
+                <View style={[styles.dropdown]}>
+                  <SelectList
+                    placeholder="Model *"
+                    setSelected={handleChange("model")}
+                    data={datamodel}
+                    save="value"
+                    boxStyles={styles.dropdownBox}
+                    inputStyles={{ color: colors.primary }}
+                    dropdownStyles={{ ...styles.dropDownListStyle }}
+                    dropdownTextStyles={{ color: colors.primary }}
+                    options={datamodel}
+                  />
+                  {touched.model && errors.model ? (
+                    <Text style={styles.errorText}>{errors.model}</Text>
+                  ) : null}
+                </View>
+                <View style={[styles.dropdown]}>
+                  <SelectList
+                    placeholder="Build Month *"
+                    setSelected={handleChange("buildMonth")}
+                    data={databuildmonth}
+                    save="value"
+                    boxStyles={styles.dropdownBox}
+                    inputStyles={{ color: colors.primary }}
+                    dropdownStyles={{ ...styles.dropDownListStyle }}
+                    dropdownTextStyles={{ color: colors.primary }}
+                    options={databuildmonth}
+                  />
+                  {touched.buildMonth && errors.buildMonth ? (
+                    <Text style={styles.errorText}>{errors.buildMonth}</Text>
+                  ) : null}
+                </View>
+                <View style={[styles.dropdown, {}]}>
+                  <SelectList
+                    placeholder="Build Year *"
+                    setSelected={handleChange("buildYear")}
+                    data={databuildyear}
+                    save="value"
+                    boxStyles={styles.dropdownBox}
+                    inputStyles={{ color: colors.primary }}
+                    dropdownStyles={{ ...styles.dropDownListStyle }}
+                    dropdownTextStyles={{ color: colors.primary }}
+                    options={databuildyear}
+                  />
+                  {touched.buildYear && errors.buildYear ? (
+                    <Text style={styles.errorText}>{errors.buildYear}</Text>
+                  ) : null}
+                </View>
 
-                <LinearGradient
-                  colors={["#77B859", "#2DA596"]}
-                  locations={[0, 1]}
-                  start={{ x: 0.2, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.button}
-                >
-                  <TouchableOpacity
-                    style={styles.submitButton}
-                    onPress={handleSubmit}
+                <View style={[styles.dropdown]}>
+                  <SelectList
+                    placeholder="Fuel Type *"
+                    setSelected={handleChange("fuelType")}
+                    data={datafueltype}
+                    save="value"
+                    boxStyles={styles.dropdownBox}
+                    inputStyles={{ color: colors.primary }}
+                    dropdownStyles={{ ...styles.dropDownListStyle }}
+                    dropdownTextStyles={{ color: colors.primary }}
+                    options={datafueltype}
+                  />
+                  {touched.fuelType && errors.fuelType ? (
+                    <Text style={styles.errorText}>{errors.fuelType}</Text>
+                  ) : null}
+                </View>
+
+                <View style={[styles.dropdown]}>
+                  <SelectList
+                    placeholder="Transmisson *"
+                    setSelected={handleChange("transmission")}
+                    data={datatransmission}
+                    save="value"
+                    boxStyles={styles.dropdownBox}
+                    inputStyles={{ color: colors.primary }}
+                    dropdownStyles={{ ...styles.dropDownListStyle }}
+                    dropdownTextStyles={{ color: colors.primary }}
+                    options={datatransmission}
+                  />
+                  {touched.transmission && errors.transmission ? (
+                    <Text style={styles.errorText}>{errors.transmission}</Text>
+                  ) : null}
+                </View>
+
+                <View style={[styles.dropdown]}>
+                  <SelectList
+                    placeholder="Body Type *"
+                    setSelected={handleChange("bodyType")}
+                    data={databodytype}
+                    save="value"
+                    boxStyles={styles.dropdownBox}
+                    inputStyles={{ color: colors.primary }}
+                    dropdownStyles={{ ...styles.dropDownListStyle }}
+                    dropdownTextStyles={{ color: colors.primary }}
+                    options={databodytype}
+                  />
+                  {touched.bodyType && errors.bodyType ? (
+                    <Text style={styles.errorText}>{errors.bodyType}</Text>
+                  ) : null}
+                </View>
+
+                <View style={[styles.dropdown]}>
+                  <SelectList
+                    placeholder="Drive Type *"
+                    setSelected={handleChange("driveType")}
+                    data={datadrivetype}
+                    save="value"
+                    boxStyles={styles.dropdownBox}
+                    inputStyles={{ color: colors.primary }}
+                    dropdownStyles={{ ...styles.dropDownListStyle }}
+                    dropdownTextStyles={{ color: colors.primary }}
+                    options={datadrivetype}
+                  />
+                  {touched.driveType && errors.driveType ? (
+                    <Text style={styles.errorText}>{errors.driveType}</Text>
+                  ) : null}
+                </View>
+
+                <View>
+                  <TextInput
+                    style={[styles.input, styles.usernameInput, {}]}
+                    placeholder="Odometer *"
+                    value={values.odometer}
+                    placeholderTextColor={colors.primary}
+                    color={colors.primary}
+                    onChangeText={handleChange("odometer")}
+                  />
+                  {touched.odometer && errors.odometer ? (
+                    <Text style={styles.errorText}>{errors.odometer}</Text>
+                  ) : null}
+                </View>
+
+                <View style={styles.buttonContainer}>
+                  <LinearGradient
+                    colors={["#4B4B4B", "#9F9F9F"]}
+                    locations={[0, 1]}
+                    start={{ x: 0.2, y: 0.5 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.button}
                   >
-                    <Text style={styles.buttonText}>Next</Text>
-                  </TouchableOpacity>
-                </LinearGradient>
-              </View>
-            </ScrollView>
-          </SafeAreaView>
-        </View>
-      )}
-    </Formik>
+                    <TouchableOpacity
+                      onPress={() => {
+                        console.log(values);
+                      }}
+                    >
+                      <Text style={styles.buttonText}>Draft</Text>
+                    </TouchableOpacity>
+                  </LinearGradient>
+
+                  <LinearGradient
+                    colors={["#77B859", "#2DA596"]}
+                    locations={[0, 1]}
+                    start={{ x: 0.2, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.button}
+                  >
+                    <TouchableOpacity
+                      style={styles.submitButton}
+                      onPress={handleSubmit}
+                    >
+                      <Text style={styles.buttonText}>Next</Text>
+                    </TouchableOpacity>
+                  </LinearGradient>
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+        )}
+      </Formik>
+    </SafeAreaView>
   );
 };
 

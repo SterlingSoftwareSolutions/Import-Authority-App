@@ -130,53 +130,10 @@ const CreateApplicationImageScreen = (props) => {
       navigation.navigate("PaymentScreen");
     }
   };
-  // --Image & Doc Validation End--
-
+  // --Image & Doc Validation End-- 
 
   return (
-    <View style={styles.container}>
-      {/* Modal gallery || camera */}
-      <Dialog
-        onDismiss={() => {
-          setImageSourceDialog(false);
-        }}
-        width={0.9}
-        visible={imageSourceDialog}
-        rounded
-        actionsBordered
-        dialogTitle={
-          <DialogTitle
-            title="Add an image using ..."
-            style={{
-              backgroundColor: "#F7F7F8",
-            }}
-            hasTitleBar={false}
-            align="left"
-          />
-        }
-        footer={
-          <DialogFooter>
-            <DialogButton
-              text="Camera"
-              bordered
-              onPress={() => {
-                setImageSourceDialog(false);
-                selectImageLaunch(true);
-              }}
-              key="button-1"
-            />
-            <DialogButton
-              text="Gallery"
-              bordered
-              onPress={() => {
-                setImageSourceDialog(false);
-                selectImageLaunch(false);
-              }}
-              key="button-2"
-            />
-          </DialogFooter>
-        }
-      ></Dialog>
+    <SafeAreaView style={styles.container}>
       {/* User control Header */}
       <TopUserControlBg>
         <View style={styles.progressContainer}>
@@ -226,6 +183,49 @@ const CreateApplicationImageScreen = (props) => {
           </View>
         </View>
       </TopUserControlBg>
+      {/* Modal gallery || camera */}
+      <Dialog
+        onDismiss={() => {
+          setImageSourceDialog(false);
+        }}
+        width={0.9}
+        visible={imageSourceDialog}
+        rounded
+        actionsBordered
+        dialogTitle={
+          <DialogTitle
+            title="Add an image using ..."
+            style={{
+              backgroundColor: "#F7F7F8",
+            }}
+            hasTitleBar={false}
+            align="left"
+          />
+        }
+        footer={
+          <DialogFooter>
+            <DialogButton
+              text="Camera"
+              bordered
+              onPress={() => {
+                setImageSourceDialog(false);
+                selectImageLaunch(true);
+              }}
+              key="button-1"
+            />
+            <DialogButton
+              text="Gallery"
+              bordered
+              onPress={() => {
+                setImageSourceDialog(false);
+                selectImageLaunch(false);
+              }}
+              key="button-2"
+            />
+          </DialogFooter>
+        }
+      ></Dialog>
+    
 
       {/* Image selector container */}
       <ScrollView contentContainerStyle={{ marginTop: 10, paddingBottom: 40 }}>
@@ -445,7 +445,7 @@ const CreateApplicationImageScreen = (props) => {
               <Text style={styles.frText}>Export Certificate</Text>
             </TouchableOpacity>
           </View>
-          <SafeAreaView style={{ flexDirection: "row", marginLeft: 46 }}>
+          <View style={{ flexDirection: "row", marginLeft: 46 }}>
             <TouchableOpacity
               style={styles.cameraContainer}
               onPress={() => {
@@ -462,7 +462,7 @@ const CreateApplicationImageScreen = (props) => {
               />
               <Text style={styles.frText}>Auction Report</Text>
             </TouchableOpacity>
-          </SafeAreaView>
+          </View>
         </View>
         {/* Draft & Next Button */}
         <View style={styles.back_draft}>
@@ -493,7 +493,7 @@ const CreateApplicationImageScreen = (props) => {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
