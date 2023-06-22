@@ -170,13 +170,7 @@ const CreateApplicationMain = () => {
   const [approvalType, setApprovalType] = useState(0);
 
   const switchApprovalType = () => {
-    if (approvalType == 0) {
-      setApprovalType(1);
-      setShowDropdown(true);
-    } else {
-      setApprovalType(0);
-      setShowDropdown(false);
-    }
+    setApprovalType(approvalType == 0 ? 1 : 0);
   };
 
   const handleSubmit = async (values) => {
@@ -192,6 +186,8 @@ const CreateApplicationMain = () => {
       body_type: values.bodyType,
       drive_type: values.driveType,
       odo_meter: values.odometer,
+      approval_type: values.approvalType,
+      vass_engineering: values.vassEngineering,
     };
     console.log(applicationData);
     try {
@@ -204,15 +200,54 @@ const CreateApplicationMain = () => {
     }
   };
 
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [radioButtonvalue, setRadioButtonvalue] = React.useState("");
+  const [value, setValue] = useState(0);
+  // incrementing the value when the arrow up button is pressed
+  const handleIncrement = () => {
+    setValue(value + 1);
+  };
 
-  const handleRadioButtonChange = (newValue) => {
-    setRadioButtonvalue(newValue);
+  // decrementing the value when the arrow down button is pressed
+  const handleDecrement = () => {
+    if (value > 0) {
+      setValue(value - 1);
+    }
   };
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
+
+  // State variable to hold an array of rows
+  const [rows, setRows] = useState([1]);
+  // adding a new row when the "+" button is pressed
+  const handleAddRow = () => {
+    const newRow = rows.length + 1;
+    setRows([...rows, newRow]);
   };
+
+  // removing a row when the "-" button is pressed
+  const handleremoveRow = (index) => {
+    const updatedRows = [...rows];
+    updatedRows.splice(index, 1);
+    setRows(updatedRows);
+  };
+
+  //validations
+  const validationSchema = Yup.object().shape({
+    chassisNumber: Yup.string().required("Chassis/Frame Number is required"),
+    estimatedDateofArrival: Yup.string().required(
+      "Estimated Date of Arrival is required"
+    ),
+    make: Yup.string().required("Make is required"),
+    model: Yup.string().required("Model is required"),
+    buildMonth: Yup.string().required("Build Month is required"),
+    buildYear: Yup.string().required("Build Year is required"),
+    fuelType: Yup.string().required("Fuel Type is required"),
+    transmission: Yup.string().required("Transmission is required"),
+    bodyType: Yup.string().required("Body Type is required"),
+    driveType: Yup.string().required("Drive Type is required"),
+    odometer: Yup.string().required("Odometer is required"),
+  });
+
+  const additionalValidations = Yup.object().shape({
+    vassEngineering: Yup.string().required("Vass engineering is required"),
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -287,7 +322,6 @@ const CreateApplicationMain = () => {
                   styles.backgroundColorWrapper2,
                   approvalType == 1 && styles.switchItemSelected,
                 ]}
-                onPress={toggleDropdown}
               >
                 <Image
                   source={require("../assets/car2.png")}
@@ -302,6 +336,7 @@ const CreateApplicationMain = () => {
       </TopUserControlBg>
       <Formik
         initialValues={{
+          vassEngineering: "",
           chassisNumber: "",
           estimatedDateofArrival: "",
           make: "",
@@ -315,23 +350,11 @@ const CreateApplicationMain = () => {
           odometer: "",
         }}
         onSubmit={handleSubmit}
-        validationSchema={Yup.object().shape({
-          chassisNumber: Yup.string().required(
-            "Chassis/Frame Number is required"
-          ),
-          estimatedDateofArrival: Yup.string().required(
-            "Estimated Date of Arrival is required"
-          ),
-          make: Yup.string().required("Make is required"),
-          model: Yup.string().required("Model is required"),
-          buildMonth: Yup.string().required("Build Month is required"),
-          buildYear: Yup.string().required("Build Year is required"),
-          fuelType: Yup.string().required("Fuel Type is required"),
-          transmission: Yup.string().required("Transmission is required"),
-          bodyType: Yup.string().required("Body Type is required"),
-          driveType: Yup.string().required("Drive Type is required"),
-          odometer: Yup.string().required("Odometer is required"),
-        })}
+        validationSchema={
+          approvalType == 0
+            ? validationSchema
+            : validationSchema.concat(additionalValidations)
+        }
       >
         {({
           handleChange,
@@ -347,11 +370,11 @@ const CreateApplicationMain = () => {
               <ScrollView
                 contentContainerStyle={{ marginTop: 5, paddingBottom: 15 }}
               >
-                {showDropdown && (
+                {approvalType == 1 ? (
                   <View>
                     <RadioButton.Group
-                      onValueChange={handleRadioButtonChange}
-                      value={radioButtonvalue}
+                      onValueChange={handleChange("vassEngineering")}
+                      value={values.vassEngineering}
                     >
                       <View style={{ flexDirection: "row" }}>
                         <RadioButton.Item
@@ -359,8 +382,8 @@ const CreateApplicationMain = () => {
                             flexDirection: "row-reverse",
                             marginRight: -19,
                           }}
-                          label="I need an Engineer"
-                          value="needEngineer"
+                          label="I need an Engineer "
+                          value="ours"
                           labelStyle={{ color: colors.primary, fontSize: 14 }}
                           uncheckedColor={colors.primary}
                           color={colors.primary}
@@ -371,17 +394,27 @@ const CreateApplicationMain = () => {
                             marginRight: -25,
                           }}
                           label="I have my Own Engineer"
-                          value="ownEngineer"
+                          value="own"
                           labelStyle={{ color: colors.primary, fontSize: 14 }}
                           uncheckedColor={colors.primary}
                           color={colors.primary}
                         />
                       </View>
                     </RadioButton.Group>
+                    {touched.vassEngineering && errors.vassEngineering ? (
+                      <Text style={styles.errorText}>
+                        {errors.vassEngineering}
+                      </Text>
+                    ) : null}
                   </View>
-                )}
+                ) : null}
+
                 <TextInput
-                  style={[styles.input, styles.usernameInput, { marginTop: 10 }]}
+                  style={[
+                    styles.input,
+                    styles.usernameInput,
+                    { marginTop: 10 },
+                  ]}
                   placeholder="Chassis/ Frame Number *"
                   value={values.chassisNumber}
                   placeholderTextColor={colors.primary}
@@ -393,12 +426,14 @@ const CreateApplicationMain = () => {
                 ) : null}
 
                 {/* Datepicker starts */}
-                {Platform.OS === 'ios' ? (
+                {Platform.OS === "ios" ? (
                   <>
                     <DateTimePickerModal
                       isVisible={datePickerVisible}
                       mode="date"
-                      onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
+                      onConfirm={(date) =>
+                        confirmDatePicker(date, setFieldValue)
+                      }
                       onCancel={hideDatePicker}
                       onChange={() => {
                         console.log("date changed");
@@ -415,7 +450,8 @@ const CreateApplicationMain = () => {
                       editable={false}
                       onPressIn={showDatePicker}
                     />
-                    {touched.estimatedDateofArrival && errors.estimatedDateofArrival ? (
+                    {touched.estimatedDateofArrival &&
+                    errors.estimatedDateofArrival ? (
                       <Text style={styles.errorText}>
                         {errors.estimatedDateofArrival}
                       </Text>
@@ -426,7 +462,9 @@ const CreateApplicationMain = () => {
                     <DateTimePickerModal
                       isVisible={datePickerVisible}
                       mode="date"
-                      onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
+                      onConfirm={(date) =>
+                        confirmDatePicker(date, setFieldValue)
+                      }
                       onCancel={hideDatePicker}
                       onChange={() => {
                         console.log("date changed");
@@ -443,7 +481,8 @@ const CreateApplicationMain = () => {
                         color={colors.primary}
                         editable={false}
                       />
-                      {touched.estimatedDateofArrival && errors.estimatedDateofArrival ? (
+                      {touched.estimatedDateofArrival &&
+                      errors.estimatedDateofArrival ? (
                         <Text style={styles.errorText}>
                           {errors.estimatedDateofArrival}
                         </Text>
@@ -601,6 +640,62 @@ const CreateApplicationMain = () => {
                   ) : null}
                 </View>
 
+                {/* Seating Row starts */}
+
+                {/* <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                <Text style={styles.seatingText}>Seating Arrangement</Text>
+                <View style={styles.seating}>
+                  <TouchableOpacity
+                    style={styles.minusbutton}
+                    onPress={handleremoveRow}
+                    disabled={rows.length === 1}
+                  >
+                    <Text style={styles.buttonText}>-</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.plusbutton}
+                    onPress={handleAddRow}
+                  >
+                    <Text style={styles.buttonText}>+</Text>
+                  </TouchableOpacity>
+
+                </View>
+              </View> */}
+
+                {/* <View style={{}}>
+                {rows.map((row, index) => (
+                  <View key={index}>
+                    <Text style={{ ...styles.seatingText, marginTop: -5 }}>Row {row} </Text>
+                    <View style={styles.inputLabelBox}>
+                      <TextInput
+                        style={styles.inputseat}
+                        placeholder={value.toString()}
+                        placeholderTextColor="black"
+                      />
+                      <View style={{ top: -44, right: 20 }}>
+                        <TouchableOpacity
+                          style={styles.arrowButton}
+                          onPress={handleIncrement}
+                        >
+                          <Text style={styles.arrowup}>+</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.arrowButton, { opacity: value === 0 ? 0.5 : 1 }]} // if the value is equal to 0 set opacity to 0.5 else keep 1 
+                          onPress={handleDecrement}
+                          disabled={value === 0}
+                        >
+                          <Text style={styles.arrowdown}>-</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+
+                ))}
+              </View> */}
+
+                {/* Seating Row Ends */}
+
                 <View style={styles.buttonContainer}>
                   <LinearGradient
                     colors={["#4B4B4B", "#9F9F9F"]}
@@ -676,10 +771,9 @@ const styles = StyleSheet.create({
   input: {
     borderRadius: 5,
     paddingHorizontal: 20,
-    paddingHorizontal: 20,
     paddingVertical: 10,
     color: "black",
-    marginBottom: 10,
+    marginBottom: 5,
   },
   dropdown: {
     backgroundColor: "#fff0",
@@ -709,6 +803,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginTop: 20,
   },
   button: {
     borderRadius: 5,
@@ -723,7 +818,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   buttonText: {
-    color: "#fff",
     color: "#fff",
   },
   progressBar1: {
@@ -828,6 +922,85 @@ const styles = StyleSheet.create({
   errorText: {
     color: "red",
     fontSize: 12,
+  },
+
+  seatingText: {
+    marginTop: 10,
+    fontSize: 15,
+    marginLeft: 20,
+    color: "#23A29F",
+  },
+  seating: {
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  plusbutton: {
+    backgroundColor: "#198754",
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    marginHorizontal: 5,
+    borderRadius: 5,
+  },
+
+  minusbutton: {
+    backgroundColor: "#E87C86",
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    marginHorizontal: 5,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  rowText: {
+    fontSize: 15,
+    marginLeft: 20,
+    marginBottom: 5,
+    color: "#23A29F",
+  },
+  inputLabelBox: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    fontSize: 16,
+    width: "40%",
+    height: 49,
+    marginTop: 10,
+  },
+
+  inputseat: {
+    borderRadius: 5,
+    paddingVertical: 10,
+    color: "black",
+    marginBottom: 5,
+    marginLeft: 60,
+    fontSize: 20,
+  },
+
+  arrowup: {
+    color: "#fff",
+    marginLeft: 120,
+    marginBottom: -15,
+    fontSize: 22,
+    backgroundColor: "#23A29F",
+    borderRadius: 4,
+    width: "20%",
+    textAlign: "center", // Center align the plus symbol
+    top: 4,
+  },
+
+  arrowdown: {
+    marginLeft: 30,
+    fontSize: 22,
+    marginBottom: 20,
+    backgroundColor: "#23A29F",
+    borderRadius: 4,
+    width: "20%",
+    bottom: 10,
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });
 
