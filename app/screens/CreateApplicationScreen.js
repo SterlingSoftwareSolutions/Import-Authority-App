@@ -984,23 +984,25 @@ const styles = StyleSheet.create({
   },
 
   arrowup: {
+    color: "#fff",
     marginLeft: 120,
     marginBottom: -15,
-    fontSize: 24,
-    backgroundColor: 'grey',
+    fontSize: 22,
+    backgroundColor: '#23A29F',
     borderRadius: 4,
     width: '20%',
     textAlign: 'center', // Center align the plus symbol
+    top: 4
   },
 
   arrowdown: {
     marginLeft: 30,
-    fontSize: 24,
+    fontSize: 22,
     marginBottom: 20,
-    backgroundColor: 'grey',
+    backgroundColor: '#23A29F',
     borderRadius: 4,
     width: '20%',
-    bottom: 15,
+    bottom: 10,
     textAlign: 'center',
     fontWeight: 'bold'
   }
