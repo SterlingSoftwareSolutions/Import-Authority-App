@@ -4,7 +4,7 @@ import storage from "../auth/storage";
 const client = async () => {
 
   let api = create({
-    baseURL: "http://10.0.2.2:8000/api",
+    baseURL: "http://import-authority-api.ap-southeast-1.elasticbeanstalk.com/api",
   });
 
   let token = "NO TOKEN";

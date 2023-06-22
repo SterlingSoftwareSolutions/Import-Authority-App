@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   SafeAreaView,
@@ -22,6 +21,7 @@ import { Formik } from "formik";
 import client from "../api/client";
 import { useNavigation } from "@react-navigation/native";
 import TopUserControlBg from "../components/TopUserControlBg";
+import { Platform } from "react-native";
 
 const CreateApplicationMain = () => {
   const endpoint = "/applications";
@@ -149,6 +149,7 @@ const CreateApplicationMain = () => {
   const [datePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
+    console.log("Test");
     setDatePickerVisibility(true);
   };
 
@@ -192,7 +193,7 @@ const CreateApplicationMain = () => {
       drive_type: values.driveType,
       odo_meter: values.odometer,
     };
-    // console.log(applicationData);
+    console.log(applicationData);
     try {
       const api = await client();
       const response = await api.post(endpoint, applicationData);
@@ -392,40 +393,66 @@ const CreateApplicationMain = () => {
                 <Text style={styles.errorText}>{errors.chassisNumber}</Text>
               ) : null}
 
-              <DateTimePickerModal
-                isVisible={datePickerVisible}
-                mode="date"
-                onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
-                onCancel={hideDatePicker}
-                onChange={() => {
-                  console.log("date changed");
-                }}
-                color={colors.primary}
-
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  showDatePicker();
-                }}
-              >
-                <TextInput
-                  style={[styles.input, styles.usernameInput]}
-                  placeholder="Estimated Date of Arrival *"
-                  placeholderTextColor={colors.primary}
-                  value={values.estimatedDateofArrival}
-                  onChangeText={handleChange("estimatedDateofArrival")}
-                  color={colors.primary}
-                  // selected={selectedEstimatedDateofArrival}
-                  // onSelectedChange={setSelectedEstimatedDateofArrival}
-                  editable={false}
-                />
-                {touched.estimatedDateofArrival &&
-                errors.estimatedDateofArrival ? (
-                  <Text style={styles.errorText}>
-                    {errors.estimatedDateofArrival}
-                  </Text>
-                ) : null}
-              </TouchableOpacity>
+{/* Datepicker starts */}
+{Platform.OS === 'ios' ? (
+  <>
+    <DateTimePickerModal
+      isVisible={datePickerVisible}
+      mode="date"
+      onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
+      onCancel={hideDatePicker}
+      onChange={() => {
+        console.log("date changed");
+      }}
+      color={colors.primary}
+    />
+    <TextInput
+      style={[styles.input, styles.usernameInput]}
+      placeholder="Estimated Date of Arrival *"
+      placeholderTextColor={colors.primary}
+      value={values.estimatedDateofArrival}
+      onChangeText={handleChange("estimatedDateofArrival")}
+      color={colors.primary}
+      editable={false}
+      onPressIn={showDatePicker}
+    />
+    {touched.estimatedDateofArrival && errors.estimatedDateofArrival ? (
+      <Text style={styles.errorText}>
+        {errors.estimatedDateofArrival}
+      </Text>
+    ) : null}
+  </>
+) : (
+  <>
+    <DateTimePickerModal
+      isVisible={datePickerVisible}
+      mode="date"
+      onConfirm={(date) => confirmDatePicker(date, setFieldValue)}
+      onCancel={hideDatePicker}
+      onChange={() => {
+        console.log("date changed");
+      }}
+      color={colors.primary}
+    />
+    <TouchableOpacity onPress={() => showDatePicker()}>
+      <TextInput
+        style={[styles.input, styles.usernameInput]}
+        placeholder="Estimated Date of Arrival *"
+        placeholderTextColor={colors.primary}
+        value={values.estimatedDateofArrival}
+        onChangeText={handleChange("estimatedDateofArrival")}
+        color={colors.primary}
+        editable={false}
+      />
+      {touched.estimatedDateofArrival && errors.estimatedDateofArrival ? (
+        <Text style={styles.errorText}>
+          {errors.estimatedDateofArrival}
+        </Text>
+      ) : null}
+    </TouchableOpacity>
+  </>
+)}
+{/* Datepicker ends */}
               <View style={[styles.dropdown]}>
                 <SelectList
                   placeholder="Make *"
@@ -627,7 +654,6 @@ const CreateApplicationMain = () => {
               </View>
             </ScrollView>
           </SafeAreaView>
-          <StatusBar style="auto" />
         </View>
       )}
     </Formik>
