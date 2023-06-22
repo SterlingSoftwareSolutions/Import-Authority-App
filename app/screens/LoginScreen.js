@@ -93,7 +93,7 @@ const LoginScreen = (props) => {
           </View>
         </LinearGradient>
         <View style={styles.footerContainer}>
-          <View style={{ flexDirection: "row", alignItems: "center" , marginBottom:10}}>
+          <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}>
             <Text style={styles.footerText}>Not a member?</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
               <Text style={styles.signupText}> SIGN UP</Text>
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   displayPic: {
-    height: 400,
+    height: 500,
     width: "100%",
     borderBottomRightRadius: 70,
     borderBottomLeftRadius: 70,
