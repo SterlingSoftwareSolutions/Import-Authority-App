@@ -20,6 +20,7 @@ import * as Yup from "yup";
 import client from "../api/client";
 
 import ApplicationLists from "../components/ApplicationLists";
+import { ScrollView } from "react-native-gesture-handler";
 
 function Dashboard({ children }) {
   const navigation = useNavigation();
@@ -38,12 +39,21 @@ function Dashboard({ children }) {
 
   const [profileActive, setProfileActive] = useState(true);
 
-  const profileButtonStyle = profileActive
-    ? styles.activeButton
-    : styles.inactiveButton;
-  const passwordButtonStyle = profileActive
-    ? styles.inactiveButton
-    : styles.activeButton;
+  const profileButtonStyle = [
+    styles.activeButton,
+    {
+      borderTopLeftRadius: 5,
+      borderBottomLeftRadius: 5,
+    },
+  ];
+
+  const passwordButtonStyle = [
+    styles.inactiveButton,
+    {
+      borderTopRightRadius: 5,
+      borderBottomRightRadius: 5,
+    },
+  ];
 
   const endpoint = "/profile";
   // Application data
@@ -86,6 +96,35 @@ function Dashboard({ children }) {
       state: "pending",
 
     },
+    {
+      id: "5",
+      name: "Another Car",
+      chassis: "789012M",
+      buildDate: "2020/03",
+      odo: "15000",
+      imageSource: require("../assets/carpay2.png"),
+      state: "completed",
+
+    },
+    {
+      id: "6",
+      name: "Toyoya Supra",
+      chassis: "123456M",
+      buildDate: "2016/07",
+      odo: "20350",
+      imageSource: require("../assets/carpay3.png"),
+      state: "pending",
+    },
+    {
+      id: "7",
+      name: "Another Car",
+      chassis: "789012M",
+      buildDate: "2020/03",
+      odo: "15000",
+      imageSource: require("../assets/carpay5.png"),
+      state: "pending",
+
+    },
   ];
   const handleSubmit = async (values) => {
     const applicationData = {
@@ -109,6 +148,7 @@ function Dashboard({ children }) {
   };
 
   return (
+    <ScrollView>
     <SafeAreaView style={styles.container}>
         {/* User control component */}
         <TopUserControlBg>
@@ -137,8 +177,10 @@ function Dashboard({ children }) {
                       </TouchableOpacity>
                     </View>
                   </View>
-
+                
+                
                   <Formik
+                 
                   initialValues={{
               name: user.name,
               businessname: user.businessname,
@@ -233,6 +275,7 @@ function Dashboard({ children }) {
 )}
 
                   </Formik>
+                 
 
                   
                 
@@ -409,7 +452,9 @@ function Dashboard({ children }) {
          <ApplicationLists data={data}/>
        
         </View>
+        
     </SafeAreaView>
+    </ScrollView>
   );
 }
 
@@ -524,9 +569,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#079BB7",
     color: "white",
     borderWidth: 1,
-    borderTopLeftRadius: 5,
+    borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    borderBottomLeftRadius: 5,
+    borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -538,9 +583,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#fff",
     borderTopLeftRadius: 0,
-    borderTopRightRadius: 5,
+    borderTopRightRadius: 0,
     borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 5,
+    borderBottomRightRadius: 0,
     paddingVertical: 5,
     paddingHorizontal: 10,
   },
