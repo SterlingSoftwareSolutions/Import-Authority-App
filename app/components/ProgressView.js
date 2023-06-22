@@ -66,9 +66,9 @@ const styles = StyleSheet.create({
         height: 90,
         borderRadius: 10,
         alignItems: 'center',
-        bottom: 20,
+        bottom: 30,
         alignSelf: "center"
     },
 })
 
-export default ProgressView;
+export default ProgressView;

@@ -30,11 +30,13 @@ function Dashboard({ children }) {
 
   const toggleProfile = () => {
     setShowProfile(!showProfile); //true
+    setProfileActive(!profileActive);
   };
 
   const togglePassword = () => {
     setShowPassword(!showPassword); //true
     setProfileActive(!profileActive);
+
   };
 
   const [profileActive, setProfileActive] = useState(true);
@@ -44,6 +46,9 @@ function Dashboard({ children }) {
     {
       borderTopLeftRadius: 5,
       borderBottomLeftRadius: 5,
+      backgroundColor: profileActive ? 'white' : '#079BB7',
+      color: profileActive ? '#079BB7' : 'white',
+      borderColor: profileActive ? "white" : "#079BB7"
     },
   ];
 
@@ -52,6 +57,9 @@ function Dashboard({ children }) {
     {
       borderTopRightRadius: 5,
       borderBottomRightRadius: 5,
+      backgroundColor: profileActive ? '#079BB7' : 'white',
+      color: profileActive ? 'white' : '#079BB7',
+      borderColor: profileActive ? "#079BB7" : "white"
     },
   ];
 
@@ -279,83 +287,88 @@ function Dashboard({ children }) {
 
 
 
-                  <View>
+                  <Formik
+  initialValues={{
+    password: user.password,
+    newpassword: user.newpassword,
+    confirmpassword: user.confirmpassword,
+  }}
+  onSubmit={handleSubmit}
+  validationSchema={Yup.object().shape({
+    password: Yup.string().required("Current password is required")
+    .min(8, "Must be at least 8 characters"),
+    newpassword: Yup.string().required("New password is required")
+    .min(8, "Must be at least 8 characters"),
+    confirmpassword: Yup.string()
+      .required("Confirm password is required")
+      .oneOf([Yup.ref('newpassword'), null], 'Passwords must match')
+         .min(8, " Must be at least 8 characters"),
+  })}
+>
+  {({ handleChange, handleSubmit, values, errors, touched }) => (
+    showPassword && (
+      <View style={styles.formContainer}>
+        <TextInput
+          style={[styles.input, styles.usernameInput]}
+          value={values.password}
+          placeholder="Password"
+          placeholderTextColor="#23A29F"
+          color="#10bca"
+          onChangeText={handleChange("password")}
+          secureTextEntry={true}
+        />
+        {touched.password && (
+          <Text style={styles.errorText}>{errors.password}</Text>
+        )}
 
+        <TextInput
+          style={[styles.input, styles.usernameInput]}
+          value={values.newpassword}
+          placeholder="New Password"
+          placeholderTextColor="#23A29F"
+          color="#10bca"
+          onChangeText={handleChange("newpassword")}
+          secureTextEntry={true}
+        />
+        {touched.newpassword && (
+          <Text style={styles.errorText}>{errors.newpassword}</Text>
+        )}
 
-                    <Formik
+        <TextInput
+          style={[styles.input, styles.usernameInput]}
+          value={values.confirmpassword}
+          placeholder="Confirm Password"
+          placeholderTextColor="#23A29F"
+          color="#10bca"
+          onChangeText={handleChange("confirmpassword")}
+          
+        />
+        {touched.confirmpassword && (
+          <Text style={styles.errorText}>{errors.confirmpassword}</Text>
+        )}
+        <View style={{ marginTop: 15}}>
+        <TouchableOpacity
+          style={{
+            ...styles.buttonContainer,
+            marginBottom: 10,
+          }}
+          onPress={handleSubmit}
+        >
+          <Text style={styles.buttonText}>UPDATE</Text>
+        </TouchableOpacity>
+       
+        <TouchableOpacity
+          style={{ ...styles.buttonContainer, marginBottom: 20 }}
+          onPress={logOut}
+        >
+          <Text style={styles.buttonText}>LOGOUT</Text>
+        </TouchableOpacity>
+        </View>
+      </View>
+    )
+  )}
+</Formik>
 
-                      initialValues={{
-                        password: user.password,
-                        newpassword: user.newpassword,
-                        confirmpassword: user.confirmpassword,
-                      }}
-                      onSubmit={handleSubmit}
-                      validationSchema={Yup.object().shape({
-                        password: Yup.string().required("Current passwrd is required"),
-                        newpassword: Yup.string().required("New password is required"),
-                        confirmpassword: Yup.string().required("Confirm password is required"),
-                      })}
-                    >
-                      {({ handleChange, handleSubmit, values, errors, touched }) => (
-                        showPassword && (     //showpassword
-                          <View style={styles.formContainer}>
-                            <TextInput
-                              style={[styles.input, styles.usernameInput]}
-                              value={values.password}
-                              placeholder="Password"
-                              placeholderTextColor="#23A29F"
-                              color="#10bca"
-                              onChangeText={handleChange("password")}
-                            />
-                            {touched.password && (
-                              <Text style={styles.errorText}>{errors.password}</Text>
-                            )}
-                            <TextInput
-                              style={[styles.input, styles.usernameInput]}
-                              value={values.newpassword}
-                              placeholder="New Password"
-                              placeholderTextColor="#23A29F"
-                              color="#10bca"
-                              onChangeText={handleChange("Newpassword")}
-                            />
-                            {touched.newpassword && (
-                              <Text style={styles.errorText}>{errors.newpassword}</Text>
-                            )}
-                            <TextInput
-                              style={[styles.input, styles.usernameInput]}
-                              value={values.confirmpassword}
-                              placeholder="Confirm Password"
-                              placeholderTextColor="#23A29F"
-                              color="#10bca"
-                              onChangeText={handleChange("Confirmpassword")}
-                            />
-                            {touched.confirmpassword && (
-                              <Text style={styles.errorText}>{errors.confirmpassword}</Text>
-                            )}
-
-
-                            <TouchableOpacity
-                              style={{
-                                ...styles.buttonContainer,
-                                marginBottom: 10,
-                              }}
-                              onPress={handleSubmit}
-                            >
-                              <Text style={styles.buttonText}>UPDATE</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                              style={{ ...styles.buttonContainer, marginBottom: 20 }}
-                              onPress={logOut}
-
-                            >
-                              <Text style={styles.buttonText}>LOGOUT</Text>
-                            </TouchableOpacity>
-                          </View>
-                        )
-                      )}
-                    </Formik>
-                  </View>
                 </View>
               )}
             </View>
@@ -570,10 +583,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#079BB7",
     color: "white",
     borderWidth: 1,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderColor: "#079BB7",
@@ -583,10 +592,6 @@ const styles = StyleSheet.create({
     color: "#079BB7",
     borderWidth: 1,
     borderColor: "#fff",
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
     paddingVertical: 5,
     paddingHorizontal: 10,
   },
