@@ -21,11 +21,16 @@ import TopUserControlBg from "../components/TopUserControlBg";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
-import * as Yup from "yup";
-import { Formik } from "formik";
+import { useRoute } from "@react-navigation/native";
+import client from "../api/client";
 
 const CreateApplicationImageScreen = (props) => {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  //Getting Vehicle info from the CreateApplication Screen
+  const vehicleInfo = route.params.params;
+
   const progress1 = 1;
   const progress2 = 1;
   const progress3 = 0;
@@ -34,17 +39,20 @@ const CreateApplicationImageScreen = (props) => {
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
 
-  // image state
+  //Uploaded images
   const [images, setImages] = useState({});
+
+  //Name of the image field
   const [key, setKey] = useState(null);
 
+  //Open the Popup onPress
   const selectImage = (imageKey) => {
     setKey(imageKey);
     setImageSourceDialog(true);
   };
 
+  //Opens the Camera or image Library
   const selectImageLaunch = async (camera = true) => {
-    console.log(key);
     setImageSourceDialog(false);
     var picker = null;
     if (camera) {
@@ -57,8 +65,6 @@ const CreateApplicationImageScreen = (props) => {
         ...images,
         [key]: picker.assets[0].uri,
       }));
-
-      console.log(images);
     }
   };
 
@@ -118,6 +124,9 @@ const CreateApplicationImageScreen = (props) => {
     return "";
   };
 
+  // --Image & Doc Validation End--
+
+  // Validate Images and Documents on Press Of the NExt Button
   const handleNextButton = () => {
     const imageErrorMessage = validateImages();
     const docErrorMessage = validateDocuments();
@@ -126,11 +135,74 @@ const CreateApplicationImageScreen = (props) => {
       const combinedErrorMessage = `${imageErrorMessage}\n${docErrorMessage}`;
       setErrorMessage(combinedErrorMessage);
     } else {
-      setErrorMessage("");
-      navigation.navigate("PaymentScreen");
+      uploadFiles();
     }
   };
-  // --Image & Doc Validation End-- 
+
+  //upload the Images
+  const uploadFiles = async () => {
+    try {
+      const api = await client();
+      const formData = new FormData();
+      // Add images to formData
+      Object.entries(images).forEach(([key, uri]) => {
+        const filename = uri.split("/").pop();
+        const match = /\.(\w+)$/.exec(filename);
+        const ext = match?.[1];
+        const type = match ? `image/${match[1]}` : "image";
+
+        formData.append(key, {
+          uri,
+          name: `image.${ext}`,
+          type,
+        });
+      });
+
+      // Add documents to formData
+      Object.entries(docs).forEach(([key, uri]) => {
+        const filename = uri.split("/").pop();
+
+        formData.append(key, {
+          uri,
+          name: filename,
+          type: "application/octet-stream",
+        });
+      });
+
+      Object.entries(vehicleInfo).forEach(([key, uri]) => {
+        formData.append(key, uri);
+      });
+
+      // vehicleInfo.forEach(Vehicle_Information => {
+      //   formData.append(Vehicle_Information);
+      // });
+
+      // Make API request to upload images and documents
+      const response = await api.post("/applications", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("---------------------------------------------Next button clicked-------------------------------------");
+      console.log(formData);
+      console.log("---------------------------------------------Next button clicked-------------------------------------");
+
+      if (response.ok) {
+        // Successful upload
+        console.log("Images and files uploaded successfully");
+        navigation.navigate("PaymentScreen");
+      } else {
+        // Error in API response
+        console.error("Failed to upload images and files:", response.problem);
+        console.log(response);
+        alert("Image and document upload failed!");
+      }
+    } catch (error) {
+      // Error in API request
+      console.log(error);
+      alert("Something went wrong");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -183,7 +255,8 @@ const CreateApplicationImageScreen = (props) => {
           </View>
         </View>
       </TopUserControlBg>
-      {/* Modal gallery || camera */}
+
+      {/* Image selecting Popup */}
       <Dialog
         onDismiss={() => {
           setImageSourceDialog(false);
@@ -225,9 +298,8 @@ const CreateApplicationImageScreen = (props) => {
           </DialogFooter>
         }
       ></Dialog>
-    
 
-      {/* Image selector container */}
+      {/* Image and Doc selector container */}
       <ScrollView contentContainerStyle={{ marginTop: 10, paddingBottom: 40 }}>
         {errorMessage ? (
           <View style={styles.errorContainer}>
@@ -235,19 +307,18 @@ const CreateApplicationImageScreen = (props) => {
           </View>
         ) : null}
 
-        {/* Exterior Images Selector */}
+        {/* Exterior Images Section */}
         <View>
           <Text style={[styles.exteriortext, { marginTop: 20 }]}>
             Exterior Images
           </Text>
+
           <View
-            style={{ flexDirection: "row", justifyContent: "space-around" }}
-          >
+            style={{ flexDirection: "row", justifyContent: "space-around" }}>
             <TouchableOpacity
               onPress={() => {
                 selectImage("img_front_right");
-              }}
-            >
+              }}>
               <View style={styles.cameraContainer}>
                 <Image
                   source={require("../assets/cam.png")}
@@ -404,6 +475,8 @@ const CreateApplicationImageScreen = (props) => {
             </TouchableOpacity>
           </View>
         </View>
+
+        {/* Documents Selector */}
         <View>
           <Text style={[styles.exteriortext, { marginTop: 60 }]}>
             Documents
@@ -464,9 +537,11 @@ const CreateApplicationImageScreen = (props) => {
             </TouchableOpacity>
           </View>
         </View>
-        {/* Draft & Next Button */}
+
+        {/* Buttons */}
         <View style={styles.back_draft}>
           <View style={styles.buttonContainer}>
+            {/* Draft button  */}
             <LinearGradient
               colors={["#4B4B4B", "#9F9F9F"]}
               locations={[0, 1]}
@@ -479,6 +554,7 @@ const CreateApplicationImageScreen = (props) => {
               </TouchableOpacity>
             </LinearGradient>
 
+            {/* Next button  */}
             <LinearGradient
               colors={["#77B859", "#2DA596"]}
               locations={[0, 1]}
@@ -496,6 +572,7 @@ const CreateApplicationImageScreen = (props) => {
     </SafeAreaView>
   );
 };
+// Styles for the page
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -190,12 +190,11 @@ const CreateApplicationMain = () => {
       approval_type: approvalType === 0 ? "SEVs / RAWs" : "Old Vehicle",
       vass_engineering: values.vassEngineering,
     };
-    // console.log(applicationData);
     try {
       const api = await client();
       const response = await api.post(endpoint, applicationData);
-      console.log("Response:", response.data);
-      navigation.navigate("CreateApplicationImageScreen");
+      // Passing the vehicle information to the Image upload screen
+      navigation.navigate("CreateApplicationImageScreen", {params: applicationData});
     } catch (error) {
       console.log("Error:", error);
     }
