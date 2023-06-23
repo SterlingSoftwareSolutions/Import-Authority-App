@@ -170,7 +170,8 @@ const CreateApplicationMain = () => {
   const [approvalType, setApprovalType] = useState(0);
 
   const switchApprovalType = () => {
-    setApprovalType(approvalType == 0 ? 1 : 0);
+    const newApprovalType = approvalType === 0 ? 1 : 0;
+    setApprovalType(newApprovalType);
   };
 
   const handleSubmit = async (values) => {
@@ -186,10 +187,10 @@ const CreateApplicationMain = () => {
       body_type: values.bodyType,
       drive_type: values.driveType,
       odo_meter: values.odometer,
-      approval_type: values.approvalType,
+      approval_type: approvalType === 0 ? "SEVs / RAWs" : "Old Vehicle",
       vass_engineering: values.vassEngineering,
     };
-    console.log(applicationData);
+    // console.log(applicationData);
     try {
       const api = await client();
       const response = await api.post(endpoint, applicationData);
@@ -248,6 +249,7 @@ const CreateApplicationMain = () => {
   const additionalValidations = Yup.object().shape({
     vassEngineering: Yup.string().required("Vass engineering is required"),
   });
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -348,8 +350,9 @@ const CreateApplicationMain = () => {
           bodyType: "",
           driveType: "",
           odometer: "",
+          approvalType: ""
         }}
-        onSubmit={handleSubmit}
+        onSubmit={values => handleSubmit(values, approvalType)}
         validationSchema={
           approvalType == 0
             ? validationSchema
@@ -451,7 +454,7 @@ const CreateApplicationMain = () => {
                       onPressIn={showDatePicker}
                     />
                     {touched.estimatedDateofArrival &&
-                    errors.estimatedDateofArrival ? (
+                      errors.estimatedDateofArrival ? (
                       <Text style={styles.errorText}>
                         {errors.estimatedDateofArrival}
                       </Text>
@@ -482,7 +485,7 @@ const CreateApplicationMain = () => {
                         editable={false}
                       />
                       {touched.estimatedDateofArrival &&
-                      errors.estimatedDateofArrival ? (
+                        errors.estimatedDateofArrival ? (
                         <Text style={styles.errorText}>
                           {errors.estimatedDateofArrival}
                         </Text>
@@ -706,11 +709,13 @@ const CreateApplicationMain = () => {
                   >
                     <TouchableOpacity
                       onPress={() => {
-                        console.log(values);
+                        console.log({ values, approvalType: approvalType === 0 ? "SEVs / RAWs" : "Old Vehicle" });
+
                       }}
                     >
                       <Text style={styles.buttonText}>Draft</Text>
                     </TouchableOpacity>
+
                   </LinearGradient>
 
                   <LinearGradient
@@ -778,7 +783,7 @@ const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: "#fff0",
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 5.5,
   },
   usernameInput: {
     backgroundColor: "#fff",
