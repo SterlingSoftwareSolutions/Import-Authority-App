@@ -187,10 +187,14 @@ const CreateApplicationMain = () => {
       body_type: values.bodyType,
       drive_type: values.driveType,
       odo_meter: values.odometer,
-      approval_type: approvalType === 0 ? "SEVs / RAWs" : "Old Vehicle",
-      vass_engineering: values.vassEngineering,
+      approval_type: approvalType === 0 ? "SEV" : "Older Vehicles",
+
     };
-    // console.log(applicationData);
+
+    if (approvalType === 1) {
+      applicationData.vass_engineering = values.vassEngineering;
+    }
+    console.log(applicationData);
     try {
       const api = await client();
       const response = await api.post(endpoint, applicationData);
@@ -708,10 +712,10 @@ const CreateApplicationMain = () => {
                     style={styles.button}
                   >
                     <TouchableOpacity
-                      onPress={() => {
-                        console.log({ values, approvalType: approvalType === 0 ? "SEVs / RAWs" : "Old Vehicle" });
+                    // onPress={() => {
+                    //   console.log({ values, approvalType: approvalType === 0 ? "SEVs / RAWs" : "Old Vehicle" });
 
-                      }}
+                    // }}
                     >
                       <Text style={styles.buttonText}>Draft</Text>
                     </TouchableOpacity>
