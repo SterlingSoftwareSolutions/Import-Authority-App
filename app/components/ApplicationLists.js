@@ -24,6 +24,12 @@ const ApplicationLists = ({ data }) => {
         break;
     }
 
+    const imgFrontRightAsset = item.assets.find(
+      (asset) => asset.asset_type === "img_front_right"
+    );
+
+    const fileType = imgFrontRightAsset ? imgFrontRightAsset.file_type : "";
+
     return (
       <View
         style={{
@@ -34,7 +40,10 @@ const ApplicationLists = ({ data }) => {
       >
         <View style={{ flexDirection: "row", marginLeft: -13 }}>
           <Image
-            source={{ uri: item.assets[0]?.location }} // Update with the correct image source property
+            source={{
+              uri: imgFrontRightAsset ? 'http://dkxw67x8n7ht.cloudfront.net/assets/applications/' + imgFrontRightAsset.location : "",
+              type: `image/${fileType}`,
+            }}
             style={[
               styles.dashboardboxicon,
               {
@@ -98,9 +107,9 @@ const ApplicationLists = ({ data }) => {
                 </View>
               </View>
               <View style={{ left: 10 }}>
-                <Text>{item.chassis_no}</Text> 
-                <Text>{`${item.build_month}/${item.build_year}`}</Text> 
-                <Text>{item.odo_meter}</Text> 
+                <Text>{item.chassis_no}</Text>
+                <Text>{`${item.build_month}/${item.build_year}`}</Text>
+                <Text>{item.odo_meter}</Text>
               </View>
             </View>
           </View>
@@ -120,7 +129,7 @@ const ApplicationLists = ({ data }) => {
     <FlatList
       data={data}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id.toString()} 
+      keyExtractor={(item) => item.id.toString()}
       contentContainerStyle={{ paddingVertical: 10 }}
     />
   );
