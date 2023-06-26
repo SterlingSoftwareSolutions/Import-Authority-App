@@ -159,7 +159,8 @@ const CreateApplicationMain = () => {
 
   const confirmDatePicker = (date, setFieldValue) => {
     const date_object = new Date(date);
-    setFieldValue("estimatedDateofArrival", date_object.toISOString());
+    setFieldValue("estimatedDateofArrival", date_object.toISOString().slice(0, 19).replace('T', ' '))
+
     hideDatePicker();
   };
 
@@ -174,27 +175,36 @@ const CreateApplicationMain = () => {
     setApprovalType(newApprovalType);
   };
 
+  function getKeyByValue(dictionaryArray, value) {
+    const foundItem = dictionaryArray.find(item => item.value === value);
+    return foundItem ? foundItem.key : null;
+  }
+
   const handleSubmit = async (values) => {
     const applicationData = {
       chassis_no: values.chassisNumber,
       arrival_date: values.estimatedDateofArrival,
       make: values.make,
       model: values.model,
-      build_month: values.buildMonth,
+      build_month: getKeyByValue(databuildmonth, values.buildMonth),
       build_year: values.buildYear,
       fuel_type: values.fuelType,
       transmission: values.transmission,
       body_type: values.bodyType,
       drive_type: values.driveType,
       odo_meter: values.odometer,
-      approval_type: approvalType === 0 ? "SEVs / RAWs" : "Old Vehicle",
-      vass_engineering: values.vassEngineering,
+      approval_type: approvalType === 0 ? "SEV" : "Older Vehicles",
     };
+    if (approvalType === 1) {
+      applicationData.vass_engineering = values.vassEngineering;
+    }
+    console.log(applicationData);
     try {
       const api = await client();
       const response = await api.post(endpoint, applicationData);
+      console.log("Response:", response.data);
       // Passing the vehicle information to the Image upload screen
-      navigation.navigate("CreateApplicationImageScreen", {params: applicationData});
+      navigation.navigate("CreateApplicationImageScreen", { params: applicationData });
     } catch (error) {
       console.log("Error:", error);
     }
@@ -706,15 +716,9 @@ const CreateApplicationMain = () => {
                     end={{ x: 1, y: 1 }}
                     style={styles.button}
                   >
-                    <TouchableOpacity
-                      onPress={() => {
-                        console.log({ values, approvalType: approvalType === 0 ? "SEVs / RAWs" : "Old Vehicle" });
-
-                      }}
-                    >
+                    <TouchableOpacity>
                       <Text style={styles.buttonText}>Draft</Text>
                     </TouchableOpacity>
-
                   </LinearGradient>
 
                   <LinearGradient

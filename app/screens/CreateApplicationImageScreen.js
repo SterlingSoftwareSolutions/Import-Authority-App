@@ -20,9 +20,9 @@ import {
 import TopUserControlBg from "../components/TopUserControlBg";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
-import { useNavigation } from "@react-navigation/native";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from '@react-navigation/native';
 import client from "../api/client";
+import mime from 'mime'
 
 const CreateApplicationImageScreen = (props) => {
   const navigation = useNavigation();
@@ -128,6 +128,7 @@ const CreateApplicationImageScreen = (props) => {
 
   // Validate Images and Documents on Press Of the NExt Button
   const handleNextButton = () => {
+    console.log(vehicleInfo)
     const imageErrorMessage = validateImages();
     const docErrorMessage = validateDocuments();
 
@@ -144,38 +145,33 @@ const CreateApplicationImageScreen = (props) => {
     try {
       const api = await client();
       const formData = new FormData();
-      // Add images to formData
-      Object.entries(images).forEach(([key, uri]) => {
-        const filename = uri.split("/").pop();
-        const match = /\.(\w+)$/.exec(filename);
-        const ext = match?.[1];
-        const type = match ? `image/${match[1]}` : "image";
-
-        formData.append(key, {
-          uri,
-          name: `image.${ext}`,
-          type,
-        });
-      });
 
       // Add documents to formData
       Object.entries(docs).forEach(([key, uri]) => {
         const filename = uri.split("/").pop();
+        console.log(uri);
 
         formData.append(key, {
           uri,
           name: filename,
-          type: "application/octet-stream",
+          type: mime.getType(uri),
         });
       });
 
+      // Add images to formData
+      Object.entries(images).forEach(([key, uri]) => {
+        const filename = uri.split("/").pop();
+        console.log(uri);
+
+        formData.append(key, {
+          uri,
+          name: filename,
+          type: mime.getType(uri),
+        });
+      });
       Object.entries(vehicleInfo).forEach(([key, uri]) => {
         formData.append(key, uri);
       });
-
-      // vehicleInfo.forEach(Vehicle_Information => {
-      //   formData.append(Vehicle_Information);
-      // });
 
       // Make API request to upload images and documents
       const response = await api.post("/applications", formData, {
@@ -183,6 +179,7 @@ const CreateApplicationImageScreen = (props) => {
           "Content-Type": "multipart/form-data",
         },
       });
+
       console.log("---------------------------------------------Next button clicked-------------------------------------");
       console.log(formData);
       console.log("---------------------------------------------Next button clicked-------------------------------------");
@@ -549,9 +546,10 @@ const CreateApplicationImageScreen = (props) => {
               end={{ x: 1, y: 1 }}
               style={styles.button}
             >
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => console.log(vehicleInfo)}>
                 <Text style={styles.buttonText}>Draft</Text>
               </TouchableOpacity>
+
             </LinearGradient>
 
             {/* Next button  */}
