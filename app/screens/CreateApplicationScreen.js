@@ -645,6 +645,7 @@ const CreateApplicationMain = () => {
                     value={values.odometer}
                     placeholderTextColor={colors.primary}
                     color={colors.primary}
+                    keyboardType="numeric"
                     onChangeText={handleChange("odometer")}
                   />
                   {touched.odometer && errors.odometer ? (

@@ -69,7 +69,7 @@ function Dashboard({ children }) {
     const fetchData = async () => {
       try {
         const api = await client();
-        const response = await api.get("/applications"); 
+        const response = await api.get("/applications");
         console.log(response.data);
         setApplications(response.data.data);
       } catch (error) {
@@ -365,34 +365,22 @@ function Dashboard({ children }) {
               </LinearGradient>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity>
-            <Image
-              source={require("../assets/carpay.png")}
-              style={
-                styles.dashboardicon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../assets/carpay2.png")}
-              style={
-                styles.dashboardicon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../assets/carpay3.png")}
-              style={
-                styles.dashboardicon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../assets/carpay5.png")}
-              style={
-                styles.dashboardicon}
-            />
-          </TouchableOpacity>
+          {/* // Render the last four application images  */}
+          {applications.slice(-4).reverse().map(application => {
+            const imgFrontRightAsset = application.assets.find(asset => asset.asset_type === "img_front_right");
+            const fileType = imgFrontRightAsset ? imgFrontRightAsset.file_type : "";
+            return (
+              <TouchableOpacity key={application.id}>
+                <Image
+                  source={{
+                    uri: imgFrontRightAsset ? `http://dkxw67x8n7ht.cloudfront.net/assets/applications/${imgFrontRightAsset.location}` : "",
+                    type: `image/${fileType}`,
+                  }}
+                  style={styles.iconStyle}
+                />
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         {/* Applications Listing Container*/}
@@ -460,7 +448,7 @@ const styles = StyleSheet.create({
     top: 20,
     left: 8,
   },
-  dashboardicon: {
+  iconStyle: {
     marginLeft: 10,
     width: 60, height: 60, borderRadius: 30,
   },
