@@ -3,6 +3,7 @@ import { View, Text, Image, FlatList, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import ApplicationFunctionsGradientButton from "./ApplicationFunctionsGradientButton";
 import { useNavigation } from "@react-navigation/native";
+import {CDN_URL} from '@env'
 
 const ApplicationLists = ({ data }) => {
   const navigation = useNavigation();
@@ -46,7 +47,7 @@ const ApplicationLists = ({ data }) => {
         <View style={{ flexDirection: "row", marginLeft: -13 }}>
           <Image
             source={{
-              uri: imgFrontRightAsset ? 'http://dkxw67x8n7ht.cloudfront.net/assets/applications/' + imgFrontRightAsset.location : "",
+              uri: imgFrontRightAsset ? CDN_URL + imgFrontRightAsset.location : "",
               type: `image/${fileType}`,
             }}
             style={[

@@ -32,6 +32,7 @@ function Dashboard({ children }) {
   const endpoint = "/profile";
 
   const toggleProfile = () => {
+    console.log(process.env.API_URL)
     setShowProfile(!showProfile); //true
     setProfileActive(!profileActive);
   };
@@ -346,7 +347,8 @@ function Dashboard({ children }) {
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <View>
             <TouchableOpacity
-              onPress={() => navigation.navigate("CreateApplicationScreen")}
+              onPress={() => navigation.navigate("CreateApplicationScreen")
+            }
             >
               <LinearGradient
                 style={{
@@ -370,7 +372,7 @@ function Dashboard({ children }) {
             const imgFrontRightAsset = application.assets.find(asset => asset.asset_type === "img_front_right");
             const fileType = imgFrontRightAsset ? imgFrontRightAsset.file_type : "";
             return (
-              <TouchableOpacity key={application.id}>
+              <TouchableOpacity key={application.id} onPress={() => navigation.navigate("ViewApplications")}>
                 <Image
                   source={{
                     uri: imgFrontRightAsset ? `http://dkxw67x8n7ht.cloudfront.net/assets/applications/${imgFrontRightAsset.location}` : "",

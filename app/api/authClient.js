@@ -1,7 +1,9 @@
 import { create } from "apisauce";
+import {API_URL} from '@env'
+
 
 const authClient = create({
-  baseURL: "http://import-authority-api.ap-southeast-1.elasticbeanstalk.com/api",
+  baseURL: API_URL,
 });
 
 export default authClient;

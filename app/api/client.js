@@ -1,10 +1,12 @@
 import { create } from "apisauce";
 import storage from "../auth/storage";
+import {API_URL} from '@env'
+
 
 const client = async () => {
 
   let api = create({
-    baseURL: "http://import-authority-api.ap-southeast-1.elasticbeanstalk.com/api",
+    baseURL: API_URL,
   });
 
   let token = "NO TOKEN";
