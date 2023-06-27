@@ -159,7 +159,8 @@ const CreateApplicationMain = () => {
 
   const confirmDatePicker = (date, setFieldValue) => {
     const date_object = new Date(date);
-    setFieldValue("estimatedDateofArrival", date_object.toISOString());
+    setFieldValue("estimatedDateofArrival", date_object.toISOString().slice(0, 19).replace('T', ' '))
+
     hideDatePicker();
   };
 
@@ -170,8 +171,14 @@ const CreateApplicationMain = () => {
   const [approvalType, setApprovalType] = useState(0);
 
   const switchApprovalType = () => {
-    setApprovalType(approvalType == 0 ? 1 : 0);
+    const newApprovalType = approvalType === 0 ? 1 : 0;
+    setApprovalType(newApprovalType);
   };
+
+  function getKeyByValue(dictionaryArray, value) {
+    const foundItem = dictionaryArray.find(item => item.value === value);
+    return foundItem ? foundItem.key : null;
+  }
 
   const handleSubmit = async (values) => {
     const applicationData = {
@@ -179,22 +186,25 @@ const CreateApplicationMain = () => {
       arrival_date: values.estimatedDateofArrival,
       make: values.make,
       model: values.model,
-      build_month: values.buildMonth,
+      build_month: getKeyByValue(databuildmonth, values.buildMonth),
       build_year: values.buildYear,
       fuel_type: values.fuelType,
       transmission: values.transmission,
       body_type: values.bodyType,
       drive_type: values.driveType,
       odo_meter: values.odometer,
-      approval_type: values.approvalType,
-      vass_engineering: values.vassEngineering,
+      approval_type: approvalType === 0 ? "SEV" : "Older Vehicles",
     };
+    if (approvalType === 1) {
+      applicationData.vass_engineering = values.vassEngineering;
+    }
     console.log(applicationData);
     try {
       const api = await client();
       const response = await api.post(endpoint, applicationData);
       console.log("Response:", response.data);
-      navigation.navigate("CreateApplicationImageScreen");
+      // Passing the vehicle information to the Image upload screen
+      navigation.navigate("CreateApplicationImageScreen", { params: applicationData });
     } catch (error) {
       console.log("Error:", error);
     }
@@ -248,6 +258,7 @@ const CreateApplicationMain = () => {
   const additionalValidations = Yup.object().shape({
     vassEngineering: Yup.string().required("Vass engineering is required"),
   });
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -348,8 +359,9 @@ const CreateApplicationMain = () => {
           bodyType: "",
           driveType: "",
           odometer: "",
+          approvalType: ""
         }}
-        onSubmit={handleSubmit}
+        onSubmit={values => handleSubmit(values, approvalType)}
         validationSchema={
           approvalType == 0
             ? validationSchema
@@ -451,7 +463,7 @@ const CreateApplicationMain = () => {
                       onPressIn={showDatePicker}
                     />
                     {touched.estimatedDateofArrival &&
-                    errors.estimatedDateofArrival ? (
+                      errors.estimatedDateofArrival ? (
                       <Text style={styles.errorText}>
                         {errors.estimatedDateofArrival}
                       </Text>
@@ -482,7 +494,7 @@ const CreateApplicationMain = () => {
                         editable={false}
                       />
                       {touched.estimatedDateofArrival &&
-                      errors.estimatedDateofArrival ? (
+                        errors.estimatedDateofArrival ? (
                         <Text style={styles.errorText}>
                           {errors.estimatedDateofArrival}
                         </Text>
@@ -704,11 +716,7 @@ const CreateApplicationMain = () => {
                     end={{ x: 1, y: 1 }}
                     style={styles.button}
                   >
-                    <TouchableOpacity
-                      onPress={() => {
-                        console.log(values);
-                      }}
-                    >
+                    <TouchableOpacity>
                       <Text style={styles.buttonText}>Draft</Text>
                     </TouchableOpacity>
                   </LinearGradient>
@@ -778,7 +786,7 @@ const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: "#fff0",
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 5.5,
   },
   usernameInput: {
     backgroundColor: "#fff",

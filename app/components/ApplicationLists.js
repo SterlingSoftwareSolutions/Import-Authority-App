@@ -1,15 +1,14 @@
 import React from "react";
-import { View, Text, Image, FlatList,  StyleSheet,} from "react-native";
+import { View, Text, Image, FlatList, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import ApplicationFunctionsGradientButton from "./ApplicationFunctionsGradientButton";
 
 const ApplicationLists = ({ data }) => {
-
   // render item for FlatList
   const renderItem = ({ item }) => {
     let borderColor;
 
-    switch (item.state) {
+    switch (item.status) {
       case "rejected":
         borderColor = colors.rejected;
         break;
@@ -25,6 +24,12 @@ const ApplicationLists = ({ data }) => {
         break;
     }
 
+    const imgFrontRightAsset = item.assets.find(
+      (asset) => asset.asset_type === "img_front_right"
+    );
+
+    const fileType = imgFrontRightAsset ? imgFrontRightAsset.file_type : "";
+
     return (
       <View
         style={{
@@ -35,7 +40,10 @@ const ApplicationLists = ({ data }) => {
       >
         <View style={{ flexDirection: "row", marginLeft: -13 }}>
           <Image
-            source={item.imageSource}
+            source={{
+              uri: imgFrontRightAsset ? 'http://dkxw67x8n7ht.cloudfront.net/assets/applications/' + imgFrontRightAsset.location : "",
+              type: `image/${fileType}`,
+            }}
             style={[
               styles.dashboardboxicon,
               {
@@ -48,7 +56,7 @@ const ApplicationLists = ({ data }) => {
             ]}
           />
           <View style={{ paddingLeft: 10 }}>
-            <Text>{item.name}</Text>
+            <Text>{item.make}</Text>
             <View style={{ flexDirection: "row" }}>
               <View>
                 <Image
@@ -99,9 +107,9 @@ const ApplicationLists = ({ data }) => {
                 </View>
               </View>
               <View style={{ left: 10 }}>
-                <Text>{item.chassis}</Text>
-                <Text>{item.buildDate}</Text>
-                <Text>{item.odo}</Text>
+                <Text>{item.chassis_no}</Text>
+                <Text>{`${item.build_month}/${item.build_year}`}</Text>
+                <Text>{item.odo_meter}</Text>
               </View>
             </View>
           </View>
@@ -121,32 +129,32 @@ const ApplicationLists = ({ data }) => {
     <FlatList
       data={data}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.id.toString()}
       contentContainerStyle={{ paddingVertical: 10 }}
     />
   );
 };
 
 const styles = StyleSheet.create({
-    dashboardapplication: {
-        flexDirection: "row",
-        borderRadius: 10,
-        backgroundColor: "#FFFFFF",
-        alignItems: "center",
-        width: "96%",
-        paddingHorizontal: 10,
-        paddingVertical: 20,
-        justifyContent: "space-between",
-        marginBottom: 10,
-        top: 20,
-        left: 8,
-      },
-      dashboardboxicon: {
-        marginLeft: 10,
-      },
-      dashboardicon: {
-        marginLeft: 10,
-      },
-})
+  dashboardapplication: {
+    flexDirection: "row",
+    borderRadius: 10,
+    backgroundColor: "#FFFFFF",
+    alignItems: "center",
+    width: "96%",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    justifyContent: "space-between",
+    marginBottom: 10,
+    top: 20,
+    left: 8,
+  },
+  dashboardboxicon: {
+    marginLeft: 10,
+  },
+  dashboardicon: {
+    marginLeft: 10,
+  },
+});
 
 export default ApplicationLists;

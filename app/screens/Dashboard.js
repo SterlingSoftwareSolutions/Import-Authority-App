@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -27,6 +27,9 @@ function Dashboard({ children }) {
   const { user, logOut } = useAuth();
   const [showProfile, setShowProfile] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [profileActive, setProfileActive] = useState(true);
+  const [applications, setApplications] = useState([]);
+  const endpoint = "/profile";
 
   const toggleProfile = () => {
     setShowProfile(!showProfile); //true
@@ -38,8 +41,6 @@ function Dashboard({ children }) {
     setProfileActive(!profileActive);
 
   };
-
-  const [profileActive, setProfileActive] = useState(true);
 
   const profileButtonStyle = [
     styles.activeButton,
@@ -63,77 +64,22 @@ function Dashboard({ children }) {
     },
   ];
 
-  const endpoint = "/profile";
-  // Application data
-  const data = [
-    {
-      id: "1",
-      name: "Toyota Supra",
-      chassis: "123456M",
-      buildDate: "2016/07",
-      odo: "20350",
-      imageSource: require("../assets/carpay.png"),
-      state: "rejected",
-    },
-    {
-      id: "2",
-      name: "Another Car",
-      chassis: "789012M",
-      buildDate: "2020/03",
-      odo: "15000",
-      imageSource: require("../assets/carpay2.png"),
-      state: "completed",
+  // Application data fetching from api 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const api = await client();
+        const response = await api.get("/applications"); 
+        console.log(response.data);
+        setApplications(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-    },
-    {
-      id: "3",
-      name: "Toyoya Supra",
-      chassis: "123456M",
-      buildDate: "2016/07",
-      odo: "20350",
-      imageSource: require("../assets/carpay3.png"),
-      state: "pending",
-    },
-    {
-      id: "4",
-      name: "Another Car",
-      chassis: "789012M",
-      buildDate: "2020/03",
-      odo: "15000",
-      imageSource: require("../assets/carpay5.png"),
-      state: "pending",
+    fetchData();
+  }, []);
 
-    },
-    {
-      id: "5",
-      name: "Another Car",
-      chassis: "789012M",
-      buildDate: "2020/03",
-      odo: "15000",
-      imageSource: require("../assets/carpay2.png"),
-      state: "completed",
-
-    },
-    {
-      id: "6",
-      name: "Toyoya Supra",
-      chassis: "123456M",
-      buildDate: "2016/07",
-      odo: "20350",
-      imageSource: require("../assets/carpay3.png"),
-      state: "pending",
-    },
-    {
-      id: "7",
-      name: "Another Car",
-      chassis: "789012M",
-      buildDate: "2020/03",
-      odo: "15000",
-      imageSource: require("../assets/carpay5.png"),
-      state: "pending",
-
-    },
-  ];
   const handleSubmit = async (values) => {
     const applicationData = {
       name: values.name,
@@ -288,86 +234,86 @@ function Dashboard({ children }) {
 
 
                   <Formik
-  initialValues={{
-    password: user.password,
-    newpassword: user.newpassword,
-    confirmpassword: user.confirmpassword,
-  }}
-  onSubmit={handleSubmit}
-  validationSchema={Yup.object().shape({
-    password: Yup.string().required("Current password is required")
-    .min(8, "Must be at least 8 characters"),
-    newpassword: Yup.string().required("New password is required")
-    .min(8, "Must be at least 8 characters"),
-    confirmpassword: Yup.string()
-      .required("Confirm password is required")
-      .oneOf([Yup.ref('newpassword'), null], 'Passwords must match')
-         .min(8, " Must be at least 8 characters"),
-  })}
->
-  {({ handleChange, handleSubmit, values, errors, touched }) => (
-    showPassword && (
-      <View style={styles.formContainer}>
-        <TextInput
-          style={[styles.input, styles.usernameInput]}
-          value={values.password}
-          placeholder="Password"
-          placeholderTextColor="#23A29F"
-          color="#10bca"
-          onChangeText={handleChange("password")}
-          secureTextEntry={true}
-        />
-        {touched.password && (
-          <Text style={styles.errorText}>{errors.password}</Text>
-        )}
+                    initialValues={{
+                      password: user.password,
+                      newpassword: user.newpassword,
+                      confirmpassword: user.confirmpassword,
+                    }}
+                    onSubmit={handleSubmit}
+                    validationSchema={Yup.object().shape({
+                      password: Yup.string().required("Current password is required")
+                        .min(8, "Must be at least 8 characters"),
+                      newpassword: Yup.string().required("New password is required")
+                        .min(8, "Must be at least 8 characters"),
+                      confirmpassword: Yup.string()
+                        .required("Confirm password is required")
+                        .oneOf([Yup.ref('newpassword'), null], 'Passwords must match')
+                        .min(8, " Must be at least 8 characters"),
+                    })}
+                  >
+                    {({ handleChange, handleSubmit, values, errors, touched }) => (
+                      showPassword && (
+                        <View style={styles.formContainer}>
+                          <TextInput
+                            style={[styles.input, styles.usernameInput]}
+                            value={values.password}
+                            placeholder="Password"
+                            placeholderTextColor="#23A29F"
+                            color="#10bca"
+                            onChangeText={handleChange("password")}
+                            secureTextEntry={true}
+                          />
+                          {touched.password && (
+                            <Text style={styles.errorText}>{errors.password}</Text>
+                          )}
 
-        <TextInput
-          style={[styles.input, styles.usernameInput]}
-          value={values.newpassword}
-          placeholder="New Password"
-          placeholderTextColor="#23A29F"
-          color="#10bca"
-          onChangeText={handleChange("newpassword")}
-          secureTextEntry={true}
-        />
-        {touched.newpassword && (
-          <Text style={styles.errorText}>{errors.newpassword}</Text>
-        )}
+                          <TextInput
+                            style={[styles.input, styles.usernameInput]}
+                            value={values.newpassword}
+                            placeholder="New Password"
+                            placeholderTextColor="#23A29F"
+                            color="#10bca"
+                            onChangeText={handleChange("newpassword")}
+                            secureTextEntry={true}
+                          />
+                          {touched.newpassword && (
+                            <Text style={styles.errorText}>{errors.newpassword}</Text>
+                          )}
 
-        <TextInput
-          style={[styles.input, styles.usernameInput]}
-          value={values.confirmpassword}
-          placeholder="Confirm Password"
-          placeholderTextColor="#23A29F"
-          color="#10bca"
-          onChangeText={handleChange("confirmpassword")}
-          
-        />
-        {touched.confirmpassword && (
-          <Text style={styles.errorText}>{errors.confirmpassword}</Text>
-        )}
-        <View style={{ marginTop: 15}}>
-        <TouchableOpacity
-          style={{
-            ...styles.buttonContainer,
-            marginBottom: 10,
-          }}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.buttonText}>UPDATE</Text>
-        </TouchableOpacity>
-       
-        <TouchableOpacity
-          style={{ ...styles.buttonContainer, marginBottom: 20 }}
-          onPress={logOut}
-        >
-          <Text style={styles.buttonText}>LOGOUT</Text>
-        </TouchableOpacity>
-        </View>
-      </View>
-    )
-  )}
-</Formik>
+                          <TextInput
+                            style={[styles.input, styles.usernameInput]}
+                            value={values.confirmpassword}
+                            placeholder="Confirm Password"
+                            placeholderTextColor="#23A29F"
+                            color="#10bca"
+                            onChangeText={handleChange("confirmpassword")}
+
+                          />
+                          {touched.confirmpassword && (
+                            <Text style={styles.errorText}>{errors.confirmpassword}</Text>
+                          )}
+                          <View style={{ marginTop: 15 }}>
+                            <TouchableOpacity
+                              style={{
+                                ...styles.buttonContainer,
+                                marginBottom: 10,
+                              }}
+                              onPress={handleSubmit}
+                            >
+                              <Text style={styles.buttonText}>UPDATE</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                              style={{ ...styles.buttonContainer, marginBottom: 20 }}
+                              onPress={logOut}
+                            >
+                              <Text style={styles.buttonText}>LOGOUT</Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      )
+                    )}
+                  </Formik>
 
                 </View>
               )}
@@ -461,8 +407,8 @@ function Dashboard({ children }) {
           }}
         >
 
-          {/* Calling FlatList  */}
-          <ApplicationLists data={data} />
+          {/* Calling Application List  - FlatList  */}
+          <ApplicationLists data={applications} />
 
         </View>
 
