@@ -20,6 +20,10 @@ function TopUserControlBg({children}) {
                   navigation.navigate('Transaction')}>
             <Image source={require('../assets/money.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
           </TouchableOpacity>
+          <TouchableOpacity onPress={() =>
+                  navigation.navigate('Dashboard')}>
+            <Image source={require('../assets/user.png')} style={[styles.icon, { width: 24, height: 24, tintColor: '#fff' }]} />
+          </TouchableOpacity>
         </View>
       </View>      
       {children}
