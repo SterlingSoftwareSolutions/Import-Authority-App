@@ -451,7 +451,7 @@ const CreateApplicationMain = () => {
                       onPressIn={showDatePicker}
                     />
                     {touched.estimatedDateofArrival &&
-                    errors.estimatedDateofArrival ? (
+                      errors.estimatedDateofArrival ? (
                       <Text style={styles.errorText}>
                         {errors.estimatedDateofArrival}
                       </Text>
@@ -482,7 +482,7 @@ const CreateApplicationMain = () => {
                         editable={false}
                       />
                       {touched.estimatedDateofArrival &&
-                      errors.estimatedDateofArrival ? (
+                        errors.estimatedDateofArrival ? (
                         <Text style={styles.errorText}>
                           {errors.estimatedDateofArrival}
                         </Text>
@@ -778,7 +778,7 @@ const styles = StyleSheet.create({
   dropdown: {
     backgroundColor: "#fff0",
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 5.5,
   },
   usernameInput: {
     backgroundColor: "#fff",

@@ -134,7 +134,7 @@ function Dashboard({ children }) {
 
     },
   ];
-  const handleSubmit = async (values) => {
+  const handleSubmit1 = async (values) => {
     const applicationData = {
       name: values.name,
       username: values.username,
@@ -142,7 +142,7 @@ function Dashboard({ children }) {
       selectedusername: values.username,
       selectedemail: values.email,
       selectedphonenumber: values.phonenumber,
-      selectedpassword: values.selectedpassword,
+      // selectedpassword: values.selectedpassword,
     };
 
     try {
@@ -154,6 +154,31 @@ function Dashboard({ children }) {
       console.log("Error:", error);
     }
   };
+
+
+  const handleSubmit = async (values, setFieldError) => {
+    await setFieldError('password', 'YOUR PASSWORD HAS BEEN NUKED! :)');
+    const applicationData = {
+      current_password: values.current_password,
+      password: values.password,
+      password_confirmation: values.password_confirmation
+    };
+    try {
+      const api = await client(); // Call the client function to get the API client instance
+      const response = await api.post('/password', applicationData); // Make the PUT request using the API client
+      if (response.data.success) {
+        console.log("Success");
+      } else {
+
+      }
+      navigation.navigate("Dashboard");
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+
+  const userActualPassword = '...';
 
   return (
     <ScrollView>
@@ -288,86 +313,95 @@ function Dashboard({ children }) {
 
 
                   <Formik
-  initialValues={{
-    password: user.password,
-    newpassword: user.newpassword,
-    confirmpassword: user.confirmpassword,
-  }}
-  onSubmit={handleSubmit}
-  validationSchema={Yup.object().shape({
-    password: Yup.string().required("Current password is required")
-    .min(8, "Must be at least 8 characters"),
-    newpassword: Yup.string().required("New password is required")
-    .min(8, "Must be at least 8 characters"),
-    confirmpassword: Yup.string()
-      .required("Confirm password is required")
-      .oneOf([Yup.ref('newpassword'), null], 'Passwords must match')
-         .min(8, " Must be at least 8 characters"),
-  })}
->
-  {({ handleChange, handleSubmit, values, errors, touched }) => (
-    showPassword && (
-      <View style={styles.formContainer}>
-        <TextInput
-          style={[styles.input, styles.usernameInput]}
-          value={values.password}
-          placeholder="Password"
-          placeholderTextColor="#23A29F"
-          color="#10bca"
-          onChangeText={handleChange("password")}
-          secureTextEntry={true}
-        />
-        {touched.password && (
-          <Text style={styles.errorText}>{errors.password}</Text>
-        )}
+                    initialValues={{
+                      current_password: "",
+                      password: "",
+                      password_confirmation: "",
+                    }}
+                    onSubmit={(values, { setFieldError }) => {
+                      handleSubmit(values, setFieldError);
+                    }}
+                    validationSchema={Yup.object().shape({
+                      current_password: Yup.string()
+                        .required("Current password is required")
+                        .min(8, "Must be at least 8 characters")
+                        .test('checkCurrentPassword', 'Current password is incorrect', (value) => {
+                          return value === userActualPassword;
 
-        <TextInput
-          style={[styles.input, styles.usernameInput]}
-          value={values.newpassword}
-          placeholder="New Password"
-          placeholderTextColor="#23A29F"
-          color="#10bca"
-          onChangeText={handleChange("newpassword")}
-          secureTextEntry={true}
-        />
-        {touched.newpassword && (
-          <Text style={styles.errorText}>{errors.newpassword}</Text>
-        )}
+                        }),
+                        password: Yup.string().required("New password is required")
+                        .min(8, "Must be at least 8 characters"),
+                        password_confirmation: Yup.string()
+                        .required("Confirm password is required")
+                        .oneOf([Yup.ref('newpassword'), null], 'Passwords must match')
+                        .min(8, " Must be at least 8 characters"),
+                    })}
+                  >
+                    {({ handleChange, setFieldError, values, errors, touched }) => (
+                      showPassword && (
+                        <View style={styles.formContainer}>
+                          <TextInput
+                            style={[styles.input, styles.usernameInput]}
+                            value={values.current_password}
+                            placeholder="Password"
+                            placeholderTextColor="#23A29F"
+                            color="#10bca"
+                            onChangeText={handleChange("current_password")}
+                            secureTextEntry={true}
+                          />
+                          {touched.current_password && (
+                            <Text style={styles.errorText}>{errors.current_password}</Text>
+                          )}
 
-        <TextInput
-          style={[styles.input, styles.usernameInput]}
-          value={values.confirmpassword}
-          placeholder="Confirm Password"
-          placeholderTextColor="#23A29F"
-          color="#10bca"
-          onChangeText={handleChange("confirmpassword")}
-          
-        />
-        {touched.confirmpassword && (
-          <Text style={styles.errorText}>{errors.confirmpassword}</Text>
-        )}
-        <View style={{ marginTop: 15}}>
-        <TouchableOpacity
-          style={{
-            ...styles.buttonContainer,
-            marginBottom: 10,
-          }}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.buttonText}>UPDATE</Text>
-        </TouchableOpacity>
-       
-        <TouchableOpacity
-          style={{ ...styles.buttonContainer, marginBottom: 20 }}
-          onPress={logOut}
-        >
-          <Text style={styles.buttonText}>LOGOUT</Text>
-        </TouchableOpacity>
-        </View>
-      </View>
-    )
-  )}
-</Formik>
+                          <TextInput
+                            style={[styles.input, styles.usernameInput]}
+                            value={values.password}
+                            placeholder="New Password"
+                            placeholderTextColor="#23A29F"
+                            color="#10bca"
+                            onChangeText={handleChange("password")}
+                            secureTextEntry={true}
+                          />
+                          {touched.password && (
+                            <Text style={styles.errorText}>{errors.password}</Text>
+                          )}
+
+                          <TextInput
+                            style={[styles.input, styles.usernameInput]}
+                            value={values.password_confirmation}
+                            placeholder="Confirm Password"
+                            placeholderTextColor="#23A29F"
+                            color="#10bca"
+                            onChangeText={handleChange("password_confirmation")}
+
+                          />
+                          {touched.password_confirmation && (
+                            <Text style={styles.errorText}>{errors.password_confirmation}</Text>
+                          )}
+                          <View style={{ marginTop: 15 }}>
+                            <TouchableOpacity
+                              style={{
+                                ...styles.buttonContainer,
+                                marginBottom: 10,
+                              }}
+                              onPress={() =>
+                                handleSubmit(values, setFieldError)
+                              }
+                            >
+                              <Text style={styles.buttonText}>UPDATE</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                              style={{ ...styles.buttonContainer, marginBottom: 20 }}
+                              onPress={logOut}
+                            >
+                              <Text style={styles.buttonText}>LOGOUT</Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      )
+                    )}
+                  </Formik>
 
                 </View>
               )}

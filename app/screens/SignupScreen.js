@@ -49,7 +49,7 @@ const SignupScreen = (props) => {
   const navigation = useNavigation();
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  const handleSubmit = async (userInfo) => {
+  const  handleSubmit  = async (userInfo) => {
     const result = await registerApi.request(userInfo);
     // console.log(result);
     if (!result.ok) {
@@ -77,6 +77,7 @@ const SignupScreen = (props) => {
     }
   };
   
+  // const [userActualPassword, setUserActualPassword] = useState('');
 
   return (
     <SafeAreaView style={styles.container}>
