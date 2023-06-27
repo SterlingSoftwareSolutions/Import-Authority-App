@@ -72,7 +72,7 @@ const LoginScreen = (props) => {
                 />
                 <AppFormField
                   name="username"
-                  placeholder="Email"
+                  placeholder="Username / Email"
                   autoCapitalize="none"
                   autoCorrect={false}
                 />

@@ -2,8 +2,11 @@ import React from "react";
 import { View, Text, Image, FlatList, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import ApplicationFunctionsGradientButton from "./ApplicationFunctionsGradientButton";
+import { useNavigation } from "@react-navigation/native";
 
 const ApplicationLists = ({ data }) => {
+  const navigation = useNavigation();
+
   // render item for FlatList
   const renderItem = ({ item }) => {
     let borderColor;
@@ -38,6 +41,8 @@ const ApplicationLists = ({ data }) => {
           borderStartColor: borderColor,
         }}
       >
+
+        {/*Rendering front right image */}
         <View style={{ flexDirection: "row", marginLeft: -13 }}>
           <Image
             source={{
@@ -55,6 +60,7 @@ const ApplicationLists = ({ data }) => {
               },
             ]}
           />
+          {/* Rendering chassis , build date , and Odometer */}
           <View style={{ paddingLeft: 10 }}>
             <Text>{item.make}</Text>
             <View style={{ flexDirection: "row" }}>
@@ -117,7 +123,7 @@ const ApplicationLists = ({ data }) => {
 
         {/* View, Edit, Download Buttons */}
         <View>
-          <ApplicationFunctionsGradientButton text="View" />
+          <ApplicationFunctionsGradientButton text="View"  onPress={() => navigation.navigate("ViewApplications")} />
           <ApplicationFunctionsGradientButton text="Edit" />
           <ApplicationFunctionsGradientButton text="Download" />
         </View>
