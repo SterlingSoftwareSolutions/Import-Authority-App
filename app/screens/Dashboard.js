@@ -27,6 +27,9 @@ function Dashboard({ children }) {
   const { user, logOut } = useAuth();
   const [showProfile, setShowProfile] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [profileActive, setProfileActive] = useState(true);
+  const [applications, setApplications] = useState([]);
+  const endpoint = "/profile";
 
   const toggleProfile = () => {
     setShowProfile(!showProfile); //true
@@ -38,8 +41,6 @@ function Dashboard({ children }) {
     setProfileActive(!profileActive);
 
   };
-
-  const [profileActive, setProfileActive] = useState(true);
 
   const profileButtonStyle = [
     styles.activeButton,
@@ -63,80 +64,7 @@ function Dashboard({ children }) {
     },
   ];
 
-  const endpoint = "/profile";
-  // Application data - shuould get the real data from endpoint = '/applications'
-  const [applications, setApplications] = useState([]);
-  // const data = [
-  //   {
-  //     id: "1",
-  //     name: "Toyota Supra",
-  //     chassis: "123456M",
-  //     buildDate: "2016/07",
-  //     odo: "20350",
-  //     imageSource: require("../assets/carpay.png"),
-  //     state: "rejected",
-  //   },
-  //   {
-  //     id: "2",
-  //     name: "Another Car",
-  //     chassis: "789012M",
-  //     buildDate: "2020/03",
-  //     odo: "15000",
-  //     imageSource: require("../assets/carpay2.png"),
-  //     state: "completed",
-
-  //   },
-  //   {
-  //     id: "3",
-  //     name: "Toyoya Supra",
-  //     chassis: "123456M",
-  //     buildDate: "2016/07",
-  //     odo: "20350",
-  //     imageSource: require("../assets/carpay3.png"),
-  //     state: "pending",
-  //   },
-  //   {
-  //     id: "4",
-  //     name: "Another Car",
-  //     chassis: "789012M",
-  //     buildDate: "2020/03",
-  //     odo: "15000",
-  //     imageSource: require("../assets/carpay5.png"),
-  //     state: "pending",
-
-  //   },
-  //   {
-  //     id: "5",
-  //     name: "Another Car",
-  //     chassis: "789012M",
-  //     buildDate: "2020/03",
-  //     odo: "15000",
-  //     imageSource: require("../assets/carpay2.png"),
-  //     state: "completed",
-
-  //   },
-  //   {
-  //     id: "6",
-  //     name: "Toyoya Supra",
-  //     chassis: "123456M",
-  //     buildDate: "2016/07",
-  //     odo: "20350",
-  //     imageSource: require("../assets/carpay3.png"),
-  //     state: "pending",
-  //   },
-  //   {
-  //     id: "7",
-  //     name: "Another Car",
-  //     chassis: "789012M",
-  //     buildDate: "2020/03",
-  //     odo: "15000",
-  //     imageSource: require("../assets/carpay5.png"),
-  //     state: "pending",
-
-  //   },
-  // ];
-
-
+  // Application data fetching from api 
   useEffect(() => {
     const fetchData = async () => {
       try {

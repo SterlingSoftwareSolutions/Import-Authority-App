@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -7,38 +7,28 @@ import {
 import colors from "../config/colors";
 import TopUserControlBg from "../components/TopUserControlBg";
 import ApplicationLists from "../components/ApplicationLists";
+import client from "../api/client";
 
 function CompletedApplicationScreen(props) {
-  const data = [
-    {
-      id: "1",
-      name: "Toyota Supra",
-      chassis: "123456M",
-      buildDate: "2016/07",
-      odo: "20350",
-      imageSource: require("../assets/carpay.png"),
-      state: "completed",
-    },
-    {
-      id: "2",
-      name: "Another Car",
-      chassis: "789012M",
-      buildDate: "2020/03",
-      odo: "15000",
-      imageSource: require("../assets/carpay2.png"),
-      state: "completed",
-    },
-    {
-      id: "3",
-      name: "Toyoya Supra",
-      chassis: "123456M",
-      buildDate: "2016/07",
-      odo: "20350",
-      imageSource: require("../assets/carpay3.png"),
-      state: "completed",
-    },
-  
-  ];
+
+  const [applications, setApplications] = useState([]);
+
+ useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const api = await client();
+      const response = await api.get("/applications"); 
+      const allApplications = response.data.data;
+      const completedApplications = allApplications.filter(application => application.status === 'completed');
+      setApplications(completedApplications);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchData();
+}, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <TopUserControlBg>
@@ -46,7 +36,7 @@ function CompletedApplicationScreen(props) {
       </TopUserControlBg>
 
       {/* Calling FlatList  */}
-      <ApplicationLists data={data} />
+          <ApplicationLists data={applications} />
 
     </SafeAreaView>
   );
