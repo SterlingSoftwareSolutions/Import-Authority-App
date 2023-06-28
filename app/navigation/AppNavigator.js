@@ -72,7 +72,7 @@ const AppNavigator = () => (
     />
     <Tab.Screen
       name="Reject"
-      component={ProfileDetailsScreen}
+      component={RejectedApplicationScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons
