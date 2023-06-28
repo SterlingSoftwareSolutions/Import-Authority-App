@@ -124,7 +124,7 @@ const ApplicationLists = ({ data }) => {
 
         {/* View, Edit, Download Buttons */}
         <View>
-          <ApplicationFunctionsGradientButton text="View"  onPress={() => navigation.navigate("ViewApplications")} />
+          <ApplicationFunctionsGradientButton text="View"  onPress={() => navigation.navigate("ViewApplications", { applicationId: item.id })} />
           <ApplicationFunctionsGradientButton text="Edit" />
           <ApplicationFunctionsGradientButton text="Download" />
         </View>

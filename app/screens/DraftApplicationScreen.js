@@ -11,12 +11,15 @@ import client from "../api/client";
 
 function DraftApplicationScreen(props) {
   const [applications, setApplications] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const api = await client();
         const response = await api.get("/applications"); 
-        setApplications(response.data.data.applications);
+       const allApplications = response.data.data.applications;
+        const draftApplications = allApplications.filter(application => application.status === 'draft');
+        setApplications(draftApplications);
       } catch (error) {
         console.log(error);
       }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRoute } from '@react-navigation/native';
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 import TopUserControlBg from "../components/TopUserControlBg";
 import colors from "../config/colors";
@@ -6,89 +7,108 @@ import client from "../api/client";
 import { CDN_URL } from '@env'
 
 function ViewApplicationScreen(props) {
-  const [application, setApplication] = useState([]);
+  const route = useRoute();
+  const applicationId = route.params?.applicationId;
+  const [application, setApplication] = useState(null);
   const [assets, setAssets] = useState({});
 
   useEffect(() => {
-    const fetchApplications = async () => {
+    const fetchApplication = async () => {
       try {
         const api = await client();
-        const response = await api.get('/applications/210');
-        setApplication(response.data.data.application);
-        response.data.data.assets.forEach(element => {
-          setAssets((assets) => ({
-            ...assets,
-            [element.asset_type]: element.location,
-          }));
-
-        });
+        const response = await api.get(`/applications/${applicationId}`);
+        if (response.data.success) {
+          setApplication(response.data.data.application);
+          response.data.data.assets.forEach((element) => {
+            setAssets((assets) => ({
+              ...assets,
+              [element.asset_type]: element.location,
+            }));
+          });
+          console.log(assets);
+          // hide progress spinner
+        } else {
+          alert('Failed to fetch application');
+        }
       } catch (error) {
-        console.error('Error fetching applications:', error);
+        console.error('Error fetching application:', error);
       }
     };
 
-    fetchApplications();
-  }, []);
+    if (applicationId) {
+      fetchApplication();
+    }
+  }, [applicationId]);
 
 
   return (
     <View style={styles.container}>
+      <TopUserControlBg>
+        <View style={styles.viewstatus}>
+          <Text style={{ ...styles.viewstatuslabel }}>{application?.status ? application.status.toUpperCase() : null}</Text>
+        </View>
+        <View style={{ ...styles.data_and_searchicon }}>
+          <Text style={{ color: '#E3E2E2', textAlign: 'center' }}> Your Application in {application?.status.toUpperCase() ?? null} Stage </Text>
+          <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>Approval Type: {application?.approval_type ?? null}  </Text>
+        </View>
+
+      </TopUserControlBg>
       <ScrollView>
-        <View key={application.id} style={{ width: '90%', marginHorizontal: '5%', marginTop: 20 }}>
+        <View key={application?.id ?? null} style={{ width: '90%', marginHorizontal: '5%', marginTop: 20 }}>
           <Text style={{ color: '#079BB7', fontWeight: 'bold' }}>Vehicle Info</Text>
 
           <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
             <View style={{ width: '45%' }}>
               <Text>Chassis/Frame Number</Text>
-              <Text style={styles.valueText}>{application.chassis_no}</Text>
+              <Text style={styles.valueText}>{application?.chassis_no ?? null}</Text>
             </View>
 
             <View style={{ width: '45%' }}>
               <Text>Est. date of arrival:</Text>
-              <Text style={styles.valueText}>{application.arrival_date}</Text>
+              <Text style={styles.valueText}>{application?.arrival_date ?? null}</Text>
             </View>
           </View>
 
           <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
             <View style={{ width: '45%' }}>
               <Text>Make:</Text>
-              <Text style={styles.valueText}>{application.make}</Text>
+              <Text style={styles.valueText}>{application?.make ?? null}</Text>
             </View>
 
             <View style={{ width: '45%' }}>
               <Text>Model:</Text>
-              <Text style={styles.valueText}>{application.model}</Text>
+              <Text style={styles.valueText}>{application?.model ?? null}</Text>
             </View>
           </View>
 
           <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
             <View style={{ width: '45%' }}>
               <Text>Build Date:</Text>
-              <Text style={styles.valueText}>{application.build_year}</Text>
+              <Text style={styles.valueText}>{application?.build_year ?? null}</Text>
             </View>
 
             <View style={{ width: '45%' }}>
               <Text>Transmission:</Text>
-              <Text style={styles.valueText}>{application.transmission}</Text>
+              <Text style={styles.valueText}>{application?.transmission ?? null}</Text>
             </View>
           </View>
 
           <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
             <View style={{ width: '45%' }}>
               <Text>Body Type:</Text>
-              <Text style={styles.valueText}>{application.body_type}</Text>
+              <Text style={styles.valueText}>{application?.body_type ?? null}</Text>
             </View>
 
             <View style={{ width: '45%' }}>
               <Text>Drive Type:</Text>
-              <Text style={styles.valueText}>{application.drive_type}</Text>
+              <Text style={styles.valueText}>{application?.drive_type ?? null}</Text>
             </View>
           </View>
 
           <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
             <View style={{ width: '45%' }}>
               <Text>ODO Meter:</Text>
-              <Text style={styles.valueText}>{application.odo_meter}</Text>
+              <Text style={styles.valueText}>{application?.odo_meter ?? null}</Text>
             </View>
           </View>
 
@@ -103,34 +123,30 @@ function ViewApplicationScreen(props) {
             style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
             <View style={styles.cameraContainer}>
-            <Image
-                source={{ uri: "http://dkxw67x8n7ht.cloudfront.net/assets/applications/1687836848918_img_front_right.jpeg" }}
+              <Image
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_front_right ?? 'default.png' }}
                 style={styles.imagePreview}
               />
               <Text style={styles.frText}>FR Corner</Text>
             </View>
             <View style={styles.cameraContainer}>
-              {/* <Image
-                source={require("../assets/cam.png")}
-                style={[styles.cameraIcon]}
-              /> */}
               <Image
-                source={{ uri: "http://dkxw67x8n7ht.cloudfront.net/assets/applications/1687836848918_img_front_right.jpeg" }}
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_rear_right ?? 'default.png' }}
                 style={styles.imagePreview}
               />
               <Text style={styles.frText}>RR Corner</Text>
             </View>
 
             <View style={styles.cameraContainer}>
-            <Image
-                source={{ uri: "http://dkxw67x8n7ht.cloudfront.net/assets/applications/1687836848918_img_front_right.jpeg" }}
+              <Image
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_front_left ?? 'default.png' }}
                 style={styles.imagePreview}
               />
               <Text style={styles.frText}>FL Corner</Text>
             </View>
             <View style={styles.cameraContainer}>
-            <Image
-                source={{ uri: "http://dkxw67x8n7ht.cloudfront.net/assets/applications/1687836848918_img_front_right.jpeg" }}
+              <Image
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_rear_left ?? 'default.png' }}
                 style={styles.imagePreview}
               />
               <Text style={styles.frText}>RL Corner</Text>
@@ -148,30 +164,30 @@ function ViewApplicationScreen(props) {
           >
             <View style={styles.cameraContainer}>
               <Image
-                source={require("../assets/cam.png")}
-                style={[styles.cameraIcon]}
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_1 ?? 'default.png' }}
+                style={[styles.imagePreview]}
               />
               <Text style={styles.frText}>FR Corner</Text>
             </View>
             <View style={styles.cameraContainer}>
               <Image
-                source={require("../assets/cam.png")}
-                style={[styles.cameraIcon]}
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_2 ?? 'default.png' }}
+                style={[styles.imagePreview]}
               />
               <Text style={styles.frText}>RR Corner</Text>
             </View>
 
             <View style={styles.cameraContainer}>
               <Image
-                source={require("../assets/cam.png")}
-                style={[styles.cameraIcon]}
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_3 ?? 'default.png' }}
+                style={[styles.imagePreview]}
               />
               <Text style={styles.frText}>FL Corner</Text>
             </View>
             <View style={styles.cameraContainer}>
               <Image
-                source={require("../assets/cam.png")}
-                style={[styles.cameraIcon]}
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_4 ?? 'default.png' }}
+                style={[styles.imagePreview]}
               />
               <Text style={styles.frText}>RL Corner</Text>
             </View>
@@ -187,23 +203,23 @@ function ViewApplicationScreen(props) {
           >
             <View style={styles.cameraContainer}>
               <Image
-                source={require("../assets/document.png")}
-                style={[styles.cameraIcon]}
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.doc_invoice ?? 'default.png' }}
+                style={[styles.imagePreview]}
               />
               <Text style={styles.frText}>Invoice</Text>
             </View>
             <View style={styles.cameraContainer}>
               <Image
-                source={require("../assets/document.png")}
-                style={[styles.cameraIcon]}
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.doc_export_certificate ?? 'default.png' }}
+                style={[styles.imagePreview]}
               />
               <Text style={styles.frText}>Export Certificate</Text>
             </View>
 
             <View style={styles.cameraContainer}>
               <Image
-                source={require("../assets/document.png")}
-                style={[styles.cameraIcon]}
+                source={{ uri: CDN_URL + "/assets/applications/" + assets?.doc_auction_report ?? 'default.png' }}
+                style={[styles.imagePreview]}
               />
               <Text style={styles.frText}>Auction Report</Text>
             </View>
@@ -231,7 +247,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     textAlign: "center",
-    backgroundColor: "#F7D060",
+    backgroundColor: colors.darkGrey,
     width: "25%",
     justifyContent: "space-between",
     alignSelf: "center",
@@ -265,9 +281,13 @@ const styles = StyleSheet.create({
   valueText: {
     color: colors.darkGrey,
   },
-  imagePreview:{
-    width:40,
-    height:40,
+  imagePreview: {
+    width: 65,
+    height: 65,
+    borderRadius: 10,
+    marginTop: 10,
+
+
   }
 });
 export default ViewApplicationScreen;
