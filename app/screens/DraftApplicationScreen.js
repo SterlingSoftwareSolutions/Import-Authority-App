@@ -16,7 +16,7 @@ function DraftApplicationScreen(props) {
       try {
         const api = await client();
         const response = await api.get("/applications"); 
-        setApplications(response.data.data);
+        setApplications(response.data.data.applications);
       } catch (error) {
         console.log(error);
       }
