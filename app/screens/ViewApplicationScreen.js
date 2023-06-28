@@ -45,11 +45,11 @@ function ViewApplicationScreen(props) {
     <View style={styles.container}>
       <TopUserControlBg>
         <View style={styles.viewstatus}>
-          <Text style={{ ...styles.viewstatuslabel }}>Submitted</Text>
+          <Text style={{ ...styles.viewstatuslabel }}>{application?.status ? application.status.toUpperCase() : null}</Text>
         </View>
         <View style={{ ...styles.data_and_searchicon }}>
-          <Text style={{ color: '#E3E2E2', textAlign: 'center' }}> Your Application in Submitted Page </Text>
-          <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>Approval Type: SEV </Text>
+          <Text style={{ color: '#E3E2E2', textAlign: 'center' }}> Your Application in {application?.status.toUpperCase() ?? null} Stage </Text>
+          <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>Approval Type: {application?.approval_type ?? null}  </Text>
         </View>
 
       </TopUserControlBg>
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     textAlign: "center",
-    backgroundColor: "#F7D060",
+    backgroundColor: colors.darkGrey,
     width: "25%",
     justifyContent: "space-between",
     alignSelf: "center",
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   imagePreview: {
     width: 65,
     height: 65,
-    borderRadius:10,
+    borderRadius: 10,
     marginTop: 10,
 
 
