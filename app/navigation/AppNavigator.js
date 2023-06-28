@@ -9,6 +9,7 @@ import DraftApplicationScreen from "../screens/DraftApplicationScreen";
 import CompletedApplicationScreen from "../screens/CompletedApplicationScreen";
 import PendingApplicationScreen from "../screens/PendingApplicationScreen";
 import RejectedApplicationScreen from "../screens/RejectedApplicationScreen";
+import ProfileDetailsScreen from "../screens/ProfileDetailsScreen";
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
