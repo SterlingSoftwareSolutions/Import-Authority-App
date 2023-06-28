@@ -1,58 +1,53 @@
-import React from 'react';
-import colors from '../config/colors';
-import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react'; import colors from '../config/colors';
+import { StyleSheet, View, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import client from '../api/client';
 
 function ProgressView(props) {
+    const [applicationCounts, setApplicationCounts] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const api = await client();
+                const response = await api.get("/applications");
+                console.log("------------------------Start--------------------------------")
+                console.log(response.data.data.count);
+                console.log("---------------------------End-----------------------------")
+                setApplicationCounts(response.data.data.count);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const renderApplication = (count, text) => (
+        <View style={styles.singleApplication}>
+            <LinearGradient
+                style={{ borderRadius: 20 }}
+                colors={[colors.secondary, colors.primary]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+            >
+                <Text style={styles.countNumber}>{count}</Text>
+            </LinearGradient>
+            <Text style={styles.countText}>{text}</Text>
+        </View>
+    );
+
+    if (applicationCounts === null) {
+        return <Text>Loading...</Text>;
+    }
+
     return (
-        <View style={{ ...styles.dashboardalapplications, flexDirection: 'row' }}>
-
-            <View style={{ width: 60, height: 60 }}>
-                <LinearGradient style={{ borderRadius: 20 }}
-                    colors={[colors.secondary, colors.primary]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}>
-                    <Text style={{ textAlign: 'center', color: '#FFF', fontWeight: 'bold' }}>12</Text>
-
-                </LinearGradient>
-                <Text style={{ textAlign: 'center', color: '#FFF', fontWeight: 'bold', fontSize: 8, top: 10 }}>Total Applications</Text>
-            </View>
-            <View style={{ width: 60, height: 60 }}>
-                <LinearGradient style={{ borderRadius: 20 }}
-                    colors={[colors.secondary, colors.primary]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}>
-                    <Text style={{ textAlign: 'center', color: '#FFF', fontWeight: 'bold' }}>09</Text>
-                </LinearGradient>
-                <Text style={{ textAlign: 'center', color: '#FFF', fontWeight: 'bold', fontSize: 8, top: 10 }}>Complete Applications</Text>
-            </View>
-            <View style={{ width: 60, height: 60 }}>
-                <LinearGradient style={{ borderRadius: 20 }}
-                    colors={[colors.secondary, colors.primary]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}>
-                    <Text style={{ textAlign: 'center', color: '#FFF', fontWeight: 'bold' }}>05</Text>
-                </LinearGradient>
-                <Text style={{ textAlign: 'center', color: '#FFF', fontWeight: 'bold', fontSize: 8, top: 10 }}>Pending Applications</Text>
-            </View>
-            <View style={{ width: 60, height: 60 }}>
-                <LinearGradient style={{ borderRadius: 20 }}
-                    colors={[colors.secondary, colors.primary]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}>
-                    <Text style={{ textAlign: 'center', color: '#FFF', fontWeight: 'bold' }}>02</Text>
-                </LinearGradient>
-                <Text style={{ textAlign: 'center', color: '#FFF', fontWeight: 'bold', fontSize: 8, top: 10 }}>Reject Applications</Text>
-            </View>
-            <View style={{ width: 60, height: 60 }}>
-                <LinearGradient style={{ borderRadius: 20 }}
-                    colors={[colors.secondary, colors.primary]}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}>
-                    <Text style={{ textAlign: 'center', color: '#FFF', fontWeight: 'bold' }}>07</Text>
-                </LinearGradient>
-                <Text style={{ textAlign: 'center', color: '#FFF', fontWeight: 'bold', fontSize: 8, top: 10 }}>Draft Applications</Text>
-            </View>
+        <View style={styles.dashboardalapplications}>
+            {renderApplication(applicationCounts.total, 'Total Applications')}
+            {renderApplication(applicationCounts.completed, 'Complete Applications')}
+            {renderApplication(applicationCounts.pending, 'Pending Applications')}
+            {renderApplication(applicationCounts.rejected, 'Reject Applications')}
+            {renderApplication(applicationCounts.draft, 'Draft Applications')}
         </View>
     );
 }
@@ -66,9 +61,26 @@ const styles = StyleSheet.create({
         height: 90,
         borderRadius: 10,
         alignItems: 'center',
-        bottom: 30,
-        alignSelf: "center"
+        bottom: 20,
+        alignSelf: 'center',
+        flexDirection: 'row',
     },
-})
+    singleApplication: {
+        width: 60,
+        height: 60,
+    },
+    countNumber: {
+        textAlign: 'center',
+        color: '#FFF',
+        fontWeight: 'bold',
+    },
+    countText: {
+        textAlign: 'center',
+        color: '#FFF',
+        fontWeight: 'bold',
+        fontSize: 8,
+        top: 10,
+    },
+});
 
-export default ProgressView;
+export default ProgressView;

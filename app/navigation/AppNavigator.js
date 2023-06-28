@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
     shadowColor: colors.black,
     shadowOpacity: 0.2,
     shadowRadius: 10,
-  
   },
 
   tab: {
