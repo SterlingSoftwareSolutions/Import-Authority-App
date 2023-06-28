@@ -5,12 +5,13 @@ import {
   View,
   TouchableOpacity,
   Image,
+  Text
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
-import useAuth from "../auth/useAuth";
 import ProgressView from "../components/ProgressView";
+import useAuth from "../auth/useAuth";
 import TopUserControlBg from "../components/TopUserControlBg";
 import { useNavigation } from "@react-navigation/native";
 import client from "../api/client";
@@ -19,45 +20,8 @@ import ApplicationLists from "../components/ApplicationLists";
 
 function Dashboard({ children }) {
   const navigation = useNavigation();
-  const { user, logOut } = useAuth();
-  const [showProfile, setShowProfile] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [profileActive, setProfileActive] = useState(true);
+  const { user } = useAuth();
   const [applications, setApplications] = useState([]);
-  const endpoint = "/profile";
-
-  const toggleProfile = () => {
-    setShowProfile(!showProfile); //true
-    setProfileActive(!profileActive);
-  };
-
-  const togglePassword = () => {
-    setShowPassword(!showPassword); //true
-    setProfileActive(!profileActive);
-
-  };
-
-  const profileButtonStyle = [
-    styles.activeButton,
-    {
-      borderTopLeftRadius: 5,
-      borderBottomLeftRadius: 5,
-      backgroundColor: profileActive ? 'white' : '#079BB7',
-      color: profileActive ? '#079BB7' : 'white',
-      borderColor: profileActive ? "white" : "#079BB7"
-    },
-  ];
-
-  const passwordButtonStyle = [
-    styles.inactiveButton,
-    {
-      borderTopRightRadius: 5,
-      borderBottomRightRadius: 5,
-      backgroundColor: profileActive ? '#079BB7' : 'white',
-      color: profileActive ? 'white' : '#079BB7',
-      borderColor: profileActive ? "#079BB7" : "white"
-    },
-  ];
 
   // Application data fetching from api 
   useEffect(() => {
@@ -75,45 +39,33 @@ function Dashboard({ children }) {
     fetchData();
   }, []);
 
-  const handleSubmit = async (values) => {
-    const applicationData = {
-      name: values.name,
-      username: values.username,
-      businessname: values.businessname,
-      selectedusername: values.username,
-      selectedemail: values.email,
-      selectedphonenumber: values.phonenumber,
-      selectedpassword: values.selectedpassword,
-    };
-
-    try {
-      const api = await client(); // Call the client function to get the API client instance
-      const response = await api.put(endpoint, applicationData); // Make the PUT request using the API client
-      console.log("Response:", response);
-      navigation.navigate("Dashboard");
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
-
   return (
-
     <SafeAreaView style={styles.container}>
       {/* User control component */}
       <TopUserControlBg>
         <View style={{ flexDirection: "row" }}>
           <View>
-            <TouchableOpacity onPress={toggleProfile}>
-              <Image
-                source={require("../assets/Group1.png")}
-                style={[
-                  styles.profileImage,
-
-                ]}
-              />
-            </TouchableOpacity>
-
-
+            <Image
+              source={require("../assets/Group1.png")}
+              style={[
+                styles.profileImage,
+              ]}
+            />
+          </View>
+          <View style={{ left: 20 }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                color: "#FFF",
+                marginTop: 12,
+              }}
+            >
+              Hi {user.name} !
+            </Text>
+            <Text style={{ fontSize: 12, fontWeight: "bold", color: "#FFF" }}>
+              Welocme to Import Authority
+            </Text>
           </View>
 
         </View>
@@ -123,7 +75,7 @@ function Dashboard({ children }) {
       <ProgressView />
 
       {/* Recent Quick Application View */}
-      <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+      <View style={{ flexDirection: "row" }}>
         <View>
           <TouchableOpacity
             onPress={() => navigation.navigate("CreateApplicationScreen")}
@@ -177,9 +129,7 @@ function Dashboard({ children }) {
 
         {/* Calling Application List  - FlatList  */}
         <ApplicationLists data={applications} />
-
       </View>
-
     </SafeAreaView>
 
   );
