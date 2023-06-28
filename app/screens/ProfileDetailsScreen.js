@@ -42,6 +42,8 @@ function ProfileDetailsScreen({ children }) {
     };
 
     const profileButtonStyle = [
+
+
         styles.activeButton,
         {
             borderTopLeftRadius: 5,
@@ -111,7 +113,7 @@ function ProfileDetailsScreen({ children }) {
                 </TopUserControlBg>
 
                 <View>
-                    <View style={{ flexDirection: "row" }}>
+                    <View style={styles.fullpage}>
                         <View>
                             <TouchableOpacity>
                                 <Image
@@ -127,7 +129,7 @@ function ProfileDetailsScreen({ children }) {
                             {showProfile && (
                                 <View style={styles.profileDetails}>
                                     <View style={styles.labelsContainer}>
-                                        <View style={{ flexDirection: "row", marginLeft: 80 }}>
+                                        <View style={{ flexDirection: "row" }}>
                                             <TouchableOpacity onPress={togglePassword}>
                                                 <Text style={profileButtonStyle}>PROFILE</Text>
                                             </TouchableOpacity>
@@ -260,15 +262,7 @@ function ProfileDetailsScreen({ children }) {
                                                             <Text style={styles.buttonText}>LOGOUT</Text>
                                                         </TouchableOpacity>
                                                     </LinearGradient>
-                                                    {/* <TouchableOpacity
-                                                        style={{
-                                                            ...styles.buttonContainer,
-                                                            marginBottom: 20,
-                                                        }}
-                                                        onPress={logOut}
-                                                    >
-                                                        <Text style={styles.buttonText}>LOGOUT</Text>
-                                                    </TouchableOpacity> */}
+
                                                 </View>
                                             )
                                         }
@@ -455,16 +449,13 @@ const styles = StyleSheet.create({
     },
     profileImageCenter: {
         alignSelf: "center",
-        alignItems: "center",
-        marginLeft: 60,
-        width: 90,
+        width: "50%",
         height: 90,
         borderRadius: 45,
 
     },
 
     profileDetails: {
-        paddingHorizontal: 20,
         paddingTop: 20,
         borderRadius: 10,
     },
@@ -473,12 +464,13 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 10,
+        alignSelf: "center",
     },
     formContainer: {
-        paddingHorizontal: 20,
-        paddingVertical: 10,
         borderRadius: 10,
-        width: "130%",
+        width: "150%",
+        alignItems: 'center',
+        alignSelf: "center",
     },
     input: {
         color: "#fff",
@@ -495,8 +487,6 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     buttonContainer: {
-        alignSelf: "center",
-        // backgroundColor: '#1BA1A5',
         borderWidth: 1,
         borderColor: "#fff",
         borderRadius: 15,
@@ -527,6 +517,11 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         paddingHorizontal: 10,
     },
+
+    fullpage: {
+        alignItems: 'center',
+
+    }
 });
 
 export default ProfileDetailsScreen;

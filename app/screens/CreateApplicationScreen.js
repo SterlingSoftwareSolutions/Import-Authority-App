@@ -345,6 +345,9 @@ const CreateApplicationMain = () => {
           </View>
         </TouchableWithoutFeedback>
       </TopUserControlBg>
+      <ScrollView
+                contentContainerStyle={{ marginTop: 5, paddingBottom: 15 }}
+              >
       <Formik
         initialValues={{
           vassEngineering: "",
@@ -379,9 +382,7 @@ const CreateApplicationMain = () => {
         }) => (
           <View style={styles.container}>
             <View style={styles.formContainer}>
-              <ScrollView
-                contentContainerStyle={{ marginTop: 5, paddingBottom: 15 }}
-              >
+              
                 {approvalType == 1 ? (
                   <View>
                     <RadioButton.Group
@@ -737,11 +738,12 @@ const CreateApplicationMain = () => {
                     </TouchableOpacity>
                   </LinearGradient>
                 </View>
-              </ScrollView>
+            
             </View>
           </View>
         )}
       </Formik>
+      </ScrollView>
     </SafeAreaView>
   );
 };
