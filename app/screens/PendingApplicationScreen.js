@@ -17,7 +17,7 @@ function PendingApplicationScreen(props) {
       try {
         const api = await client();
         const response = await api.get("/applications"); 
-        const allApplications = response.data.data;
+        const allApplications = response.data.data.applications;
         const pendingApplications = allApplications.filter(application => application.status === 'pending');
         setApplications(pendingApplications);
       } catch (error) {

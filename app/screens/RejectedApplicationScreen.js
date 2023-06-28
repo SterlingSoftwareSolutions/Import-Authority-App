@@ -17,7 +17,7 @@ function RejectedApplicationScreen(props) {
       try {
         const api = await client();
         const response = await api.get("/applications"); 
-        const allApplications = response.data.data;
+        const allApplications = response.data.data.applications;
         const rejectedApplications = allApplications.filter(application => application.status === 'rejected');
         setApplications(rejectedApplications);
       } catch (error) {

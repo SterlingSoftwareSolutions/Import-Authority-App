@@ -18,7 +18,7 @@ function CompletedApplicationScreen(props) {
     try {
       const api = await client();
       const response = await api.get("/applications"); 
-      const allApplications = response.data.data;
+      const allApplications = response.data.data.applications;
       const completedApplications = allApplications.filter(application => application.status === 'completed');
       setApplications(completedApplications);
     } catch (error) {
