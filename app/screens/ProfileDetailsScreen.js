@@ -350,25 +350,36 @@ function ProfileDetailsScreen({ children }) {
                                                         </Text>
                                                     )}
                                                     <View style={{ marginTop: 15 }}>
-                                                        <TouchableOpacity
-                                                            style={{
-                                                                ...styles.buttonContainer,
-                                                                marginBottom: 10,
-                                                            }}
-                                                            onPress={handleSubmit}
+                                                        <LinearGradient
+                                                            colors={["#8FBF45", "#079BB7"]}
+                                                            style={[styles.buttonContainer, { marginBottom: 10 }]}
+                                                            start={{ x: 0.5, y: 0.5 }}
+                                                            end={{ x: 1, y: 1 }}
                                                         >
-                                                            <Text style={styles.buttonText}>UPDATE</Text>
-                                                        </TouchableOpacity>
+                                                            <TouchableOpacity
+                                                                style={styles.buttonContainer}
+                                                                onPress={handleSubmit}
+                                                            >
+                                                                <Text style={styles.buttonText}>UPDATE</Text>
+                                                            </TouchableOpacity>
+                                                        </LinearGradient>
 
-                                                        <TouchableOpacity
-                                                            style={{
-                                                                ...styles.buttonContainer,
-                                                                marginBottom: 20,
-                                                            }}
-                                                            onPress={logOut}
+
+
+                                                        <LinearGradient
+                                                            colors={["#8FBF45", "#079BB7"]}
+                                                            style={[styles.buttonContainer, { marginBottom: 10 }]}
+                                                            start={{ x: 0.5, y: 0.5 }}
+                                                            end={{ x: 1, y: 1 }}
                                                         >
-                                                            <Text style={styles.buttonText}>LOGOUT</Text>
-                                                        </TouchableOpacity>
+                                                            <TouchableOpacity
+                                                                style={styles.buttonContainer}
+                                                                onPress={logOut}
+                                                            >
+                                                                <Text style={styles.buttonText}>LOGOUT</Text>
+                                                            </TouchableOpacity>
+                                                        </LinearGradient>
+
                                                     </View>
                                                 </View>
                                             )
@@ -389,6 +400,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-start",
         backgroundColor: "#DDF4E9",
+        height: 780
+
     },
     header: {
         flexDirection: "row",
