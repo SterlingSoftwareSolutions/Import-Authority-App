@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
-  TextInput,
   View,
   TouchableOpacity,
-  Text,
   Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -15,12 +13,9 @@ import useAuth from "../auth/useAuth";
 import ProgressView from "../components/ProgressView";
 import TopUserControlBg from "../components/TopUserControlBg";
 import { useNavigation } from "@react-navigation/native";
-import { Formik } from "formik";
-import * as Yup from "yup";
 import client from "../api/client";
-
 import ApplicationLists from "../components/ApplicationLists";
-import { ScrollView } from "react-native-gesture-handler";
+
 
 function Dashboard({ children }) {
   const navigation = useNavigation();
@@ -102,91 +97,91 @@ function Dashboard({ children }) {
   };
 
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
-        {/* User control component */}
-        <TopUserControlBg>
-          <View style={{ flexDirection: "row" }}>
-            <View>
-              <TouchableOpacity onPress={toggleProfile}>
-                <Image
-                  source={require("../assets/Group1.png")}
-                  style={[
-                    styles.profileImage,
-                   
-                  ]}
-                />
-              </TouchableOpacity>
 
-             
-            </View>
-           
-          </View>
-        </TopUserControlBg>
-
-        {/* Progress View Component */}
-        <ProgressView />
-
-        {/* Recent Quick Application View */}
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+    <SafeAreaView style={styles.container}>
+      {/* User control component */}
+      <TopUserControlBg>
+        <View style={{ flexDirection: "row" }}>
           <View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("CreateApplicationScreen")}
-            >
-              <LinearGradient
-                style={{
-                  width: 60,
-                  height: 60,
-                  marginLeft: 10,
-                  borderRadius: 30,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                colors={[colors.secondary, colors.primary]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-              >
-                <MaterialCommunityIcons name="plus" color={"#FFF"} size={45} />
-              </LinearGradient>
+            <TouchableOpacity onPress={toggleProfile}>
+              <Image
+                source={require("../assets/Group1.png")}
+                style={[
+                  styles.profileImage,
+
+                ]}
+              />
             </TouchableOpacity>
+
+
           </View>
-          {/* // Render the last four application images  */}
-          {applications.slice(-4).reverse().map(application => {
-            const imgFrontRightAsset = application.assets.find(asset => asset.asset_type === "img_front_right");
-            const fileType = imgFrontRightAsset ? imgFrontRightAsset.file_type : "";
-            return (
-              <TouchableOpacity key={application.id}>
-                <Image
-                  source={{
-                    uri: imgFrontRightAsset ? `http://dkxw67x8n7ht.cloudfront.net/assets/applications/${imgFrontRightAsset.location}` : "",
-                    type: `image/${fileType}`,
-                  }}
-                  style={styles.iconStyle}
-                />
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-
-        {/* Applications Listing Container*/}
-        <View
-          style={{
-            backgroundColor: "#DBEDD7",
-            borderRadius: 10,
-            width: "96%",
-            height: "55%",
-            marginLeft: 9,
-            marginTop: 15,
-          }}
-        >
-
-          {/* Calling Application List  - FlatList  */}
-          <ApplicationLists data={applications} />
 
         </View>
+      </TopUserControlBg>
 
-      </SafeAreaView>
-    </ScrollView>
+      {/* Progress View Component */}
+      <ProgressView />
+
+      {/* Recent Quick Application View */}
+      <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+        <View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("CreateApplicationScreen")}
+          >
+            <LinearGradient
+              style={{
+                width: 60,
+                height: 60,
+                marginLeft: 10,
+                borderRadius: 30,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              colors={[colors.secondary, colors.primary]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+            >
+              <MaterialCommunityIcons name="plus" color={"#FFF"} size={45} />
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+        {/* // Render the last four application images  */}
+        {applications.slice(-4).reverse().map(application => {
+          const imgFrontRightAsset = application.assets.find(asset => asset.asset_type === "img_front_right");
+          const fileType = imgFrontRightAsset ? imgFrontRightAsset.file_type : "";
+          return (
+            <TouchableOpacity key={application.id}>
+              <Image
+                source={{
+                  uri: imgFrontRightAsset ? `http://dkxw67x8n7ht.cloudfront.net/assets/applications/${imgFrontRightAsset.location}` : "",
+                  type: `image/${fileType}`,
+                }}
+                style={styles.iconStyle}
+              />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
+      {/* Applications Listing Container*/}
+      <View
+        style={{
+          backgroundColor: "#DBEDD7",
+          borderRadius: 10,
+          width: "96%",
+          height: "54%",
+          marginLeft: 9,
+          marginTop: 15,
+        }}
+      >
+
+        {/* Calling Application List  - FlatList  */}
+        <ApplicationLists data={applications} />
+
+      </View>
+
+    </SafeAreaView>
+
   );
 }
 
@@ -202,7 +197,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
   },
-  
+
   iconStyle: {
     marginLeft: 10,
     width: 60, height: 60, borderRadius: 30,
@@ -212,11 +207,6 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
   },
- 
-
- 
-
- 
 
 });
 
