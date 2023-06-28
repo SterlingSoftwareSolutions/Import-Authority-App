@@ -82,10 +82,10 @@ function PaymentSuccessScreen(props) {
 
           <View style={{ width: "80%" }}>
             <LinearGradient
-              colors={["#77B859", "#2DA596"]} // Define the colors for the gradient (ash to lighter ash)
-              locations={[0, 1]} // Define the gradient color stops
-              start={{ x: 0.2, y: 0 }} // Define the start position (top-left)
-              end={{ x: 1, y: 1 }} // Define the end position (top-right)
+              colors={["#77B859", "#2DA596"]} 
+              locations={[0, 1]} 
+              start={{ x: 0.2, y: 0 }} 
+              end={{ x: 1, y: 1 }} 
               style={styles.button}
             >
               <TouchableOpacity
