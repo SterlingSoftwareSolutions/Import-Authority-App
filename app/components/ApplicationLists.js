@@ -47,7 +47,7 @@ const ApplicationLists = ({ data }) => {
         <View style={{ flexDirection: "row", marginLeft: -13 }}>
           <Image
             source={{
-              uri: imgFrontRightAsset ? CDN_URL + imgFrontRightAsset.location : "",
+              uri: imgFrontRightAsset ? CDN_URL + '/assets/applications/' + imgFrontRightAsset.location : "",
               type: `image/${fileType}`,
             }}
             style={[

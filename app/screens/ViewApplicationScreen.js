@@ -7,7 +7,7 @@ import { CDN_URL } from '@env'
 
 function ViewApplicationScreen(props) {
   const [application, setApplication] = useState([]);
-  const [assets2, setAssets] = useState({});
+  const [assets, setAssets] = useState({});
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -16,8 +16,8 @@ function ViewApplicationScreen(props) {
         const response = await api.get('/applications/210');
         setApplication(response.data.data.application);
         response.data.data.assets.forEach(element => {
-          setAssets((assets2) => ({
-            ...assets2,
+          setAssets((assets) => ({
+            ...assets,
             [element.asset_type]: element.location,
           }));
 
