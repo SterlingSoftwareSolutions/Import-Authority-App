@@ -107,7 +107,7 @@ function Dashboard({ children }) {
           const imgFrontRightAsset = application.assets.find(asset => asset.asset_type === "img_front_right");
           const fileType = imgFrontRightAsset ? imgFrontRightAsset.file_type : "";
           return (
-            <TouchableOpacity key={application.id} onPress={() => navigation.navigate("ViewApplications")}>
+            <TouchableOpacity key={application.id} onPress={() => navigation.navigate("ViewApplications", { applicationId: application.id })}>
               <Image
                 source={{
                   uri: imgFrontRightAsset ? `http://dkxw67x8n7ht.cloudfront.net/assets/applications/${imgFrontRightAsset.location}` : "",
