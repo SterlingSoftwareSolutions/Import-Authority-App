@@ -16,12 +16,17 @@ import TopUserControlBg from "../components/TopUserControlBg";
 import { useNavigation } from "@react-navigation/native";
 import client from "../api/client";
 import ApplicationLists from "../components/ApplicationLists";
-
+import { CDN_URL } from '@env'
 
 function Dashboard({ children }) {
   const navigation = useNavigation();
-  const { user } = useAuth();
+  const { user, logOut } = useAuth();
   const [applications, setApplications] = useState([]);
+  const [avatar, setAvatar] = useState(
+    user.avatar ?
+      { uri: CDN_URL + '/assets/avatars/' + user.avatar }
+      : require("../assets/avatarplaceholder.png")
+  );
 
   // Application data fetching from api 
   useEffect(() => {
@@ -46,7 +51,7 @@ function Dashboard({ children }) {
         <View style={{ flexDirection: "row" }}>
           <View>
             <Image
-              source={require("../assets/Group1.png")}
+              source={avatar}
               style={[
                 styles.profileImage,
               ]}
@@ -64,7 +69,7 @@ function Dashboard({ children }) {
               Hi {user.name} !
             </Text>
             <Text style={{ fontSize: 12, fontWeight: "bold", color: "#FFF" }}>
-              Welocme to Import Authority
+              Welcome to Import Authority
             </Text>
           </View>
 
