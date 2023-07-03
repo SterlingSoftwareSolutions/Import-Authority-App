@@ -57,9 +57,9 @@ function ProfileDetailsScreen({ children }) {
         {
             borderTopLeftRadius: 5,
             borderBottomLeftRadius: 5,
-            backgroundColor: profileActive ? "white" : "#079BB7",
-            color: profileActive ? "#079BB7" : "white",
-            borderColor: profileActive ? "white" : "#079BB7",
+            backgroundColor: profileActive ? "#079BB7" : "white",
+            color: profileActive ? "white" : "#079BB7",
+            borderColor: profileActive ? "#079BB7" : "white",
         },
     ];
 
@@ -68,9 +68,9 @@ function ProfileDetailsScreen({ children }) {
         {
             borderTopRightRadius: 5,
             borderBottomRightRadius: 5,
-            backgroundColor: profileActive ? "#079BB7" : "white",
-            color: profileActive ? "white" : "#079BB7",
-            borderColor: profileActive ? "#079BB7" : "white",
+            backgroundColor: profileActive ? "white" : "#079BB7",
+            color: profileActive ? "#079BB7" : "white",
+            borderColor: profileActive ? "white" : "#079BB7",
         },
     ];
 
