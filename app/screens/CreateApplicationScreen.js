@@ -232,10 +232,13 @@ const CreateApplicationMain = () => {
   };
 
   // removing a row when the "-" button is pressed
-  const handleremoveRow = (index) => {
+  const handleremoveRow = () => {
     const updatedRows = [...rows];
-    updatedRows.splice(index, 1);
-    setRows(updatedRows);
+
+    if (updatedRows.length > 0) {
+      updatedRows.pop(); // Remove the last row from the array
+      setRows(updatedRows); // Update the state with the modified rows array
+    }
   };
 
   //validations
@@ -258,6 +261,10 @@ const CreateApplicationMain = () => {
   const additionalValidations = Yup.object().shape({
     vassEngineering: Yup.string().required("Vass engineering is required"),
   });
+
+
+
+
 
 
   return (
@@ -346,43 +353,43 @@ const CreateApplicationMain = () => {
         </TouchableWithoutFeedback>
       </TopUserControlBg>
       <ScrollView
-                contentContainerStyle={{ marginTop: 5, paddingBottom: 15 }}
-              >
-      <Formik
-        initialValues={{
-          vassEngineering: "",
-          chassisNumber: "",
-          estimatedDateofArrival: "",
-          make: "",
-          model: "",
-          buildMonth: "",
-          buildYear: "",
-          fuelType: "",
-          transmission: "",
-          bodyType: "",
-          driveType: "",
-          odometer: "",
-          approvalType: ""
-        }}
-        onSubmit={values => handleSubmit(values, approvalType)}
-        validationSchema={
-          approvalType == 0
-            ? validationSchema
-            : validationSchema.concat(additionalValidations)
-        }
+        contentContainerStyle={{ marginTop: 5, paddingBottom: 15 }}
       >
-        {({
-          handleChange,
-          values,
-          errors,
-          setFieldTouched,
-          setFieldValue,
-          touched,
-          handleSubmit,
-        }) => (
-          <View style={styles.container}>
-            <View style={styles.formContainer}>
-              
+        <Formik
+          initialValues={{
+            vassEngineering: "",
+            chassisNumber: "",
+            estimatedDateofArrival: "",
+            make: "",
+            model: "",
+            buildMonth: "",
+            buildYear: "",
+            fuelType: "",
+            transmission: "",
+            bodyType: "",
+            driveType: "",
+            odometer: "",
+            approvalType: ""
+          }}
+          onSubmit={values => handleSubmit(values, approvalType)}
+          validationSchema={
+            approvalType == 0
+              ? validationSchema
+              : validationSchema.concat(additionalValidations)
+          }
+        >
+          {({
+            handleChange,
+            values,
+            errors,
+            setFieldTouched,
+            setFieldValue,
+            touched,
+            handleSubmit,
+          }) => (
+            <View style={styles.container}>
+              <View style={styles.formContainer}>
+
                 {approvalType == 1 ? (
                   <View>
                     <RadioButton.Group
@@ -656,60 +663,64 @@ const CreateApplicationMain = () => {
 
                 {/* Seating Row starts */}
 
-                {/* <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                <Text style={styles.seatingText}>Seating Arrangement</Text>
-                <View style={styles.seating}>
-                  <TouchableOpacity
-                    style={styles.minusbutton}
-                    onPress={handleremoveRow}
-                    disabled={rows.length === 1}
-                  >
-                    <Text style={styles.buttonText}>-</Text>
-                  </TouchableOpacity>
+                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                  <Text style={styles.seatingText}>Seating Arrangement</Text>
+                  <View style={styles.seating}>
+                    <TouchableOpacity
+                      style={styles.minusbutton}
+                      onPress={handleremoveRow}
+                      disabled={rows.length === 1}
+                    >
+                      <Text style={styles.buttonText}>-</Text>
+                    </TouchableOpacity>
 
-                  <TouchableOpacity
-                    style={styles.plusbutton}
-                    onPress={handleAddRow}
-                  >
-                    <Text style={styles.buttonText}>+</Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.plusbutton}
+                      onPress={handleAddRow}
+                    >
+                      <Text style={styles.buttonText}>+</Text>
+                    </TouchableOpacity>
 
+                  </View>
                 </View>
-              </View> */}
 
-                {/* <View style={{}}>
+
                 {rows.map((row, index) => (
                   <View key={index}>
-                    <Text style={{ ...styles.seatingText, marginTop: -5 }}>Row {row} </Text>
-                    <View style={styles.inputLabelBox}>
+
+                    <Text style={{ ...styles.seatingText, marginTop: -4 }}>Row {row} </Text>
+
+                    <View style={{ ...styles.row, marginTop: 10 }}>
+
+                      <TouchableOpacity
+                        style={[{ opacity: value === 0 ? 0.5 : 1 }]} // if the value is equal to 0 set opacity to 0.5 else keep 1 
+                        onPress={handleDecrement}
+                        disabled={value === 0}
+                      >
+                        <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>-</Text>
+                      </TouchableOpacity>
+
+
                       <TextInput
                         style={styles.inputseat}
                         placeholder={value.toString()}
                         placeholderTextColor="black"
                       />
-                      <View style={{ top: -44, right: 20 }}>
-                        <TouchableOpacity
-                          style={styles.arrowButton}
-                          onPress={handleIncrement}
-                        >
-                          <Text style={styles.arrowup}>+</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={[styles.arrowButton, { opacity: value === 0 ? 0.5 : 1 }]} // if the value is equal to 0 set opacity to 0.5 else keep 1 
-                          onPress={handleDecrement}
-                          disabled={value === 0}
-                        >
-                          <Text style={styles.arrowdown}>-</Text>
-                        </TouchableOpacity>
-                      </View>
+
+                      <TouchableOpacity
+                        onPress={handleIncrement}
+                      >
+                        <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>+</Text>
+                      </TouchableOpacity>
+
                     </View>
+
                   </View>
 
                 ))}
-              </View> */}
+
 
                 {/* Seating Row Ends */}
-
                 <View style={styles.buttonContainer}>
                   <LinearGradient
                     colors={["#4B4B4B", "#9F9F9F"]}
@@ -738,11 +749,11 @@ const CreateApplicationMain = () => {
                     </TouchableOpacity>
                   </LinearGradient>
                 </View>
-            
+
+              </View>
             </View>
-          </View>
-        )}
-      </Formik>
+          )}
+        </Formik>
       </ScrollView>
     </SafeAreaView>
   );
@@ -983,11 +994,10 @@ const styles = StyleSheet.create({
 
   inputseat: {
     borderRadius: 5,
-    paddingVertical: 10,
     color: "black",
     marginBottom: 5,
-    marginLeft: 60,
     fontSize: 20,
+    textAlign: 'center'
   },
 
   arrowup: {
@@ -1013,6 +1023,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
   },
+
+  row: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    width: '45%',
+    height: 49,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+
+  }
+
+
 });
 
 export default CreateApplicationMain;
