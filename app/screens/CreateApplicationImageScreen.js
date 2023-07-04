@@ -258,6 +258,9 @@ const CreateApplicationImageScreen = (props) => {
         onDismiss={() => {
           setImageSourceDialog(false);
         }}
+        onTouchOutside={() => {
+          setImageSourceDialog(false);
+        }}
         width={0.9}
         visible={imageSourceDialog}
         rounded
