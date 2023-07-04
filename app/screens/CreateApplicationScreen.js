@@ -34,6 +34,7 @@ const CreateApplicationMain = () => {
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
+  const [seats, setSeats] = React.useState([0]);
 
   {
     /Make/;
@@ -212,32 +213,29 @@ const CreateApplicationMain = () => {
 
   const [value, setValue] = useState(0);
   // incrementing the value when the arrow up button is pressed
-  const handleIncrement = () => {
-    setValue(value + 1);
-  };
-
-  // decrementing the value when the arrow down button is pressed
-  const handleDecrement = () => {
-    if (value > 0) {
-      setValue(value - 1);
-    }
+  const updateSeats = async (index, substract) => {
+    let tempSeats = [...seats];
+    let value = substract ? Math.max(tempSeats[index] - 1, 0) : Math.max(tempSeats[index] + 1, 0);
+    tempSeats[index] = value;
+    await setSeats(tempSeats);
+    console.log(seats);
   };
 
   // State variable to hold an array of rows
   const [rows, setRows] = useState([1]);
   // adding a new row when the "+" button is pressed
   const handleAddRow = () => {
-    const newRow = rows.length + 1;
-    setRows([...rows, newRow]);
+    let tempSeats = [...seats];
+    tempSeats.push(0);
+    setSeats(tempSeats);
   };
 
   // removing a row when the "-" button is pressed
   const handleremoveRow = () => {
-    const updatedRows = [...rows];
-
-    if (updatedRows.length > 0) {
-      updatedRows.pop(); // Remove the last row from the array
-      setRows(updatedRows); // Update the state with the modified rows array
+    let tempSeats = [...seats];
+    if (tempSeats.length > 0) {
+      tempSeats.pop();
+      setSeats(tempSeats);
     }
   };
 
@@ -685,7 +683,7 @@ const CreateApplicationMain = () => {
                 </View>
 
 
-                {rows.map((row, index) => (
+                {seats.map((row, index) => (
                   <View key={index}>
 
                     <Text style={{ ...styles.seatingText, marginTop: -4 }}>Row {row} </Text>
@@ -694,7 +692,9 @@ const CreateApplicationMain = () => {
 
                       <TouchableOpacity
                         style={[{ opacity: value === 0 ? 0.5 : 1 }]} // if the value is equal to 0 set opacity to 0.5 else keep 1 
-                        onPress={handleDecrement}
+                        onPress={() => {
+                          updateSeats(0, true);
+                        }}
                         disabled={value === 0}
                       >
                         <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>-</Text>
@@ -708,7 +708,9 @@ const CreateApplicationMain = () => {
                       />
 
                       <TouchableOpacity
-                        onPress={handleIncrement}
+                        onPress={() => {
+                          updateSeats(0);
+                        }}
                       >
                         <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>+</Text>
                       </TouchableOpacity>
