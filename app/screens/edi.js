@@ -240,14 +240,14 @@ function EditApplicationScreen(props) {
       applicationData.vass_engineering = values.vassEngineering;
     }
     console.log(applicationData);
-    // try {
-    //   const api = await client();
-    //   const response = await api.post(endpoint, applicationData);
-    //   console.log("Response:", response.data);
-    //   navigation.navigate("Dashboard");
-    // } catch (error) {
-    //   console.log("Error:", error);
-    // }
+    try {
+      const api = await client();
+      const response = await api.post(endpoint, applicationData);
+      console.log("Response:", response.data);
+      navigation.navigate("Dashboard");
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
 
   //validations
@@ -561,7 +561,7 @@ function EditApplicationScreen(props) {
                   <Text>Build Month</Text>
                   <View style={[styles.dropdown]}>
                     <SelectList
-                    defaultOption={{ key: values.make, value: values.make }}
+                    defaultOption={{ key: values.buildMonth, value: values.buildMonth }}
                       placeholder="Build Month *"
                       setSelected={handleChange("buildMonth")}
                       data={databuildmonth}
@@ -579,7 +579,7 @@ function EditApplicationScreen(props) {
                   <Text>Build Year </Text>
                   <View style={[styles.dropdown, {}]}>
                     <SelectList
-                    defaultOption={{ key: values.make, value: values.make }}
+                    defaultOption={{ key: values.buildYear, value: values.buildYear }}
                       placeholder="Build Year *"
                       setSelected={handleChange("buildYear")}
                       data={databuildyear}
@@ -597,7 +597,7 @@ function EditApplicationScreen(props) {
                   <Text>Fuel Type</Text>
                   <View style={[styles.dropdown]}>
                     <SelectList
-                    defaultOption={{ key: values.make, value: values.make }}
+                    defaultOption={{ key: values.fuelType, value: values.fuelType }}
                       placeholder="Fuel Type *"
                       setSelected={handleChange("fuelType")}
                       data={datafueltype}
@@ -651,7 +651,7 @@ function EditApplicationScreen(props) {
                   <Text>Drive Type</Text>
                   <View style={[styles.dropdown]}>
                     <SelectList
-                    defaultOption={{ key: values.make, value: values.make }}
+                    defaultOption={{ key: values.driveType, value: values.driveType }}
                       placeholder="Drive Type *"
                       setSelected={handleChange("driveType")}
                       data={datadrivetype}
