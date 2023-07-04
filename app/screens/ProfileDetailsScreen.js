@@ -123,49 +123,49 @@ function ProfileDetailsScreen({ children }) {
   return (
     <>
       <Dialog
-    onDismiss={() => {
-        setImageSourceDialog(false);
-    }}
-    onBackdropPress={() => {
-        setImageSourceDialog(false);
-    }}
-    width={0.9}
-    visible={imageSourceDialog}
-    rounded
-    actionsBordered
-    dialogTitle={
-        <DialogTitle
+        onDismiss={() => {
+          setImageSourceDialog(false);
+        }}
+        onTouchOutside={() => {
+          setImageSourceDialog(false);
+        }}
+        width={0.9}
+        visible={imageSourceDialog}
+        rounded
+        actionsBordered
+        dialogTitle={
+          <DialogTitle
             title="Add an image using ..."
             style={{
-                backgroundColor: "#F7F7F8",
+              backgroundColor: "#F7F7F8",
             }}
             hasTitleBar={false}
             align="left"
-        />
-    }
-    footer={
-        <DialogFooter>
+          />
+        }
+        footer={
+          <DialogFooter>
             <DialogButton
-                text="Camera"
-                bordered
-                onPress={() => {
-                    setImageSourceDialog(false);
-                    selectImageLaunch(true);
-                }}
-                key="button-1"
+              text="Camera"
+              bordered
+              onPress={() => {
+                setImageSourceDialog(false);
+                selectImageLaunch(true);
+              }}
+              key="button-1"
             />
             <DialogButton
-                text="Gallery"
-                bordered
-                onPress={() => {
-                    setImageSourceDialog(false);
-                    selectImageLaunch(false);
-                }}
-                key="button-2"
+              text="Gallery"
+              bordered
+              onPress={() => {
+                setImageSourceDialog(false);
+                selectImageLaunch(false);
+              }}
+              key="button-2"
             />
-        </DialogFooter>
-    }
-></Dialog>
+          </DialogFooter>
+        }
+      ></Dialog>
 
       <ScrollView>
         <SafeAreaView style={styles.container}>
