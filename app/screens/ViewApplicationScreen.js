@@ -40,6 +40,22 @@ function ViewApplicationScreen(props) {
     }
   }, [applicationId]);
 
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  const buildMonth = application?.build_month ?? null;
+  const monthName = buildMonth ? months[buildMonth - 1] : null;
 
   return (
     <View style={styles.container}>
@@ -48,7 +64,7 @@ function ViewApplicationScreen(props) {
           <Text style={{ ...styles.viewstatuslabel }}>{application?.status ? application.status.toUpperCase() : null}</Text>
         </View>
         <View style={{ ...styles.data_and_searchicon }}>
-          <Text style={{ color: '#E3E2E2', textAlign: 'center' }}> Your Application in {application?.status.toUpperCase() ?? null} Stage </Text>
+          <Text style={{ color: '#E3E2E2', textAlign: 'center' }}> Your Application is in {application?.status.toUpperCase() ?? null} Stage </Text>
           <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>Approval Type: {application?.approval_type ?? null}  </Text>
         </View>
 
@@ -84,28 +100,34 @@ function ViewApplicationScreen(props) {
           <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
             <View style={{ width: '45%' }}>
               <Text>Build Date:</Text>
+              <Text style={styles.valueText}>{monthName}</Text>
               <Text style={styles.valueText}>{application?.build_year ?? null}</Text>
             </View>
 
             <View style={{ width: '45%' }}>
-              <Text>Transmission:</Text>
-              <Text style={styles.valueText}>{application?.transmission ?? null}</Text>
+              <Text>Fuel Type:</Text>
+              <Text style={styles.valueText}>{application?.fuel_type ?? null}</Text>
             </View>
           </View>
 
           <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+            <View style={{ width: '45%' }}>
+              <Text>Transmission:</Text>
+              <Text style={styles.valueText}>{application?.transmission ?? null}</Text>
+            </View>
             <View style={{ width: '45%' }}>
               <Text>Body Type:</Text>
               <Text style={styles.valueText}>{application?.body_type ?? null}</Text>
             </View>
 
+
+          </View>
+
+          <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
             <View style={{ width: '45%' }}>
               <Text>Drive Type:</Text>
               <Text style={styles.valueText}>{application?.drive_type ?? null}</Text>
             </View>
-          </View>
-
-          <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
             <View style={{ width: '45%' }}>
               <Text>ODO Meter:</Text>
               <Text style={styles.valueText}>{application?.odo_meter ?? null}</Text>
