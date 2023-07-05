@@ -34,7 +34,7 @@ const CreateApplicationMain = () => {
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
-  const [seats, setSeats] = React.useState([0]);
+  const [seats, setSeats] = React.useState([0, 2, 4, 3, 2]);
 
   {
     /Make/;
@@ -667,7 +667,7 @@ const CreateApplicationMain = () => {
                     <TouchableOpacity
                       style={styles.minusbutton}
                       onPress={handleremoveRow}
-                      disabled={rows.length === 1}
+                      disabled={seats.length === 1}
                     >
                       <Text style={styles.buttonText}>-</Text>
                     </TouchableOpacity>
@@ -683,19 +683,19 @@ const CreateApplicationMain = () => {
                 </View>
 
 
-                {seats.map((row, index) => (
+                {seats.map((value, index) => (
                   <View key={index}>
 
-                    <Text style={{ ...styles.seatingText, marginTop: -4 }}>Row {row} </Text>
+                    <Text style={{ ...styles.seatingText, marginTop: -4 }}>Row {index + 1} </Text>
 
                     <View style={{ ...styles.row, marginTop: 10 }}>
 
                       <TouchableOpacity
-                        style={[{ opacity: value === 0 ? 0.5 : 1 }]} // if the value is equal to 0 set opacity to 0.5 else keep 1 
+                        style={[{ opacity: seats[index] === 0 ? 0.5 : 1 }]} // if the value is equal to 0 set opacity to 0.5 else keep 1 
                         onPress={() => {
-                          updateSeats(0, true);
+                          updateSeats(index, true);
                         }}
-                        disabled={value === 0}
+                        disabled={seats[index] === 0}
                       >
                         <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>-</Text>
                       </TouchableOpacity>
@@ -703,13 +703,13 @@ const CreateApplicationMain = () => {
 
                       <TextInput
                         style={styles.inputseat}
-                        placeholder={value.toString()}
+                        placeholder={seats[index].toString()}
                         placeholderTextColor="black"
                       />
 
                       <TouchableOpacity
                         onPress={() => {
-                          updateSeats(0);
+                          updateSeats(index);
                         }}
                       >
                         <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>+</Text>
