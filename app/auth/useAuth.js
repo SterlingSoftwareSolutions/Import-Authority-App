@@ -7,7 +7,6 @@ export default useAuth = () => {
   const { user, setUser } = useContext(AuthContext);
 
   const logIn = (authToken, user) => {
-    console.log(user);
     setUser(user);
     authStorage.storeToken(authToken);
   };
@@ -15,7 +14,6 @@ export default useAuth = () => {
   const logOut = async () => {
     let api = await client();
     api.post("/logout").then((response) => {
-      console.log(response);
       if (response.ok) {
         setUser(null);
         authStorage.removeToken();
@@ -23,7 +21,20 @@ export default useAuth = () => {
     });
   };
 
-  return { user, logOut, logIn };
+  const updateUser = async () => {
+    let api = await client();
+    api.get("/user").then((response) => {
+      console.log(response.data);
+      setUser(response.data);
+    });
+  }
+
+  const getUser = async () => {
+    console.log('getting user');
+    return user;
+  }
+
+  return { user, logOut, logIn, updateUser, getUser };
 };
 
 //custom hook for business logic

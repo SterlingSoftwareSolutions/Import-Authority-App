@@ -51,13 +51,12 @@ const SignupScreen = (props) => {
 
   const handleSubmit = async (userInfo) => {
     const result = await registerApi.request(userInfo);
-    // console.log(result);
+
     if (!result.ok) {
       console.log(result.data.errors);
       if (result.data) setError(result.data.error);
       else {
         setError("An unexpected error occurred.");
-        // console.log(result);
       }
       return;
     }

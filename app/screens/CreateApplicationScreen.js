@@ -149,7 +149,6 @@ const CreateApplicationMain = () => {
   const [datePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
-    console.log("Test");
     setDatePickerVisibility(true);
   };
 
@@ -198,11 +197,9 @@ const CreateApplicationMain = () => {
     if (approvalType === 1) {
       applicationData.vass_engineering = values.vassEngineering;
     }
-    console.log(applicationData);
     try {
       const api = await client();
       const response = await api.post(endpoint, applicationData);
-      console.log("Response:", response.data);
       // Passing the vehicle information to the Image upload screen
       navigation.navigate("CreateApplicationImageScreen", { params: applicationData });
     } catch (error) {

@@ -25,7 +25,6 @@ function ViewApplicationScreen(props) {
               [element.asset_type]: element.location,
             }));
           });
-          console.log(assets);
           // hide progress spinner
         } else {
           alert('Failed to fetch application');
