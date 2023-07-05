@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -28,16 +28,15 @@ import mime from "mime";
 
 function ProfileDetailsScreen({ children }) {
   const navigation = useNavigation();
-  const { user, logOut } = useAuth();
+  const { logOut, user, updateUser } = useAuth();
   const [showProfile, setShowProfile] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [profileActive, setProfileActive] = useState(true);
   const endpoint = "/profile";
-  const [avatar, setAvatar] = useState(
-    user.avatar
-      ? { uri: CDN_URL + "/assets/avatars/" + user.avatar }
-      : require("../assets/avatarplaceholder.png")
-  );
+
+  const [avatar, setAvatar] = useState(user.avatar ?
+    { uri: CDN_URL + '/assets/avatars/' + user.avatar }
+    : require("../assets/avatarplaceholder.png"))
 
   const togglePassword = () => {
     setShowPassword(!showPassword); //true
@@ -56,6 +55,18 @@ function ProfileDetailsScreen({ children }) {
       borderColor: profileActive ? "#079BB7" : "white",
     },
   ];
+
+  // const updateUserDetails = async () => {
+  //   setUser(await getUser());
+  //   let avatar = user.avatar ?
+  //     { uri: CDN_URL + '/assets/avatars/' + user.avatar }
+  //     : require("../assets/avatarplaceholder.png")
+  //   setAvatar(avatar);
+  // }
+
+  // useEffect(() => {
+  //   updateUserDetails();
+  // }, []);
 
   const passwordButtonStyle = [
     styles.inactiveButton,
@@ -93,13 +104,16 @@ function ProfileDetailsScreen({ children }) {
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log(response.data);
       if (response.ok) {
+        await updateUser();
         setAvatar({ uri: avatar_uri });
       }
     }
   };
 
   const handleSubmit = async (values) => {
+    console.log(values);
     const applicationData = {
       name: values.name,
       username: values.username,
@@ -113,7 +127,7 @@ function ProfileDetailsScreen({ children }) {
     try {
       const api = await client(); // Call the client function to get the API client instance
       const response = await api.put(endpoint, applicationData); // Make the PUT request using the API client
-      console.log("Response:", response);
+      getUser();
       navigation.navigate("Dashboard");
     } catch (error) {
       console.log("Error:", error);

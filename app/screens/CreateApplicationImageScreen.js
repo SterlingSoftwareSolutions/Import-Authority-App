@@ -128,7 +128,6 @@ const CreateApplicationImageScreen = (props) => {
 
   // Validate Images and Documents on Press Of the NExt Button
   const handleNextButton = () => {
-    console.log(vehicleInfo)
     const imageErrorMessage = validateImages();
     const docErrorMessage = validateDocuments();
 
@@ -149,7 +148,6 @@ const CreateApplicationImageScreen = (props) => {
       // Add documents to formData
       Object.entries(docs).forEach(([key, uri]) => {
         const filename = uri.split("/").pop();
-        console.log(uri);
 
         formData.append(key, {
           uri,
@@ -161,7 +159,6 @@ const CreateApplicationImageScreen = (props) => {
       // Add images to formData
       Object.entries(images).forEach(([key, uri]) => {
         const filename = uri.split("/").pop();
-        console.log(uri);
 
         formData.append(key, {
           uri,
@@ -180,18 +177,12 @@ const CreateApplicationImageScreen = (props) => {
         },
       });
 
-      console.log("---------------------------------------------Next button clicked-------------------------------------");
-      console.log(formData);
-      console.log("---------------------------------------------Next button clicked-------------------------------------");
-
       if (response.ok) {
         // Successful upload
-        console.log("Images and files uploaded successfully");
         navigation.navigate("PaymentScreen");
       } else {
         // Error in API response
         console.error("Failed to upload images and files:", response.problem);
-        console.log(response);
         alert("Image and document upload failed!");
       }
     } catch (error) {
