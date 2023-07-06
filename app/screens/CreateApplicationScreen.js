@@ -34,7 +34,7 @@ const CreateApplicationMain = () => {
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
-  const [seats, setSeats] = React.useState([0, 2, 4, 3, 2]);
+  const [seats, setSeats] = React.useState([0]);
 
   {
     /Make/;
@@ -194,10 +194,21 @@ const CreateApplicationMain = () => {
       drive_type: values.driveType,
       odo_meter: values.odometer,
       approval_type: approvalType === 0 ? "SEV" : "Older Vehicles",
+      seat_row_1: seats[0].toString()
+
+
+
     };
     if (approvalType === 1) {
       applicationData.vass_engineering = values.vassEngineering;
     }
+    for (let i = 0; i < seats.length; i++) {
+      const key = `seat_row_${i + 1}`;
+      applicationData[key] = seats[i].toString();
+    }
+
+
+
     try {
       const api = await client();
       const response = await api.post(endpoint, applicationData);
@@ -206,6 +217,8 @@ const CreateApplicationMain = () => {
     } catch (error) {
       console.log("Error:", error);
     }
+
+    console.log(applicationData);
   };
 
   const [value, setValue] = useState(0);
@@ -219,7 +232,7 @@ const CreateApplicationMain = () => {
   };
 
   // State variable to hold an array of rows
-  const [rows, setRows] = useState([1]);
+  // const [rows, setRows] = useState([1]);
   // adding a new row when the "+" button is pressed
   const handleAddRow = () => {
     let tempSeats = [...seats];
@@ -256,10 +269,6 @@ const CreateApplicationMain = () => {
   const additionalValidations = Yup.object().shape({
     vassEngineering: Yup.string().required("Vass engineering is required"),
   });
-
-
-
-
 
 
   return (
@@ -364,7 +373,9 @@ const CreateApplicationMain = () => {
             bodyType: "",
             driveType: "",
             odometer: "",
-            approvalType: ""
+            approvalType: "",
+
+
           }}
           onSubmit={values => handleSubmit(values, approvalType)}
           validationSchema={
@@ -665,20 +676,21 @@ const CreateApplicationMain = () => {
                       style={styles.minusbutton}
                       onPress={handleremoveRow}
                       disabled={seats.length === 1}
+
                     >
-                      <Text style={styles.buttonText}>-</Text>
+                      <Text style={styles.buttonText} >-</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                       style={styles.plusbutton}
                       onPress={handleAddRow}
+
                     >
                       <Text style={styles.buttonText}>+</Text>
                     </TouchableOpacity>
 
                   </View>
                 </View>
-
 
                 {seats.map((value, index) => (
                   <View key={index}>
@@ -702,11 +714,13 @@ const CreateApplicationMain = () => {
                         style={styles.inputseat}
                         placeholder={seats[index].toString()}
                         placeholderTextColor="black"
+
                       />
 
                       <TouchableOpacity
                         onPress={() => {
                           updateSeats(index);
+
                         }}
                       >
                         <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>+</Text>
@@ -715,9 +729,7 @@ const CreateApplicationMain = () => {
                     </View>
 
                   </View>
-
                 ))}
-
 
                 {/* Seating Row Ends */}
                 <View style={styles.buttonContainer}>
@@ -728,7 +740,9 @@ const CreateApplicationMain = () => {
                     end={{ x: 1, y: 1 }}
                     style={styles.button}
                   >
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    >
+
                       <Text style={styles.buttonText}>Draft</Text>
                     </TouchableOpacity>
                   </LinearGradient>
@@ -1031,10 +1045,6 @@ const styles = StyleSheet.create({
     height: 49,
     justifyContent: 'space-around',
     alignItems: 'center',
-
   }
-
-
 });
-
 export default CreateApplicationMain;
