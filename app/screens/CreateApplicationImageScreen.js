@@ -128,6 +128,7 @@ const CreateApplicationImageScreen = (props) => {
 
   // Validate Images and Documents on Press Of the NExt Button
   const handleNextButton = () => {
+    console.log("------------------------------check vehicle values-------------------")
     console.log(vehicleInfo)
     const imageErrorMessage = validateImages();
     const docErrorMessage = validateDocuments();

@@ -12,6 +12,12 @@ import {
   ScrollView,
 } from "react-native";
 import TopUserControlBg from "../components/TopUserControlBg";
+import {
+  Dialog,
+  DialogTitle,
+  DialogFooter,
+  DialogButton,
+} from "react-native-popup-dialog";
 import colors from "../config/colors";
 import client from "../api/client";
 import { CDN_URL } from '@env'
@@ -19,11 +25,13 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import { Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { ProgressBar } from "react-native-paper";
 import { SelectList } from "react-native-dropdown-select-list";
 import { RadioButton } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useNavigation } from "@react-navigation/native";
+import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
+import mime from 'mime'
 
 function EditApplicationScreen(props) {
   const endpoint = "/applications";
@@ -32,6 +40,48 @@ function EditApplicationScreen(props) {
   const applicationId = route.params?.applicationId;
   const [application, setApplication] = useState(null);
   const [assets, setAssets] = useState({});
+  const [imageSourceDialog, setImageSourceDialog] = useState(false);
+  //Uploaded images
+  const [images, setImages] = useState({});
+
+  //Name of the image field
+  const [key, setKey] = useState(null);
+
+  //Open the Popup onPress
+  const selectImage = (imageKey) => {
+    setKey(imageKey);
+    setImageSourceDialog(true);
+  };
+
+  //Opens the Camera or image Library
+  const selectImageLaunch = async (camera = true) => {
+    setImageSourceDialog(false);
+    var picker = null;
+    if (camera) {
+      picker = await ImagePicker.launchCameraAsync();
+    } else {
+      picker = await ImagePicker.launchImageLibraryAsync();
+    }
+    if (!picker.canceled) {
+      setImages((images) => ({
+        ...images,
+        [key]: picker.assets[0].uri,
+      }));
+    }
+  };
+
+  // doc state
+  const [docs, setDocs] = useState({});
+
+  const selectDocs = async (key) => {
+    const picker = await DocumentPicker.getDocumentAsync();
+    if (!picker.canceled) {
+      setDocs((docs) => ({
+        ...docs,
+        [key]: picker.uri,
+      }));
+    }
+  };
 
   useEffect(() => {
     const fetchApplication = async () => {
@@ -46,7 +96,6 @@ function EditApplicationScreen(props) {
               [element.asset_type]: element.location,
             }));
           });
-          // console.log(assets);
           // hide progress spinner - should be done 
         } else {
           alert('Failed to fetch application');
@@ -91,6 +140,21 @@ function EditApplicationScreen(props) {
     { key: "7", value: "Mersedez Benz" },
     { key: "8", value: "Suzuki" },
     { key: "9", value: "Honda" },
+  ];
+
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   {
@@ -176,7 +240,6 @@ function EditApplicationScreen(props) {
   const [datePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
-    console.log("Test");
     setDatePickerVisibility(true);
   };
 
@@ -200,7 +263,7 @@ function EditApplicationScreen(props) {
   const [approvalTypeN, setApprovalTypeN] = useState('');
 
   const handleApprovalTypeChange = (value) => {
-    setApprovalTypeN(value);
+    setApprovalType(value);
     if (value === 'SEV') {
       setVassEngineering('');
     }
@@ -210,18 +273,14 @@ function EditApplicationScreen(props) {
     setVassEngineering(value);
   };
 
-  const switchApprovalType = () => {
-    const newApprovalType = approvalType === 0 ? 1 : 0;
-    setApprovalType(newApprovalType);
-  };
-
   function getKeyByValue(dictionaryArray, value) {
     const foundItem = dictionaryArray.find(item => item.value === value);
     return foundItem ? foundItem.key : null;
   }
 
-
   const handleSubmit = async (values) => {
+    console.log(values);
+
     const applicationData = {
       chassis_no: values.chassisNumber,
       arrival_date: values.estimatedDateofArrival,
@@ -237,17 +296,17 @@ function EditApplicationScreen(props) {
       approval_type: approvalType === 0 ? "SEV" : "Older Vehicles",
     };
     if (approvalType === 1) {
-      applicationData.vass_engineering = values.vassEngineering;
+      applicationData.vass_engineering = values.vass_engineering;
     }
     console.log(applicationData);
-    // try {
-    //   const api = await client();
-    //   const response = await api.post(endpoint, applicationData);
-    //   console.log("Response:", response.data);
-    //   navigation.navigate("Dashboard");
-    // } catch (error) {
-    //   console.log("Error:", error);
-    // }
+    try {
+      const api = await client();
+      const response = await api.post(endpoint, applicationData);
+      console.log("Response:", response.data);
+      navigation.navigate("Dashboard");
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
 
   //validations
@@ -283,81 +342,53 @@ function EditApplicationScreen(props) {
           <Text style={{ color: '#E3E2E2', textAlign: 'center' }}> Your Application is in {application?.status.toUpperCase() ?? null} Stage </Text>
         </View>
       </TopUserControlBg>
+
+      {/* Image selecting Popup Dialog Box */}
+      <Dialog
+        onDismiss={() => {
+          setImageSourceDialog(false);
+        }}
+        width={0.9}
+        visible={imageSourceDialog}
+        rounded
+        actionsBordered
+        dialogTitle={
+          <DialogTitle
+            title="Add an image using ..."
+            style={{
+              backgroundColor: "#F7F7F8",
+            }}
+            hasTitleBar={false}
+            align="left"
+          />
+        }
+        footer={
+          <DialogFooter>
+            <DialogButton
+              text="Camera"
+              bordered
+              onPress={() => {
+                setImageSourceDialog(false);
+                selectImageLaunch(true);
+              }}
+              key="button-1"
+            />
+            <DialogButton
+              text="Gallery"
+              bordered
+              onPress={() => {
+                setImageSourceDialog(false);
+                selectImageLaunch(false);
+              }}
+              key="button-2"
+            />
+          </DialogFooter>
+        }
+      ></Dialog>
       <ScrollView>
-        <View>
-          <RadioButton.Group onValueChange={handleApprovalTypeChange} value={approvalTypeN} flexDirection="row">
-            <RadioButton.Item label="SEVs/ RAWs" value="SEV" color={colors.primary} />
-            <RadioButton.Item label="Older Vehicle" value="Older Vehicles" color={colors.primary} />
-          </RadioButton.Group>
-
-          {approvalTypeN === 'Older Vehicles' && (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <RadioButton.Group onValueChange={handleVassEngineeringChange} value={vassEngineering}>
-                <RadioButton.Item label="I need an Engineer" value="ours" color={colors.primary} />
-                <RadioButton.Item label="I have my Own Engineer" value="own" color={colors.primary} />
-              </RadioButton.Group>
-            </View>
-          )}
-        </View>
-
 
         <View key={application?.id ?? null} style={{ width: '90%', marginHorizontal: '5%', marginTop: 20 }}>
-          {/* Vehicle Information */}
-          <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
-            <View style={{ width: '45%' }}>
-              <Text>Chassis/Frame Number</Text>
-              <Text style={styles.valueText}>{application?.chassis_no ?? null}</Text>
-            </View>
-
-            <View style={{ width: '45%' }}>
-              <Text>Est. date of arrival:</Text>
-              <Text style={styles.valueText}>{application?.arrival_date ?? null}</Text>
-            </View>
-          </View>
-
-          <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
-            <View style={{ width: '45%' }}>
-              <Text>Make:</Text>
-              <Text style={styles.valueText}>{application?.make ?? null}</Text>
-            </View>
-
-            <View style={{ width: '45%' }}>
-              <Text>Model:</Text>
-              <Text style={styles.valueText}>{application?.model ?? null}</Text>
-            </View>
-          </View>
-
-          <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
-            <View style={{ width: '45%' }}>
-              <Text>Build Date:</Text>
-              <Text style={styles.valueText}>{application?.build_year ?? null}</Text>
-            </View>
-
-            <View style={{ width: '45%' }}>
-              <Text>Transmission:</Text>
-              <Text style={styles.valueText}>{application?.transmission ?? null}</Text>
-            </View>
-          </View>
-
-          <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
-            <View style={{ width: '45%' }}>
-              <Text>Body Type:</Text>
-              <Text style={styles.valueText}>{application?.body_type ?? null}</Text>
-            </View>
-
-            <View style={{ width: '45%' }}>
-              <Text>Drive Type:</Text>
-              <Text style={styles.valueText}>{application?.drive_type ?? null}</Text>
-            </View>
-          </View>
-
-          <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
-            <View style={{ width: '45%' }}>
-              <Text>ODO Meter:</Text>
-              <Text style={styles.valueText}>{application?.odo_meter ?? null}</Text>
-            </View>
-          </View>
-
+          {/* ----------Vehicle Information Start------------ */}
           <Formik
             initialValues={{
               vassEngineering: application?.vass_engineering ?? "",
@@ -393,6 +424,39 @@ function EditApplicationScreen(props) {
               <View style={styles.container}>
                 <View style={styles.formContainer}>
                   <Text style={{ color: colors.primary, fontWeight: 'bold' }}>Vehicle Info</Text>
+                  <View>
+                    <RadioButton.Group onValueChange={handleApprovalTypeChange} value={values.approvalType} >
+                      <View style={{ flexDirection: 'row' }}>
+                        <RadioButton.Item
+                          label="SEVs/ RAWs"
+                          value="SEV"
+                          color={colors.primary}
+                          style={{ flexDirection: 'row-reverse' }}
+                        />
+                        <RadioButton.Item
+                          label="Older Vehicle"
+                          value="Older Vehicles"
+                          color={colors.primary}
+                          style={{
+                            flexDirection: 'row-reverse',
+                          }}
+                        />
+                      </View>
+                    </RadioButton.Group>
+
+                    {values.approvalType === 'Older Vehicles' && (
+                      <RadioButton.Group onValueChange={handleVassEngineeringChange} value={vassEngineering}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                          <RadioButton.Item label="Need an Engineer" value="ours" color={colors.primary} style={{
+                            flexDirection: "row-reverse",
+                          }} />
+                          <RadioButton.Item label="Own Engineer" value="own" color={colors.primary} style={{
+                            flexDirection: "row-reverse",
+                          }} />
+                        </View>
+                      </RadioButton.Group>
+                    )}
+                  </View>
                   {approvalType == 1 ? (
                     // Radio button and switch for approval type 
                     <View>
@@ -524,12 +588,13 @@ function EditApplicationScreen(props) {
                   <Text>Make</Text>
                   <View style={[styles.dropdown]}>
                     <SelectList
+                      placeholder="Make *"
                       defaultOption={{ key: values.make, value: values.make }}
                       setSelected={handleChange("make")}
                       data={datamake}
                       save="value"
                       boxStyles={styles.dropdownBox}
-                      inputStyles={{ color: colors.primary }}
+                      inputStyles={{ color: colors.darkGrey }}
                       dropdownStyles={{ ...styles.dropDownListStyle }}
                       dropdownTextStyles={{ color: colors.primary }}
                       search={false}
@@ -549,7 +614,7 @@ function EditApplicationScreen(props) {
                       data={datamodel}
                       save="value"
                       boxStyles={styles.dropdownBox}
-                      inputStyles={{ color: colors.primary }}
+                      inputStyles={{ color: colors.darkGrey }}
                       dropdownStyles={{ ...styles.dropDownListStyle }}
                       dropdownTextStyles={{ color: colors.primary }}
                       options={datamodel}
@@ -561,13 +626,13 @@ function EditApplicationScreen(props) {
                   <Text>Build Month</Text>
                   <View style={[styles.dropdown]}>
                     <SelectList
-                    defaultOption={{ key: values.make, value: values.make }}
+                      defaultOption={{ key: values.buildMonth.toString(), value: months[values.buildMonth - 1] }}
                       placeholder="Build Month *"
                       setSelected={handleChange("buildMonth")}
                       data={databuildmonth}
                       save="value"
                       boxStyles={styles.dropdownBox}
-                      inputStyles={{ color: colors.primary }}
+                      inputStyles={{ color: colors.darkGrey }}
                       dropdownStyles={{ ...styles.dropDownListStyle }}
                       dropdownTextStyles={{ color: colors.primary }}
                       options={databuildmonth}
@@ -579,13 +644,13 @@ function EditApplicationScreen(props) {
                   <Text>Build Year </Text>
                   <View style={[styles.dropdown, {}]}>
                     <SelectList
-                    defaultOption={{ key: values.make, value: values.make }}
+                      defaultOption={{ key: values.buildYear.toString(), value: values.buildYear.toString() }}
                       placeholder="Build Year *"
                       setSelected={handleChange("buildYear")}
                       data={databuildyear}
                       save="value"
                       boxStyles={styles.dropdownBox}
-                      inputStyles={{ color: colors.primary }}
+                      inputStyles={{ color: colors.darkGrey }}
                       dropdownStyles={{ ...styles.dropDownListStyle }}
                       dropdownTextStyles={{ color: colors.primary }}
                       options={databuildyear}
@@ -597,13 +662,13 @@ function EditApplicationScreen(props) {
                   <Text>Fuel Type</Text>
                   <View style={[styles.dropdown]}>
                     <SelectList
-                    defaultOption={{ key: values.make, value: values.make }}
+                      defaultOption={{ key: values.fuelType, value: values.fuelType }}
                       placeholder="Fuel Type *"
                       setSelected={handleChange("fuelType")}
                       data={datafueltype}
                       save="value"
                       boxStyles={styles.dropdownBox}
-                      inputStyles={{ color: colors.primary }}
+                      inputStyles={{ color: colors.darkGrey }}
                       dropdownStyles={{ ...styles.dropDownListStyle }}
                       dropdownTextStyles={{ color: colors.primary }}
                       options={datafueltype}
@@ -615,13 +680,13 @@ function EditApplicationScreen(props) {
                   <Text>Transmisson</Text>
                   <View style={[styles.dropdown]}>
                     <SelectList
-                    defaultOption={{ key: values.transmission, value: values.transmission }}
+                      defaultOption={{ key: values.transmission, value: values.transmission }}
                       placeholder="Transmisson *"
                       setSelected={handleChange("transmission")}
                       data={datatransmission}
                       save="value"
                       boxStyles={styles.dropdownBox}
-                      inputStyles={{ color: colors.primary }}
+                      inputStyles={{ color: colors.darkGrey }}
                       dropdownStyles={{ ...styles.dropDownListStyle }}
                       dropdownTextStyles={{ color: colors.primary }}
                       options={datatransmission}
@@ -633,13 +698,13 @@ function EditApplicationScreen(props) {
                   <Text>Body Type</Text>
                   <View style={[styles.dropdown]}>
                     <SelectList
-                    defaultOption={{ key: values.bodyType, value: values.bodyType }}
+                      defaultOption={{ key: values.bodyType, value: values.bodyType }}
                       placeholder="Body Type *"
                       setSelected={handleChange("bodyType")}
                       data={databodytype}
                       save="value"
                       boxStyles={styles.dropdownBox}
-                      inputStyles={{ color: colors.primary }}
+                      inputStyles={{ color: colors.darkGrey }}
                       dropdownStyles={{ ...styles.dropDownListStyle }}
                       dropdownTextStyles={{ color: colors.primary }}
                       options={databodytype}
@@ -651,13 +716,13 @@ function EditApplicationScreen(props) {
                   <Text>Drive Type</Text>
                   <View style={[styles.dropdown]}>
                     <SelectList
-                    defaultOption={{ key: values.make, value: values.make }}
+                      defaultOption={{ key: values.driveType, value: values.driveType }}
                       placeholder="Drive Type *"
                       setSelected={handleChange("driveType")}
                       data={datadrivetype}
                       save="value"
                       boxStyles={styles.dropdownBox}
-                      inputStyles={{ color: colors.primary }}
+                      inputStyles={{ color: colors.darkGrey }}
                       dropdownStyles={{ ...styles.dropDownListStyle }}
                       dropdownTextStyles={{ color: colors.primary }}
                       options={datadrivetype}
@@ -681,120 +746,229 @@ function EditApplicationScreen(props) {
                       <Text style={styles.errorText}>{errors.odo_meter}</Text>
                     ) : null}
                   </View>
+                  {/*Vehicle Info end */}
 
-                  {/* Displays Exterior Images  */}
-                  <Text
-                    style={{ color: colors.primary, fontWeight: "bold", marginTop: 20 }}>
-                    Exterior Images
-                  </Text>
-                  <View
-                    style={{ flexDirection: "row", justifyContent: "space-around" }}
-                  >
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_front_right ?? 'default.png' }}
-                        style={styles.imagePreview}
-                      />
-                      <Text style={styles.frText}>FR Corner</Text>
-                    </View>
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_rear_right ?? 'default.png' }}
-                        style={styles.imagePreview}
-                      />
-                      <Text style={styles.frText}>RR Corner</Text>
+                  {/* -------------------------Images and Documents Start------------------------------ */}
+                  {/* Exterior Images Selector */}
+                  <View>
+                    <Text style={{ color: colors.primary, fontWeight: 'bold', marginTop: 10 }}>Exterior Images</Text>
+                    <View
+                      style={{ flexDirection: "row", justifyContent: "space-around" }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          selectImage("img_front_right");
+                        }}>
+                        <View style={styles.cameraContainer}>
+                          <Image
+                            source={require("../assets/cam.png")}
+                            style={styles.cameraIcon}
+                          />
+                          <Image
+                            source={{ uri: images["img_front_right"] }}
+                            style={styles.imagePreview}
+                          />
+                          <Text style={styles.cameraText}>FR Corner</Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          selectImage("img_rear_right");
+                        }}
+                      >
+                        <View style={styles.cameraContainer}>
+                          <Image
+                            source={require("../assets/cam.png")}
+                            style={styles.cameraIcon}
+                          />
+                          <Image
+                            source={{ uri: images["img_rear_right"] }}
+                            style={styles.imagePreview}
+                          />
+                          <Text style={styles.cameraText}>RR Corner</Text>
+                        </View>
+                      </TouchableOpacity>
                     </View>
 
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_front_left ?? 'default.png' }}
-                        style={styles.imagePreview}
-                      />
-                      <Text style={styles.frText}>FL Corner</Text>
+                    <View
+                      style={{ flexDirection: "row", justifyContent: "space-around" }}
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          selectImage("img_front_left");
+                        }}
+                      >
+                        <View style={styles.cameraContainer}>
+                          <Image
+                            source={require("../assets/cam.png")}
+                            style={styles.cameraIcon}
+                          />
+                          <Image
+                            source={{ uri: images["img_front_left"] }}
+                            style={styles.imagePreview}
+                          />
+                          <Text style={styles.cameraText}>FL Corner</Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          selectImage("img_rear_left");
+                        }}
+                      >
+                        <View style={styles.cameraContainer}>
+                          <Image
+                            source={require("../assets/cam.png")}
+                            style={styles.cameraIcon}
+                          />
+                          <Image
+                            source={{ uri: images["img_rear_left"] }}
+                            style={styles.imagePreview}
+                          />
+                          <Text style={styles.cameraText}>RL Corner</Text>
+                        </View>
+                      </TouchableOpacity>
                     </View>
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_rear_left ?? 'default.png' }}
-                        style={styles.imagePreview}
-                      />
-                      <Text style={styles.frText}>RL Corner</Text>
+                    {/* Interior Images Selector */}
+                    <Text style={{ color: colors.primary, fontWeight: 'bold', marginTop: 10 }}>Interior Images</Text>
+                    <View
+                      style={{ flexDirection: "row", justifyContent: "space-around" }}
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          selectImage("img_interior_1");
+                        }}
+                      >
+                        <View style={styles.cameraContainer}>
+                          <Image
+                            source={require("../assets/cam.png")}
+                            style={styles.cameraIcon}
+                          />
+                          <Image
+                            source={{ uri: images["img_interior_1"] }}
+                            style={styles.imagePreview}
+                          />
+                          <Text style={styles.cameraText}>FR Corner</Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          selectImage("img_interior_2");
+                        }}
+                      >
+                        <View style={styles.cameraContainer}>
+                          <Image
+                            source={require("../assets/cam.png")}
+                            style={styles.cameraIcon}
+                          />
+                          <Image
+                            source={{ uri: images["img_interior_2"] }}
+                            style={styles.imagePreview}
+                          />
+                          <Text style={styles.cameraText}>RR Corner</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+
+                    <View
+                      style={{ flexDirection: "row", justifyContent: "space-around" }}
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          selectImage("img_interior_3");
+                        }}
+                      >
+                        <View style={styles.cameraContainer}>
+                          <Image
+                            source={require("../assets/cam.png")}
+                            style={styles.cameraIcon}
+                          />
+                          <Image
+                            source={{ uri: images["img_interior_3"] }}
+                            style={styles.imagePreview}
+                          />
+                          <Text style={styles.cameraText}>FL Corner</Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          selectImage("img_interior_4");
+                        }}
+                      >
+                        <View style={styles.cameraContainer}>
+                          <Image
+                            source={require("../assets/cam.png")}
+                            style={styles.cameraIcon}
+                          />
+                          <Image
+                            source={{ uri: images["img_interior_4"] }}
+                            style={styles.imagePreview}
+                          />
+                          <Text style={styles.cameraText}>RL Corner</Text>
+                        </View>
+                      </TouchableOpacity>
                     </View>
                   </View>
 
-                  {/* Displays Interior Images */}
-                  <Text
-                    style={{ color: colors.primary, fontWeight: "bold", marginTop: 20 }}
-                  >
-                    Interior Images
-                  </Text>
-
-                  <View
-                    style={{ flexDirection: "row", justifyContent: "space-around" }}
-                  >
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_1 ?? 'default.png' }}
-                        style={[styles.imagePreview]}
-                      />
-                      <Text style={styles.frText}>FR Corner</Text>
-                    </View>
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_2 ?? 'default.png' }}
-                        style={[styles.imagePreview]}
-                      />
-                      <Text style={styles.frText}>RR Corner</Text>
-                    </View>
-
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_3 ?? 'default.png' }}
-                        style={[styles.imagePreview]}
-                      />
-                      <Text style={styles.frText}>FL Corner</Text>
-                    </View>
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_4 ?? 'default.png' }}
-                        style={[styles.imagePreview]}
-                      />
-                      <Text style={styles.frText}>RL Corner</Text>
-                    </View>
-                  </View>
-
-                  {/* Displays Documents */}
-                  <Text
-                    style={{ color: colors.primary, fontWeight: "bold", marginTop: 20 }}
-                  >
-                    Documents
-                  </Text>
-
-                  <View
-                    style={{ flexDirection: "row", justifyContent: "space-around" }}
-                  >
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.doc_invoice ?? 'default.png' }}
-                        style={[styles.imagePreview]}
-                      />
-                      <Text style={styles.frText}>Invoice</Text>
-                    </View>
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.doc_export_certificate ?? 'default.png' }}
-                        style={[styles.imagePreview]}
-                      />
-                      <Text style={styles.frText}>Export Certificate</Text>
-                    </View>
-
-                    <View style={styles.cameraContainer}>
-                      <Image
-                        source={{ uri: CDN_URL + "/assets/applications/" + assets?.doc_auction_report ?? 'default.png' }}
-                        style={[styles.imagePreview]}
-                      />
-                      <Text style={styles.frText}>Auction Report</Text>
+                  {/* Documents Selector */}
+                  <View>
+                    <Text style={{ color: colors.primary, fontWeight: 'bold', marginTop: 10 }}>Documents</Text>
+                    <View
+                      style={{ flexDirection: "row", justifyContent: "space-around" }}
+                    >
+                      <TouchableOpacity
+                        style={styles.cameraContainer}
+                        onPress={() => {
+                          selectDocs("doc_invoice");
+                        }}
+                      >
+                        <Image
+                          source={
+                            docs["doc_invoice"]
+                              ? require("../assets/doc_thumbnail.png")
+                              : require("../assets/doc_placeholder.png")
+                          }
+                          style={[styles.cameraIcon]}
+                        />
+                        <Text style={styles.frText}>Invoice</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.cameraContainer}
+                        onPress={() => {
+                          selectDocs("doc_export_certificate");
+                        }}
+                      >
+                        <Image
+                          source={
+                            docs["doc_export_certificate"]
+                              ? require("../assets/doc_thumbnail.png")
+                              : require("../assets/doc_placeholder.png")
+                          }
+                          style={[styles.cameraIcon]}
+                        />
+                        <Text style={styles.frText}>Export Certificate</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.cameraContainer}
+                        onPress={() => {
+                          selectDocs("doc_auction_report");
+                        }}
+                      >
+                        <Image
+                          source={
+                            docs["doc_auction_report"]
+                              ? require("../assets/doc_thumbnail.png")
+                              : require("../assets/doc_placeholder.png")
+                          }
+                          style={[styles.cameraIcon]}
+                        />
+                        <Text style={styles.frText}>Auction Report</Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
+                  {/* Draft - Submit */}
                   <View style={styles.buttonContainer}>
                     <LinearGradient
                       colors={["#4B4B4B", "#9F9F9F"]}
@@ -866,7 +1040,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     width: 80,
-    height: 98,
+    height: 95,
+    alignItems: "center",
+    borderColor: colors.lightGrey,
+  },
+  documentContainer: {
+    marginHorizontal: "auto",
+    backgroundColor: "white",
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    marginTop: 25,
+    borderRadius: 10,
+    borderWidth: 1,
+    width: 100,
+    height: 100,
     alignItems: "center",
     borderColor: colors.lightGrey,
   },
@@ -884,10 +1071,12 @@ const styles = StyleSheet.create({
     color: colors.darkGrey,
   },
   imagePreview: {
-    width: 65,
-    height: 65,
-    borderRadius: 10,
-    marginTop: 10,
+    position: "absolute",
+    width: "150%",
+    height: "120%",
+    resizeMode: "cover",
+    borderRadius: 20,
+    zIndex: 2,
   },
   statusText: {
     fontWeight: 700,
@@ -974,30 +1163,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginLeft: 10,
-  },
-  bottomContainer: {
-    position: "absolute",
-    bottom: 1,
-    right: 0,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 80,
-    marginBottom: 10,
-  },
-  bottomRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignContent: "center",
-  },
-  bottomText1: {
-    color: "#fff",
-  },
-  bottomText2: {
-    color: "#fff",
-  },
-  carIcon1: {},
-  carIcon2: {
-    marginRight: 15,
   },
   backgroundColorWrapper: {
     backgroundColor: "#E5E5E5",

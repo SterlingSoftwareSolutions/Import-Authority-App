@@ -69,7 +69,7 @@ function ViewApplicationScreen(props) {
         </View>
 
       </TopUserControlBg>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         <View key={application?.id ?? null} style={{ width: '90%', marginHorizontal: '5%', marginTop: 20 }}>
           <Text style={{ color: '#079BB7', fontWeight: 'bold' }}>Vehicle Info</Text>
 
@@ -189,14 +189,12 @@ function ViewApplicationScreen(props) {
                 source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_1 ?? 'default.png' }}
                 style={[styles.imagePreview]}
               />
-              <Text style={styles.frText}>FR Corner</Text>
             </View>
             <View style={styles.cameraContainer}>
               <Image
                 source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_2 ?? 'default.png' }}
                 style={[styles.imagePreview]}
               />
-              <Text style={styles.frText}>RR Corner</Text>
             </View>
 
             <View style={styles.cameraContainer}>
@@ -204,14 +202,12 @@ function ViewApplicationScreen(props) {
                 source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_3 ?? 'default.png' }}
                 style={[styles.imagePreview]}
               />
-              <Text style={styles.frText}>FL Corner</Text>
             </View>
             <View style={styles.cameraContainer}>
               <Image
                 source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_4 ?? 'default.png' }}
                 style={[styles.imagePreview]}
               />
-              <Text style={styles.frText}>RL Corner</Text>
             </View>
           </View>
           <Text
@@ -223,14 +219,14 @@ function ViewApplicationScreen(props) {
           <View
             style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
-            <View style={styles.cameraContainer}>
+            <View style={styles.documentContainer}>
               <Image
                 source={{ uri: CDN_URL + "/assets/applications/" + assets?.doc_invoice ?? 'default.png' }}
                 style={[styles.imagePreview]}
               />
               <Text style={styles.frText}>Invoice</Text>
             </View>
-            <View style={styles.cameraContainer}>
+            <View style={styles.documentContainer}>
               <Image
                 source={{ uri: CDN_URL + "/assets/applications/" + assets?.doc_export_certificate ?? 'default.png' }}
                 style={[styles.imagePreview]}
@@ -238,7 +234,7 @@ function ViewApplicationScreen(props) {
               <Text style={styles.frText}>Export Certificate</Text>
             </View>
 
-            <View style={styles.cameraContainer}>
+            <View style={styles.documentContainer}>
               <Image
                 source={{ uri: CDN_URL + "/assets/applications/" + assets?.doc_auction_report ?? 'default.png' }}
                 style={[styles.imagePreview]}
@@ -286,7 +282,20 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     width: 80,
-    height: 92,
+    height: 95,
+    alignItems: "center",
+    borderColor: colors.lightGrey,
+  },
+  documentContainer: {
+    marginHorizontal: "auto",
+    backgroundColor: "white",
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    marginTop: 25,
+    borderRadius: 10,
+    borderWidth: 1,
+    width: 100,
+    height: 100,
     alignItems: "center",
     borderColor: colors.lightGrey,
   },
