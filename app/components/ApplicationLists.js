@@ -3,7 +3,7 @@ import { View, Text, Image, FlatList, StyleSheet } from "react-native";
 import colors from "../config/colors";
 import ApplicationFunctionsGradientButton from "./ApplicationFunctionsGradientButton";
 import { useNavigation } from "@react-navigation/native";
-import {CDN_URL} from '@env'
+import { CDN_URL } from '@env'
 
 const ApplicationLists = ({ data }) => {
   const navigation = useNavigation();
@@ -44,7 +44,7 @@ const ApplicationLists = ({ data }) => {
       >
 
         {/*Rendering front right image */}
-        <View style={{ flexDirection: "row", marginLeft: -13 }}>
+        <View style={{ flexDirection: "row", marginLeft: -13, }}>
           <Image
             source={{
               uri: imgFrontRightAsset ? CDN_URL + '/assets/applications/' + imgFrontRightAsset.location : "",
@@ -53,11 +53,12 @@ const ApplicationLists = ({ data }) => {
             style={[
               styles.dashboardboxicon,
               {
-                width: 80,
-                height: 80,
+                width: 90,
+                height: 90,
                 borderColor: borderColor,
                 borderRadius: 10,
                 borderWidth: 2,
+                top: 2
               },
             ]}
           />
@@ -87,7 +88,7 @@ const ApplicationLists = ({ data }) => {
                       width: 16,
                       height: 16,
                       tintColor: "#000",
-                      top: 6,
+                      top: 16,
                       right: 10,
                     },
                   ]}
@@ -100,34 +101,38 @@ const ApplicationLists = ({ data }) => {
                       width: 16,
                       height: 16,
                       tintColor: "#000",
-                      top: 9,
+                      top: 25,
                       right: 10,
+
                     },
                   ]}
                 />
               </View>
               <View>
-                <View>
-                  <Text>Chassis:</Text>
-                  <Text>Build Date:</Text>
+                <View style={{ left: -3 }}>
+                  <Text style={{ maxWidth: 70, minHeight: 35 }}>Chassis:</Text>
+                  <Text style={{ bottom: 4 }}>Build Date:</Text>
                   <Text>ODO:</Text>
                 </View>
               </View>
-              <View style={{ left: 10 }}>
-                <Text>{item.chassis_no}</Text>
-                <Text>{`${item.build_month}/${item.build_year}`}</Text>
-                <Text>{item.odo_meter}</Text>
+              <View style={{ left: -2 }}>
+                <Text style={{ maxWidth: 70, fontSize: 13, minHeight: 35, top: 2 }}>{item.chassis_no}</Text>
+
+
+                <Text style={{ bottom: 3, fontSize: 13, }}>{`${item.build_month}/${item.build_year}`}</Text>
+                <Text style={{ bottom: 6, fontSize: 13, top: 2 }}>{item.odo_meter}</Text>
               </View>
             </View>
           </View>
         </View>
 
         {/* View, Edit, Download Buttons */}
-        <View>
-          <ApplicationFunctionsGradientButton text="View"  onPress={() => navigation.navigate("ViewApplications", { applicationId: item.id })} />
+        <View style={{ marginTop: 10 }}>
+          <ApplicationFunctionsGradientButton text="View" onPress={() => navigation.navigate("ViewApplications", { applicationId: item.id })} />
           <ApplicationFunctionsGradientButton text="Edit" />
           <ApplicationFunctionsGradientButton text="Download" />
         </View>
+
       </View>
     );
   };
