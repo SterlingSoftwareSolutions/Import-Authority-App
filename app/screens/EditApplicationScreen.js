@@ -255,22 +255,13 @@ function EditApplicationScreen(props) {
   };
 
   {
-    /Approval Type Switch /;
+    /Approval Type  /;
   }
+  const [enableAdditionalValidations, setEnableAdditionalValidations] = useState(false);
 
-  const [approvalType, setApprovalType] = useState(0);
-  const [vassEngineering, setVassEngineering] = useState('');
-  const [approvalTypeN, setApprovalTypeN] = useState('');
-
-  const handleApprovalTypeChange = (value) => {
-    setApprovalType(value);
-    if (value === 'SEV') {
-      setVassEngineering('');
-    }
-  };
-
-  const handleVassEngineeringChange = (value) => {
-    setVassEngineering(value);
+  const handleApprovalTypeChange = (value, setFieldValue) => {
+    setFieldValue('approvalType', value);
+    setEnableAdditionalValidations(value === 0);
   };
 
   function getKeyByValue(dictionaryArray, value) {
@@ -293,20 +284,70 @@ function EditApplicationScreen(props) {
       body_type: values.bodyType,
       drive_type: values.driveType,
       odo_meter: values.odo_meter,
-      approval_type: approvalType === 0 ? "SEV" : "Older Vehicles",
+      approval_type: values.approvalType === 0 ? "SEV" : "Older Vehicles",
     };
-    if (approvalType === 1) {
+    if (values.approvalType === 1) {
       applicationData.vass_engineering = values.vass_engineering;
     }
     console.log(applicationData);
     try {
       const api = await client();
-      const response = await api.post(endpoint, applicationData);
-      console.log("Response:", response.data);
-      navigation.navigate("Dashboard");
+      const formData = new FormData();
+
+      // Add documents to formData
+      Object.entries(docs).forEach(([key, uri]) => {
+        const filename = uri.split("/").pop();
+        console.log(uri);
+
+        formData.append(key, {
+          uri,
+          name: filename,
+          type: mime.getType(uri),
+        });
+      });
+
+      // Add images to formData
+      Object.entries(images).forEach(([key, uri]) => {
+        const filename = uri.split("/").pop();
+        console.log(uri);
+
+        formData.append(key, {
+          uri,
+          name: filename,
+          type: mime.getType(uri),
+        });
+      });
+      Object.entries(applicationData).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      // Make API request to upload images and documents
+      const response = await api.put("/applications", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("---------------------------------------------Next button clicked-------------------------------------");
+      console.log(formData);
+      console.log("---------------------------------------------Next button clicked-------------------------------------");
+
+      if (response.ok) {
+        // Successful upload
+        console.log("Images and files uploaded successfully");
+        navigation.navigate("PaymentScreen");
+      } else {
+        // Error in API response
+        console.error("Failed to upload images and files:", response.problem);
+        console.log(response);
+        alert("Image and document upload failed!");
+      }
     } catch (error) {
-      console.log("Error:", error);
+      // Error in API request
+      console.log(error);
+      alert("Something went wrong");
     }
+  
   };
 
   //validations
@@ -403,11 +444,11 @@ function EditApplicationScreen(props) {
               bodyType: application?.body_type ?? "",
               driveType: application?.drive_type ?? "",
               odo_meter: application?.odo_meter ?? "",
-              approvalType: application?.approval_type ?? "",
+              approvalType: application?.approval_type == 'Older Vehicles' ? '1' : '0'
             }}
             onSubmit={values => handleSubmit(values, approvalType)}
             validationSchema={
-              approvalType == 0
+              enableAdditionalValidations
                 ? validationSchema
                 : validationSchema.concat(additionalValidations)
             }
@@ -425,17 +466,19 @@ function EditApplicationScreen(props) {
                 <View style={styles.formContainer}>
                   <Text style={{ color: colors.primary, fontWeight: 'bold' }}>Vehicle Info</Text>
                   <View>
-                    <RadioButton.Group onValueChange={handleApprovalTypeChange} value={values.approvalType} >
+                    <RadioButton.Group onValueChange={(value) => {
+                      handleApprovalTypeChange(value, setFieldValue);
+                    }} value={values.approvalType} >
                       <View style={{ flexDirection: 'row' }}>
                         <RadioButton.Item
                           label="SEVs/ RAWs"
-                          value="SEV"
+                          value="0"
                           color={colors.primary}
                           style={{ flexDirection: 'row-reverse' }}
                         />
                         <RadioButton.Item
                           label="Older Vehicle"
-                          value="Older Vehicles"
+                          value="1"
                           color={colors.primary}
                           style={{
                             flexDirection: 'row-reverse',
@@ -444,8 +487,8 @@ function EditApplicationScreen(props) {
                       </View>
                     </RadioButton.Group>
 
-                    {values.approvalType === 'Older Vehicles' && (
-                      <RadioButton.Group onValueChange={handleVassEngineeringChange} value={vassEngineering}>
+                    {values.approvalType == '1' ? (
+                      <RadioButton.Group onValueChange={handleChange} value={values.vassEngineering}>
                         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                           <RadioButton.Item label="Need an Engineer" value="ours" color={colors.primary} style={{
                             flexDirection: "row-reverse",
@@ -455,47 +498,8 @@ function EditApplicationScreen(props) {
                           }} />
                         </View>
                       </RadioButton.Group>
-                    )}
+                    ) : null}
                   </View>
-                  {approvalType == 1 ? (
-                    // Radio button and switch for approval type 
-                    <View>
-                      <RadioButton.Group
-                        onValueChange={handleChange("vassEngineering")}
-                        value={values.vassEngineering}
-                      >
-                        <View style={{ flexDirection: "row" }}>
-                          <RadioButton.Item
-                            style={{
-                              flexDirection: "row-reverse",
-                              marginRight: -19,
-                            }}
-                            label="I need an Engineer "
-                            value="ours"
-                            labelStyle={{ color: colors.primary, fontSize: 14 }}
-                            uncheckedColor={colors.primary}
-                            color={colors.primary}
-                          />
-                          <RadioButton.Item
-                            style={{
-                              flexDirection: "row-reverse",
-                              marginRight: -25,
-                            }}
-                            label="I have my Own Engineer"
-                            value="own"
-                            labelStyle={{ color: colors.primary, fontSize: 14 }}
-                            uncheckedColor={colors.primary}
-                            color={colors.primary}
-                          />
-                        </View>
-                      </RadioButton.Group>
-                      {touched.vassEngineering && errors.vassEngineering ? (
-                        <Text style={styles.errorText}>
-                          {errors.vassEngineering}
-                        </Text>
-                      ) : null}
-                    </View>
-                  ) : null}
                   <Text>Chassis/Frame Number</Text>
                   <TextInput
                     style={[
@@ -752,15 +756,15 @@ function EditApplicationScreen(props) {
                   {/* Exterior Images Selector */}
                   <View>
                     <Text style={{ color: colors.primary, fontWeight: 'bold', marginTop: 10 }}>Exterior Images</Text>
-                    <View
-                      style={{ flexDirection: "row", justifyContent: "space-around" }}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+                      {/*  img_front_right */}
                       <TouchableOpacity
                         onPress={() => {
                           selectImage("img_front_right");
                         }}>
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={require("../assets/cam.png")}
+                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_front_right ?? 'default.png' }}
                             style={styles.cameraIcon}
                           />
                           <Image
@@ -770,7 +774,7 @@ function EditApplicationScreen(props) {
                           <Text style={styles.cameraText}>FR Corner</Text>
                         </View>
                       </TouchableOpacity>
-
+                      {/*img_rear_right  */}
                       <TouchableOpacity
                         onPress={() => {
                           selectImage("img_rear_right");
@@ -778,7 +782,7 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={require("../assets/cam.png")}
+                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_rear_right ?? 'default.png' }}
                             style={styles.cameraIcon}
                           />
                           <Image
@@ -800,7 +804,7 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={require("../assets/cam.png")}
+                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_front_left ?? 'default.png' }}
                             style={styles.cameraIcon}
                           />
                           <Image
@@ -818,7 +822,7 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={require("../assets/cam.png")}
+                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_rear_left ?? 'default.png' }}
                             style={styles.cameraIcon}
                           />
                           <Image
@@ -841,7 +845,7 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={require("../assets/cam.png")}
+                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_1 ?? 'default.png' }}
                             style={styles.cameraIcon}
                           />
                           <Image
@@ -859,7 +863,7 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={require("../assets/cam.png")}
+                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_2 ?? 'default.png' }}
                             style={styles.cameraIcon}
                           />
                           <Image
@@ -881,7 +885,7 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={require("../assets/cam.png")}
+                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_3 ?? 'default.png' }}
                             style={styles.cameraIcon}
                           />
                           <Image
@@ -899,7 +903,7 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={require("../assets/cam.png")}
+                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_4 ?? 'default.png' }}
                             style={styles.cameraIcon}
                           />
                           <Image
@@ -911,6 +915,49 @@ function EditApplicationScreen(props) {
                       </TouchableOpacity>
                     </View>
                   </View>
+                  {/* Additional Images if approval type = Older Vehicles */}
+                  {application?.approval_type === 'Older Vehicles' && (
+                    <>
+                      <Text style={{ color: colors.primary, fontWeight: 'bold', marginTop: 10 }}>Additional Images</Text>
+                      <View
+                        style={{ flexDirection: "row", justifyContent: "space-around" }}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            selectImage("img_engine");
+                          }}>
+                          <View style={styles.cameraContainer}>
+                            <Image
+                              source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_engine ?? 'default.png' }}
+                              style={styles.cameraIcon}
+                            />
+                            <Image
+                              source={{ uri: images["img_engine"] }}
+                              style={styles.imagePreview}
+                            />
+                            <Text style={styles.cameraText}>Engine</Text>
+                          </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          onPress={() => {
+                            selectImage("img_chassis");
+                          }}
+                        >
+                          <View style={styles.cameraContainer}>
+                            <Image
+                              source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_chassis ?? 'default.png' }}
+                              style={styles.cameraIcon}
+                            />
+                            <Image
+                              source={{ uri: images["img_chassis"] }}
+                              style={styles.imagePreview}
+                            />
+                            <Text style={styles.cameraText}>Chassis</Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    </>
+                  )}
 
                   {/* Documents Selector */}
                   <View>
@@ -928,7 +975,7 @@ function EditApplicationScreen(props) {
                           source={
                             docs["doc_invoice"]
                               ? require("../assets/doc_thumbnail.png")
-                              : require("../assets/doc_placeholder.png")
+                              : require("../assets/doc_thumbnail.png")
                           }
                           style={[styles.cameraIcon]}
                         />
@@ -944,7 +991,7 @@ function EditApplicationScreen(props) {
                           source={
                             docs["doc_export_certificate"]
                               ? require("../assets/doc_thumbnail.png")
-                              : require("../assets/doc_placeholder.png")
+                              : require("../assets/doc_thumbnail.png")
                           }
                           style={[styles.cameraIcon]}
                         />
@@ -960,7 +1007,7 @@ function EditApplicationScreen(props) {
                           source={
                             docs["doc_auction_report"]
                               ? require("../assets/doc_thumbnail.png")
-                              : require("../assets/doc_placeholder.png")
+                              : require("../assets/doc_thumbnail.png")
                           }
                           style={[styles.cameraIcon]}
                         />
@@ -1034,12 +1081,10 @@ const styles = StyleSheet.create({
   cameraContainer: {
     marginHorizontal: "auto",
     backgroundColor: "white",
-    paddingHorizontal: 4,
-    paddingVertical: 2,
     marginTop: 25,
     borderRadius: 10,
     borderWidth: 1,
-    width: 80,
+    width: 95,
     height: 95,
     alignItems: "center",
     borderColor: colors.lightGrey,
@@ -1060,9 +1105,8 @@ const styles = StyleSheet.create({
   cameraIcon: {
     marginTop: 10,
     borderRadius: 10,
-    width: 50,
-    height: 50,
-    tintColor: "#C9C9C9",
+    width: 60,
+    height: 60,
   },
   frText: {
     fontSize: 11,
@@ -1072,10 +1116,10 @@ const styles = StyleSheet.create({
   },
   imagePreview: {
     position: "absolute",
-    width: "150%",
-    height: "120%",
+    width: "100%",
+    height: "100%",
     resizeMode: "cover",
-    borderRadius: 20,
+    borderRadius: 10,
     zIndex: 2,
   },
   statusText: {
@@ -1291,5 +1335,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 5,
   },
+  cameraText: {
+    color: "#C9C9C9",
+  }
 });
 export default EditApplicationScreen;

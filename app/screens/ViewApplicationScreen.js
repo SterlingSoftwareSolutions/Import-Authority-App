@@ -210,6 +210,33 @@ function ViewApplicationScreen(props) {
               />
             </View>
           </View>
+          {application?.approval_type === 'Older Vehicles' && (
+            <>
+              <Text
+                style={{ color: colors.primary, fontWeight: "bold", marginTop: 20 }}
+              >
+                Additional Images
+              </Text>
+              <View
+                style={{ flexDirection: "row", justifyContent: "flex-start" }}
+              >
+                <View style={styles.documentContainer}>
+                  <Image
+                    source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_engine ?? 'default.png' }}
+                    style={[styles.imagePreview]}
+                  />
+                  <Text style={styles.frText}>Engine</Text>
+                </View>
+                <View style={styles.documentContainer}>
+                  <Image
+                    source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_chassis ?? 'default.png' }}
+                    style={[styles.imagePreview]}
+                  />
+                  <Text style={styles.frText}>Chassis/Fram</Text>
+                </View>
+              </View>
+            </>
+          )}
           <Text
             style={{ color: colors.primary, fontWeight: "bold", marginTop: 20 }}
           >
@@ -287,7 +314,7 @@ const styles = StyleSheet.create({
     borderColor: colors.lightGrey,
   },
   documentContainer: {
-    marginHorizontal: "auto",
+    marginHorizontal: 20,
     backgroundColor: "white",
     paddingHorizontal: 4,
     paddingVertical: 2,
@@ -295,7 +322,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     width: 100,
-    height: 100,
+    height: 95,
     alignItems: "center",
     borderColor: colors.lightGrey,
   },
