@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -10,12 +10,15 @@ import {
   ScrollView,
   Modal,
   TouchableWithoutFeedback,
+
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 import TopUserControlBg from "../components/TopUserControlBg";
+import { StripeProvider, CardField, CardForm } from '@stripe/stripe-react-native';
+import client from "../api/client";
 
 function PaymentScreen(props) {
   const navigation = useNavigation();
@@ -25,6 +28,18 @@ function PaymentScreen(props) {
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
+  const [stripeKey, setStripeKey] = useState('');
+
+  const fetchStrieKey = async () => {
+    const api = await client();
+    const response = await api.get('/stripe-key');
+    setStripeKey(response.data);
+    console.log(stripeKey);
+  };
+
+  useEffect(() => {
+    fetchStrieKey();
+  });
 
   const handleExpiryDateChange = (text) => {
     let formattedText = text;
@@ -50,8 +65,19 @@ function PaymentScreen(props) {
     setCardNumber(formattedText);
   };
 
+  const [validationError, setValidationError] = useState('');
+
   const handlePress = () => {
-    setModalVisible(true);
+
+
+    if (cardname === "") {
+      // Cardholder name is empty, show error message or take appropriate action
+      setValidationError('Please fill Card Holder Name');
+    } else {
+      // Cardholder name is not empty, proceed with your logic here
+      setModalVisible(true);
+    }
+
   };
 
   const closeModal = () => {
@@ -65,6 +91,15 @@ function PaymentScreen(props) {
   const progress1 = 1;
   const progress2 = 1;
   const progress3 = 1;
+
+  const [Card, setCard] = React.useState("");
+  const [cardname, setCardName] = React.useState("");
+
+
+  const ValidationMessage = ({ message }) => {
+    return message ? <Text style={{ color: 'red' }}>{message}</Text> : null;
+  };
+
 
   return (
     <View style={styles.container}>
@@ -146,7 +181,7 @@ function PaymentScreen(props) {
                 <Text>8250</Text>
               </SafeAreaView>
               <Text style={{ ...styles.row3_1, marginBottom: 10 }}>
-                Thafani Nawas
+                {cardname}
               </Text>
             </View>
           </View>
@@ -181,67 +216,59 @@ function PaymentScreen(props) {
             </View>
           </View>
 
-          <Text style={styles.cardnumberheading}>Card Number</Text>
 
-          <View style={styles.cardnumber}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Card Number"
-            keyboardType="numeric"
-            value={cardNumber}
-            onChangeText={handleCardNumberChange}
-          />
-          <Image source={require("../assets/card.png")} />
-        </View>
-      </View>
 
-          <View style={styles.expiry_cvc}>
-            <Text style={styles.cardnumberheading}>Expiry Date</Text>
-            <Text style={{ ...styles.cardnumberheading, marginRight: 130 }}>
-              CVC
-            </Text>
-          </View>
-
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <TextInput
-              style={styles.expiry_date_box}
-              placeholder="MM/YY"
-              keyboardType="numeric"
-              maxLength={5}
-              value={expiryDate}
-              onChangeText={handleExpiryDateChange}
-            />
-
-            <TextInput
-              style={styles.expiry_date_box}
-              placeholder="CVC"
-              keyboardType="numeric"
-            />
-          </View>
-          <Text style={styles.cardnumberheading}>Card Holder Name</Text>
           <View style={styles.cardnumber}>
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
                 width: "100%",
+                height: 50,
+                top: 6
               }}
             >
               <TextInput
-                style={styles.input}
+
                 placeholder="Enter Card Holder Name"
+                value={cardname}
+                onChangeText={setCardName}
+                style={{
+                  padding: 15
+                }}
               />
             </View>
+            <View style={{
+              borderBottomColor: '#DCDCDC',
+              borderBottomWidth: 1,
+              minHeight: 5
+            }}>
+              {validationError !== '' && (
+                <Text style={{ color: 'red', marginTop: 0, fontSize: 12, paddingLeft: 15 }}>{validationError}</Text>
+              )}
+            </View>
+
           </View>
+          <StripeProvider
+            publishableKey={stripeKey.toString()}
+          >
+
+
+            <CardForm
+              onFormComplete={(cardDetails) => {
+                console.log('card details', cardDetails);
+                setCard(cardDetails);
+              }}
+              style={{ height: 260 }}
+            >
+
+            </CardForm>
+
+
+          </StripeProvider>
+
+
+
           {/* pay $ button */}
           <View>
             <LinearGradient
@@ -251,6 +278,7 @@ function PaymentScreen(props) {
               end={{ x: 1, y: 1 }}
               style={styles.button}
             >
+
               <TouchableOpacity onPress={handlePress}>
                 <Text style={{ ...styles.buttonText }}>Pay 1500</Text>
               </TouchableOpacity>
@@ -355,7 +383,7 @@ function PaymentScreen(props) {
           </Modal>
         </SafeAreaView>
       </ScrollView>
-    </View>
+    </View >
   );
 }
 const styles = StyleSheet.create({
@@ -396,13 +424,12 @@ const styles = StyleSheet.create({
     marginTop: -25,
   },
   cardnumber: {
-    borderRadius: 10,
+
     borderWidth: 2,
-    borderColor: "#57C590",
+    borderColor: "white",
     backgroundColor: "white",
-    padding: 15,
     width: "100%",
-    borderRadius: 10,
+
     marginTop: 15,
     textAlign: "center",
   },
