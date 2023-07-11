@@ -143,7 +143,7 @@ function PaymentScreen(props) {
               value={progressText1}
               onChangeText={setProgressText1}
               placeholder="Car Info"
-              placeholderTextColor="#fff"
+              placeholderTextColor="#000"
             />
             <ProgressBar
               progress={progress1}
@@ -522,7 +522,7 @@ const styles = StyleSheet.create({
   progressContainer: {
     flexDirection: "row",
     marginTop: 40,
-    justifyContent: "flex-end",
+    alignSelf: 'center'
   },
   progressText: {
     position: "absolute",

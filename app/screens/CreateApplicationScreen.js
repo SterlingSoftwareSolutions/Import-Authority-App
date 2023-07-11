@@ -277,13 +277,9 @@ const CreateApplicationMain = () => {
         {/* step progress container */}
         <View style={styles.progressContainer}>
           <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText1}
-              onChangeText={setProgressText1}
-              placeholder="Car Info"
-              placeholderTextColor="#fff"
-            />
+            <Text style={[styles.progressText, { color: 'black' }]}>
+              Car Info
+            </Text>
             <ProgressBar
               progress={progress1}
               color="#000"
@@ -292,13 +288,9 @@ const CreateApplicationMain = () => {
           </View>
 
           <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText2}
-              onChangeText={setProgressText2}
-              placeholder="Documents"
-              placeholderTextColor="#000"
-            />
+            <Text style={[styles.progressText]}>
+              Documents
+            </Text>
             <ProgressBar
               progress={progress2}
               color="#079BB7"
@@ -307,13 +299,9 @@ const CreateApplicationMain = () => {
           </View>
 
           <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText3}
-              onChangeText={setProgressText3}
-              placeholder="Payment"
-              placeholderTextColor="#fff"
-            />
+            <Text style={[styles.progressText]}>
+              Payments
+            </Text>
             <ProgressBar
               progress={progress3}
               color="#079BB7"
@@ -883,7 +871,7 @@ const styles = StyleSheet.create({
   },
   progressText: {
     position: "absolute",
-    bottom: 10,
+    bottom: 15,
     alignSelf: "center",
     backgroundColor: "transparent",
     color: "#fff",
@@ -897,7 +885,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     position: "absolute",
     bottom: 1,
-    right: 0,
+    right: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 80,

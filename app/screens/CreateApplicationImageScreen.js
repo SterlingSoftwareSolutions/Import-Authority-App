@@ -23,6 +23,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRoute } from '@react-navigation/native';
 import client from "../api/client";
 import mime from 'mime'
+import colors from "../config/colors";
 
 const CreateApplicationImageScreen = (props) => {
   const navigation = useNavigation();
@@ -198,13 +199,9 @@ const CreateApplicationImageScreen = (props) => {
       <TopUserControlBg>
         <View style={styles.progressContainer}>
           <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText1}
-              onChangeText={setProgressText1}
-              placeholder="Car Info"
-              placeholderTextColor="#fff"
-            />
+            <Text style={[styles.progressText, { color: '#000' }]}>
+              Car Info
+            </Text>
             <ProgressBar
               progress={progress1}
               color="#000"
@@ -213,32 +210,24 @@ const CreateApplicationImageScreen = (props) => {
           </View>
 
           <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText2}
-              onChangeText={setProgressText2}
-              placeholder="Documents"
-              placeholderTextColor="#000"
-            />
+            <Text style={[styles.progressText, { color: '#000' }]}>
+              Documents
+            </Text>
             <ProgressBar
-              progress={progress2}
+              progress={progress1}
               color="#000"
-              style={styles.progressBar2}
+              style={styles.progressBar1}
             />
           </View>
 
           <View style={styles.progressBarWrapper}>
-            <TextInput
-              style={[styles.headingText, styles.progressText]}
-              value={progressText3}
-              onChangeText={setProgressText3}
-              placeholder="Payment"
-              placeholderTextColor="#fff"
-            />
+            <Text style={[styles.progressText]}>
+              Payments
+            </Text>
             <ProgressBar
-              progress={progress3}
-              color="#079BB7"
-              style={styles.progressBar3}
+              progress={progress1}
+              color="#fff"
+              style={styles.progressBar1}
             />
           </View>
         </View>
@@ -671,7 +660,7 @@ const styles = StyleSheet.create({
   },
   progressText: {
     position: "absolute",
-    bottom: 10,
+    bottom: 16,
     alignSelf: "center",
     backgroundColor: "transparent",
     color: "#fff",
@@ -732,6 +721,10 @@ const styles = StyleSheet.create({
     color: "#B71C1C",
     fontSize: 14,
   },
+
+  progressBarWrapper: {
+
+  }
 });
 
 export default CreateApplicationImageScreen;
