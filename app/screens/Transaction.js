@@ -11,7 +11,7 @@ function Transaction(props) {
   return (
     <View style={styles.container}>
       <TopUserControlBg>
-      <View style={{ top: -12 }}>
+        <View style={{ top: -12 }}>
           <Text style={{ textAlign: 'center', color: '#FA3E3E', fontSize: 29, fontWeight: 'bold' }}>$2900</Text>
           <Text style={{ textAlign: 'center', color: '#C9C9C9', fontSize: 19, fontWeight: 'bold' }}>Total Remaining</Text>
         </View>
@@ -22,13 +22,13 @@ function Transaction(props) {
 
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around'}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
           <Text style={{ textAlign: 'center', fontSize: 10, color: '#FFFFFF' }}>Total Amount</Text>
           <Text style={{ textAlign: 'center', fontSize: 10, color: '#FFFFFF' }}>Total Paid</Text>
         </View>
       </TopUserControlBg>
-   
-   {/* Filtering dropdown should be added */}
+
+      {/* Filtering dropdown should be added */}
       {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 30 }}>
         <Text style={{ textAlign: 'left', fontSize: 15, color: '#000000', fontWeight: 600, top: 10 }}>Sort By Unpiad </Text>
         <Text style={{ textAlign: 'left', fontSize: 15, color: '#000000', fontWeight: 600, top: 10 }}>Remaining Payments: 2/5</Text>
