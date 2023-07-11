@@ -17,7 +17,7 @@ import { ProgressBar } from "react-native-paper";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 import TopUserControlBg from "../components/TopUserControlBg";
-import { StripeProvider, CardField, CardForm } from '@stripe/stripe-react-native';
+import { StripeProvider, CardField, CardForm, useStripe } from '@stripe/stripe-react-native';
 import client from "../api/client";
 
 function PaymentScreen(props) {
@@ -25,10 +25,13 @@ function PaymentScreen(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [expiryDate, setExpiryDate] = useState("");
   const [cardNumber, setCardNumber] = useState("");
+  const [cardImage, setCardImage] = useState(require("../assets/cards/undefined.png"));
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
   const [stripeKey, setStripeKey] = useState('');
+  const [stripeCardDetails, setStripeCardDetails] = useState([]);
+  const { init, createPaymentMethod } = useStripe();
 
   const fetchStrieKey = async () => {
     const api = await client();
@@ -39,7 +42,7 @@ function PaymentScreen(props) {
 
   useEffect(() => {
     fetchStrieKey();
-  });
+  }, []);
 
   const handleExpiryDateChange = (text) => {
     let formattedText = text;
@@ -55,27 +58,41 @@ function PaymentScreen(props) {
     setExpiryDate(formattedText);
   };
 
-  const handleCardNumberChange = (text) => {
-    let formattedText = text.replace(/[^\d]/g, "");
-
-    if (formattedText.length > 0) {
-      formattedText = formattedText.match(new RegExp(".{1,4}", "g")).join(" ");
-    }
-
-    setCardNumber(formattedText);
-  };
-
   const [validationError, setValidationError] = useState('');
 
-  const handlePress = () => {
+  const handlePress = async () => {
 
 
     if (cardname === "") {
       // Cardholder name is empty, show error message or take appropriate action
       setValidationError('Please fill Card Holder Name');
     } else {
-      // Cardholder name is not empty, proceed with your logic here
-      setModalVisible(true);
+      if (stripeCardDetails.complete) {
+
+        // Send payment details to Stripe and get the payment token
+        const paymentMethod = await createPaymentMethod({
+          paymentMethodType: 'Card',
+          card: {
+            number: stripeCardDetails?.number,
+            expMonth: stripeCardDetails?.expMonth,
+            expYear: stripeCardDetails?.expYear,
+            cvc: stripeCardDetails?.cvc,
+          },
+        });
+
+        var formData = new FormData();
+        formData.append('payment_method', paymentMethod);
+        formData.append('amount', 123);
+
+        // Send the payment token to backend
+        api = await client();
+        var response = await api.post('/bills/');
+        console.log(response);
+
+      } else {
+        console.log('card details incomplete')
+      }
+      // setModalVisible(true);
     }
 
   };
@@ -95,10 +112,25 @@ function PaymentScreen(props) {
   const [Card, setCard] = React.useState("");
   const [cardname, setCardName] = React.useState("");
 
+  const UpdateCardImage = (brand) => {
+    console.log(brand);
+    switch (brand) {
+      case 'visa':
+        setCardImage(require("../assets/cards/visa.png"));
+        break;
+      case 'mastercard':
+        setCardImage(require("../assets/cards/mastercard.png"));
+        break;
+      default:
+        setCardImage(require("../assets/cards/undefined.png"));
+    }
+  }
 
   const ValidationMessage = ({ message }) => {
     return message ? <Text style={{ color: 'red' }}>{message}</Text> : null;
   };
+
+
 
 
   return (
@@ -163,7 +195,7 @@ function PaymentScreen(props) {
                   width: "100%",
                 }}
               >
-                <Image source={require("../assets/card.png")}></Image>
+                <Image source={cardImage} style={{ width: 64, height: 42.5, right: 12 }}></Image>
                 <Text>5/28</Text>
               </View>
 
@@ -229,12 +261,11 @@ function PaymentScreen(props) {
               }}
             >
               <TextInput
-
                 placeholder="Enter Card Holder Name"
                 value={cardname}
                 onChangeText={setCardName}
                 style={{
-                  padding: 15
+                  padding: 15,
                 }}
               />
             </View>
@@ -253,15 +284,18 @@ function PaymentScreen(props) {
             publishableKey={stripeKey.toString()}
           >
 
-
             <CardForm
+              postalCodeEnabled={false}
               onFormComplete={(cardDetails) => {
-                console.log('card details', cardDetails);
-                setCard(cardDetails);
+                UpdateCardImage(cardDetails.brand?.toLowerCase())
+                setStripeCardDetails(cardDetails);
+              }}
+              onFormChange={(cardDetails) => {
+                cosnole.log(cardDetails);
               }}
               style={{ height: 260 }}
             >
-
+              {/* Card form fields */}
             </CardForm>
 
 
@@ -424,12 +458,10 @@ const styles = StyleSheet.create({
     marginTop: -25,
   },
   cardnumber: {
-
     borderWidth: 2,
     borderColor: "white",
     backgroundColor: "white",
     width: "100%",
-
     marginTop: 15,
     textAlign: "center",
   },
