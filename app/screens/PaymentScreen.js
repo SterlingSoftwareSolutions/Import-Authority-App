@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -10,21 +10,39 @@ import {
   ScrollView,
   Modal,
   TouchableWithoutFeedback,
+
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ProgressBar } from "react-native-paper";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 import TopUserControlBg from "../components/TopUserControlBg";
+import { StripeProvider, CardField, CardForm, useStripe } from '@stripe/stripe-react-native';
+import client from "../api/client";
 
 function PaymentScreen(props) {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [expiryDate, setExpiryDate] = useState("");
   const [cardNumber, setCardNumber] = useState("");
+  const [cardImage, setCardImage] = useState(require("../assets/cards/undefined.png"));
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
+  const [stripeKey, setStripeKey] = useState('');
+  const [stripeCardDetails, setStripeCardDetails] = useState([]);
+  const { init, createPaymentMethod } = useStripe();
+
+  const fetchStrieKey = async () => {
+    const api = await client();
+    const response = await api.get('/stripe-key');
+    setStripeKey(response.data);
+    console.log(stripeKey);
+  };
+
+  useEffect(() => {
+    fetchStrieKey();
+  }, []);
 
   const handleExpiryDateChange = (text) => {
     let formattedText = text;
@@ -40,18 +58,43 @@ function PaymentScreen(props) {
     setExpiryDate(formattedText);
   };
 
-  const handleCardNumberChange = (text) => {
-    let formattedText = text.replace(/[^\d]/g, "");
+  const [validationError, setValidationError] = useState('');
 
-    if (formattedText.length > 0) {
-      formattedText = formattedText.match(new RegExp(".{1,4}", "g")).join(" ");
+  const handlePress = async () => {
+
+
+    if (cardname === "") {
+      // Cardholder name is empty, show error message or take appropriate action
+      setValidationError('Please fill Card Holder Name');
+    } else {
+      if (stripeCardDetails.complete) {
+
+        // Send payment details to Stripe and get the payment token
+        const paymentMethod = await createPaymentMethod({
+          paymentMethodType: 'Card',
+          card: {
+            number: stripeCardDetails?.number,
+            expMonth: stripeCardDetails?.expMonth,
+            expYear: stripeCardDetails?.expYear,
+            cvc: stripeCardDetails?.cvc,
+          },
+        });
+
+        var formData = new FormData();
+        formData.append('payment_method', paymentMethod);
+        formData.append('amount', 123);
+
+        // Send the payment token to backend
+        api = await client();
+        var response = await api.post('/bills/');
+        console.log(response);
+
+      } else {
+        console.log('card details incomplete')
+      }
+      // setModalVisible(true);
     }
 
-    setCardNumber(formattedText);
-  };
-
-  const handlePress = () => {
-    setModalVisible(true);
   };
 
   const closeModal = () => {
@@ -65,6 +108,30 @@ function PaymentScreen(props) {
   const progress1 = 1;
   const progress2 = 1;
   const progress3 = 1;
+
+  const [Card, setCard] = React.useState("");
+  const [cardname, setCardName] = React.useState("");
+
+  const UpdateCardImage = (brand) => {
+    console.log(brand);
+    switch (brand) {
+      case 'visa':
+        setCardImage(require("../assets/cards/visa.png"));
+        break;
+      case 'mastercard':
+        setCardImage(require("../assets/cards/mastercard.png"));
+        break;
+      default:
+        setCardImage(require("../assets/cards/undefined.png"));
+    }
+  }
+
+  const ValidationMessage = ({ message }) => {
+    return message ? <Text style={{ color: 'red' }}>{message}</Text> : null;
+  };
+
+
+
 
   return (
     <View style={styles.container}>
@@ -128,7 +195,7 @@ function PaymentScreen(props) {
                   width: "100%",
                 }}
               >
-                <Image source={require("../assets/card.png")}></Image>
+                <Image source={cardImage} style={{ width: 64, height: 42.5, right: 12 }}></Image>
                 <Text>5/28</Text>
               </View>
 
@@ -146,7 +213,7 @@ function PaymentScreen(props) {
                 <Text>8250</Text>
               </SafeAreaView>
               <Text style={{ ...styles.row3_1, marginBottom: 10 }}>
-                Thafani Nawas
+                {cardname}
               </Text>
             </View>
           </View>
@@ -181,67 +248,61 @@ function PaymentScreen(props) {
             </View>
           </View>
 
-          <Text style={styles.cardnumberheading}>Card Number</Text>
 
-          <View style={styles.cardnumber}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Card Number"
-            keyboardType="numeric"
-            value={cardNumber}
-            onChangeText={handleCardNumberChange}
-          />
-          <Image source={require("../assets/card.png")} />
-        </View>
-      </View>
 
-          <View style={styles.expiry_cvc}>
-            <Text style={styles.cardnumberheading}>Expiry Date</Text>
-            <Text style={{ ...styles.cardnumberheading, marginRight: 130 }}>
-              CVC
-            </Text>
-          </View>
-
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <TextInput
-              style={styles.expiry_date_box}
-              placeholder="MM/YY"
-              keyboardType="numeric"
-              maxLength={5}
-              value={expiryDate}
-              onChangeText={handleExpiryDateChange}
-            />
-
-            <TextInput
-              style={styles.expiry_date_box}
-              placeholder="CVC"
-              keyboardType="numeric"
-            />
-          </View>
-          <Text style={styles.cardnumberheading}>Card Holder Name</Text>
           <View style={styles.cardnumber}>
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
                 width: "100%",
+                height: 50,
+                top: 6
               }}
             >
               <TextInput
-                style={styles.input}
                 placeholder="Enter Card Holder Name"
+                value={cardname}
+                onChangeText={setCardName}
+                style={{
+                  padding: 15,
+                }}
               />
             </View>
+            <View style={{
+              borderBottomColor: '#DCDCDC',
+              borderBottomWidth: 1,
+              minHeight: 5
+            }}>
+              {validationError !== '' && (
+                <Text style={{ color: 'red', marginTop: 0, fontSize: 12, paddingLeft: 15 }}>{validationError}</Text>
+              )}
+            </View>
+
           </View>
+          <StripeProvider
+            publishableKey={stripeKey.toString()}
+          >
+
+            <CardForm
+              postalCodeEnabled={false}
+              onFormComplete={(cardDetails) => {
+                UpdateCardImage(cardDetails.brand?.toLowerCase())
+                setStripeCardDetails(cardDetails);
+              }}
+              onFormChange={(cardDetails) => {
+                cosnole.log(cardDetails);
+              }}
+              style={{ height: 260 }}
+            >
+              {/* Card form fields */}
+            </CardForm>
+
+
+          </StripeProvider>
+
+
+
           {/* pay $ button */}
           <View>
             <LinearGradient
@@ -251,6 +312,7 @@ function PaymentScreen(props) {
               end={{ x: 1, y: 1 }}
               style={styles.button}
             >
+
               <TouchableOpacity onPress={handlePress}>
                 <Text style={{ ...styles.buttonText }}>Pay 1500</Text>
               </TouchableOpacity>
@@ -355,7 +417,7 @@ function PaymentScreen(props) {
           </Modal>
         </SafeAreaView>
       </ScrollView>
-    </View>
+    </View >
   );
 }
 const styles = StyleSheet.create({
@@ -396,13 +458,10 @@ const styles = StyleSheet.create({
     marginTop: -25,
   },
   cardnumber: {
-    borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#57C590",
+    borderColor: "white",
     backgroundColor: "white",
-    padding: 15,
     width: "100%",
-    borderRadius: 10,
     marginTop: 15,
     textAlign: "center",
   },
