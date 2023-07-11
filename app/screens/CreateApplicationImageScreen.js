@@ -166,8 +166,8 @@ const CreateApplicationImageScreen = (props) => {
           type: mime.getType(uri),
         });
       });
-      Object.entries(vehicleInfo).forEach(([key, uri]) => {
-        formData.append(key, uri);
+      Object.entries(vehicleInfo).forEach(([key, value]) => {
+        formData.append(key, value);
       });
 
       // Make API request to upload images and documents
@@ -403,7 +403,6 @@ const CreateApplicationImageScreen = (props) => {
                   source={{ uri: images["img_interior_1"] }}
                   style={styles.imagePreview}
                 />
-                <Text style={styles.cameraText}>FR Corner</Text>
               </View>
             </TouchableOpacity>
 
@@ -421,7 +420,6 @@ const CreateApplicationImageScreen = (props) => {
                   source={{ uri: images["img_interior_2"] }}
                   style={styles.imagePreview}
                 />
-                <Text style={styles.cameraText}>RR Corner</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -443,7 +441,6 @@ const CreateApplicationImageScreen = (props) => {
                   source={{ uri: images["img_interior_3"] }}
                   style={styles.imagePreview}
                 />
-                <Text style={styles.cameraText}>FL Corner</Text>
               </View>
             </TouchableOpacity>
 
@@ -461,11 +458,57 @@ const CreateApplicationImageScreen = (props) => {
                   source={{ uri: images["img_interior_4"] }}
                   style={styles.imagePreview}
                 />
-                <Text style={styles.cameraText}>RL Corner</Text>
               </View>
             </TouchableOpacity>
           </View>
         </View>
+
+
+        {/* Additional Images if approval type = Older Vehicles */}
+        {vehicleInfo.approval_type === 'Older Vehicles' && (
+          <>
+            <Text style={[styles.exteriortext, { marginTop: 30 }]}>
+              Additional Images
+            </Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-around" }}>
+              <TouchableOpacity
+                onPress={() => {
+                  selectImage("img_engine");
+                }}>
+                <View style={styles.cameraContainer}>
+                  <Image
+                    source={require("../assets/cam.png")}
+                    style={styles.cameraIcon}
+                  />
+                  <Image
+                    source={{ uri: images["img_engine"] }}
+                    style={styles.imagePreview}
+                  />
+                  <Text style={styles.cameraText}>Engine</Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  selectImage("img_chassis");
+                }}
+              >
+                <View style={styles.cameraContainer}>
+                  <Image
+                    source={require("../assets/cam.png")}
+                    style={styles.cameraIcon}
+                  />
+                  <Image
+                    source={{ uri: images["img_chassis"] }}
+                    style={styles.imagePreview}
+                  />
+                  <Text style={styles.cameraText}>Chassis</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
 
         {/* Documents Selector */}
         <View>
@@ -666,6 +709,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     borderWidth: 1,
     width: 100,
+    height: 100,
     alignItems: "center",
     borderColor: "grey",
     overflow: "hidden",

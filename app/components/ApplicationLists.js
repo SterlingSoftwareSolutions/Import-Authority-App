@@ -129,7 +129,7 @@ const ApplicationLists = ({ data }) => {
         {/* View, Edit, Download Buttons */}
         <View style={{ marginTop: 10 }}>
           <ApplicationFunctionsGradientButton text="View" onPress={() => navigation.navigate("ViewApplications", { applicationId: item.id })} />
-          <ApplicationFunctionsGradientButton text="Edit" />
+          <ApplicationFunctionsGradientButton text="Edit" onPress={() => navigation.navigate("EditApplications", { applicationId: item.id })}/>
           <ApplicationFunctionsGradientButton text="Download" />
         </View>
 
