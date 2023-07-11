@@ -1,67 +1,69 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, TextInput, View, TouchableOpacity, Text, Image, Switch, ScrollView } from 'react-native';
 import TopUserControlBg from '../components/TopUserControlBg';
 import { useNavigation } from "@react-navigation/native";
-import TransactionComponent from '../components/TransactionComponent';
+import TransactionComponent from '../components/TransactionLists';
+import TransactionListComponent from '../components/TransactionLists';
+import ApplicationLists from '../components/ApplicationLists';
+import TransactionLists from '../components/TransactionLists';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import colors from "../config/colors";
+import useAuth from "../auth/useAuth";
+import client from "../api/client";
+import { CDN_URL } from '@env'
 
 function Transaction(props) {
   const navigation = useNavigation();
+  const { user, logOut } = useAuth();
+  const [bills, setBills] = useState([]);
+  const data = [
+    {
+      id: 1,
+      chassis_no: "ABC123",
+      build_month: "07",
+      build_year: "2022",
+      odo_meter: "5000",
+      assets: [
+        {
+          asset_type: "img_front_right",
+          file_type: "png",
+          location: "carpay",
+        },
+      ],
+    },
+    {
+      id: 2,
+      chassis_no: "XYZ789",
+      build_month: "05",
+      build_year: "2021",
+      odo_meter: "8000",
+      assets: [
+        {
+          asset_type: "img_front_right",
+          file_type: "jpg",
+          location: "carpay.png",
+        },
+      ],
+    },
+  ];
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'flex-start',
-      backgroundColor: '#DCF3E8',
-    },
-    background: {
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-      maxHeight: 130,
-      borderRadius: 20,
-    },
-    header: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      paddingHorizontal: 20,
-      paddingTop: 20,
-    },
-    iconContainer: {
-      flexDirection: 'row',
-    },
-    icon: {
-      marginLeft: 10,
-    },
-    paymenthisorycontainer: {
-      alignItems: 'center'
-    },
-    paymenthistorybox: {
-      flexDirection: 'row',
-      borderRadius: 10,
-      backgroundColor: '#FFFFFF',
-      alignItems: 'center',
-      width: '90%',
-      paddingHorizontal: 10,
-      paddingVertical: 10,
-      justifyContent: 'space-between',
-      marginTop: 15,
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const api = await client();
+        const response = await api.get("/bills");
+        setBills(response.data.data);
+        console.log(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-    },
-    paymenthistorybtn: {
-      color: '#fff',
-      backgroundColor: '#FF6D60',
-      textAlign: 'center',
-      borderRadius: 5,
-      padding: 2,
-      fontWeight: 900,
-      width: 70
-    }
-  });
+    fetchData();
+  }, []);
 
   return (
     <View style={styles.container}>
-
       <TopUserControlBg>
         <View style={{ top: -12 }}>
           <Text style={{ textAlign: 'center', color: '#FA3E3E', fontSize: 29, fontWeight: 'bold' }}>$2900</Text>
@@ -80,13 +82,22 @@ function Transaction(props) {
         </View>
       </TopUserControlBg>
 
-
-      <ScrollView contentContainerStyle={styles.paymenthisorycontainer}>
-        <TransactionComponent styles={styles} />
-
-      </ScrollView>
+      <View>
+        <TransactionLists data={bills} />
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  paymenthisorycontainer: {
+    alignItems: 'center'
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    backgroundColor: '#DCF3E8',
+  },
+})
 
 export default Transaction;
