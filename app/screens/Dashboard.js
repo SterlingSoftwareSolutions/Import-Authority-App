@@ -34,7 +34,6 @@ function Dashboard({ children }) {
       try {
         const api = await client();
         const response = await api.get("/applications");
-        console.log(response.data);
         setApplications(response.data.data.applications);
       } catch (error) {
         console.log(error);

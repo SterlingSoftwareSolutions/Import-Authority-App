@@ -11,9 +11,7 @@ function ProgressView(props) {
             try {
                 const api = await client();
                 const response = await api.get("/applications");
-                console.log("------------------------Start--------------------------------")
-                console.log(response.data.data.count);
-                console.log("---------------------------End-----------------------------")
+             
                 setApplicationCounts(response.data.data.count);
             } catch (error) {
                 console.error(error);

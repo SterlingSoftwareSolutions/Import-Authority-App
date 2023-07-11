@@ -34,6 +34,7 @@ const CreateApplicationMain = () => {
   const [progressText1, setProgressText1] = React.useState("");
   const [progressText2, setProgressText2] = React.useState("");
   const [progressText3, setProgressText3] = React.useState("");
+  const [seats, setSeats] = React.useState([0]);
 
   {
     /Make/;
@@ -149,7 +150,6 @@ const CreateApplicationMain = () => {
   const [datePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
-    console.log("Test");
     setDatePickerVisibility(true);
   };
 
@@ -194,44 +194,59 @@ const CreateApplicationMain = () => {
       drive_type: values.driveType,
       odo_meter: values.odometer,
       approval_type: approvalType === 0 ? "SEV" : "Older Vehicles",
+      seat_row_1: seats[0].toString()
+
+
+
     };
     if (approvalType === 1) {
       applicationData.vass_engineering = values.vassEngineering;
     }
-    console.log(applicationData);
+    for (let i = 0; i < seats.length; i++) {
+      const key = `seat_row_${i + 1}`;
+      applicationData[key] = seats[i].toString();
+    }
+
+
+
     try {
+      const api = await client();
+      const response = await api.post(endpoint, applicationData);
+      // Passing the vehicle information to the Image upload screen
       navigation.navigate("CreateApplicationImageScreen", { params: applicationData });
     } catch (error) {
       console.log("Error:", error);
     }
+
+    console.log(applicationData);
   };
 
   const [value, setValue] = useState(0);
   // incrementing the value when the arrow up button is pressed
-  const handleIncrement = () => {
-    setValue(value + 1);
-  };
-
-  // decrementing the value when the arrow down button is pressed
-  const handleDecrement = () => {
-    if (value > 0) {
-      setValue(value - 1);
-    }
+  const updateSeats = async (index, substract) => {
+    let tempSeats = [...seats];
+    let value = substract ? Math.max(tempSeats[index] - 1, 0) : Math.max(tempSeats[index] + 1, 0);
+    tempSeats[index] = value;
+    await setSeats(tempSeats);
+    console.log(seats);
   };
 
   // State variable to hold an array of rows
-  const [rows, setRows] = useState([1]);
+  // const [rows, setRows] = useState([1]);
   // adding a new row when the "+" button is pressed
   const handleAddRow = () => {
-    const newRow = rows.length + 1;
-    setRows([...rows, newRow]);
+    let tempSeats = [...seats];
+    tempSeats.push(0);
+    setSeats(tempSeats);
   };
 
   // removing a row when the "-" button is pressed
-  const handleremoveRow = (index) => {
-    const updatedRows = [...rows];
-    updatedRows.splice(index, 1);
-    setRows(updatedRows);
+  const handleremoveRow = () => {
+    let tempSeats = [...seats];
+    if (tempSeats.length > 0) {
+      tempSeats.pop();
+      setSeats(tempSeats);
+    }
   };
 
   //validations
@@ -342,43 +357,45 @@ const CreateApplicationMain = () => {
         </TouchableWithoutFeedback>
       </TopUserControlBg>
       <ScrollView
-                contentContainerStyle={{ marginTop: 5, paddingBottom: 15 }}
-              >
-      <Formik
-        initialValues={{
-          vassEngineering: "",
-          chassisNumber: "",
-          estimatedDateofArrival: "",
-          make: "",
-          model: "",
-          buildMonth: "",
-          buildYear: "",
-          fuelType: "",
-          transmission: "",
-          bodyType: "",
-          driveType: "",
-          odometer: "",
-          approvalType: ""
-        }}
-        onSubmit={values => handleSubmit(values, approvalType)}
-        validationSchema={
-          approvalType == 0
-            ? validationSchema
-            : validationSchema.concat(additionalValidations)
-        }
+        contentContainerStyle={{ marginTop: 5, paddingBottom: 15 }}
       >
-        {({
-          handleChange,
-          values,
-          errors,
-          setFieldTouched,
-          setFieldValue,
-          touched,
-          handleSubmit,
-        }) => (
-          <View style={styles.container}>
-            <View style={styles.formContainer}>
-              
+        <Formik
+          initialValues={{
+            vassEngineering: "",
+            chassisNumber: "",
+            estimatedDateofArrival: "",
+            make: "",
+            model: "",
+            buildMonth: "",
+            buildYear: "",
+            fuelType: "",
+            transmission: "",
+            bodyType: "",
+            driveType: "",
+            odometer: "",
+            approvalType: "",
+
+
+          }}
+          onSubmit={values => handleSubmit(values, approvalType)}
+          validationSchema={
+            approvalType == 0
+              ? validationSchema
+              : validationSchema.concat(additionalValidations)
+          }
+        >
+          {({
+            handleChange,
+            values,
+            errors,
+            setFieldTouched,
+            setFieldValue,
+            touched,
+            handleSubmit,
+          }) => (
+            <View style={styles.container}>
+              <View style={styles.formContainer}>
+
                 {approvalType == 1 ? (
                   <View>
                     <RadioButton.Group
@@ -652,60 +669,69 @@ const CreateApplicationMain = () => {
 
                 {/* Seating Row starts */}
 
-                {/* <View style={{ flexDirection: 'row', marginBottom: 10 }}>
-                <Text style={styles.seatingText}>Seating Arrangement</Text>
-                <View style={styles.seating}>
-                  <TouchableOpacity
-                    style={styles.minusbutton}
-                    onPress={handleremoveRow}
-                    disabled={rows.length === 1}
-                  >
-                    <Text style={styles.buttonText}>-</Text>
-                  </TouchableOpacity>
+                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                  <Text style={styles.seatingText}>Seating Arrangement</Text>
+                  <View style={styles.seating}>
+                    <TouchableOpacity
+                      style={styles.minusbutton}
+                      onPress={handleremoveRow}
+                      disabled={seats.length === 1}
 
-                  <TouchableOpacity
-                    style={styles.plusbutton}
-                    onPress={handleAddRow}
-                  >
-                    <Text style={styles.buttonText}>+</Text>
-                  </TouchableOpacity>
+                    >
+                      <Text style={styles.buttonText} >-</Text>
+                    </TouchableOpacity>
 
+                    <TouchableOpacity
+                      style={styles.plusbutton}
+                      onPress={handleAddRow}
+
+                    >
+                      <Text style={styles.buttonText}>+</Text>
+                    </TouchableOpacity>
+
+                  </View>
                 </View>
-              </View> */}
 
-                {/* <View style={{}}>
-                {rows.map((row, index) => (
+                {seats.map((value, index) => (
                   <View key={index}>
-                    <Text style={{ ...styles.seatingText, marginTop: -5 }}>Row {row} </Text>
-                    <View style={styles.inputLabelBox}>
+
+                    <Text style={{ ...styles.seatingText, marginTop: -4 }}>Row {index + 1} </Text>
+
+                    <View style={{ ...styles.row, marginTop: 10 }}>
+
+                      <TouchableOpacity
+                        style={[{ opacity: seats[index] === 0 ? 0.5 : 1 }]} // if the value is equal to 0 set opacity to 0.5 else keep 1 
+                        onPress={() => {
+                          updateSeats(index, true);
+                        }}
+                        disabled={seats[index] === 0}
+                      >
+                        <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>-</Text>
+                      </TouchableOpacity>
+
+
                       <TextInput
                         style={styles.inputseat}
-                        placeholder={value.toString()}
+                        placeholder={seats[index].toString()}
                         placeholderTextColor="black"
-                      />
-                      <View style={{ top: -44, right: 20 }}>
-                        <TouchableOpacity
-                          style={styles.arrowButton}
-                          onPress={handleIncrement}
-                        >
-                          <Text style={styles.arrowup}>+</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={[styles.arrowButton, { opacity: value === 0 ? 0.5 : 1 }]} // if the value is equal to 0 set opacity to 0.5 else keep 1 
-                          onPress={handleDecrement}
-                          disabled={value === 0}
-                        >
-                          <Text style={styles.arrowdown}>-</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
 
+                      />
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          updateSeats(index);
+
+                        }}
+                      >
+                        <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>+</Text>
+                      </TouchableOpacity>
+
+                    </View>
+
+                  </View>
                 ))}
-              </View> */}
 
                 {/* Seating Row Ends */}
-
                 <View style={styles.buttonContainer}>
                   <LinearGradient
                     colors={["#4B4B4B", "#9F9F9F"]}
@@ -714,7 +740,9 @@ const CreateApplicationMain = () => {
                     end={{ x: 1, y: 1 }}
                     style={styles.button}
                   >
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    >
+
                       <Text style={styles.buttonText}>Draft</Text>
                     </TouchableOpacity>
                   </LinearGradient>
@@ -734,11 +762,11 @@ const CreateApplicationMain = () => {
                     </TouchableOpacity>
                   </LinearGradient>
                 </View>
-            
+
+              </View>
             </View>
-          </View>
-        )}
-      </Formik>
+          )}
+        </Formik>
       </ScrollView>
     </SafeAreaView>
   );
@@ -979,11 +1007,10 @@ const styles = StyleSheet.create({
 
   inputseat: {
     borderRadius: 5,
-    paddingVertical: 10,
     color: "black",
     marginBottom: 5,
-    marginLeft: 60,
     fontSize: 20,
+    textAlign: 'center'
   },
 
   arrowup: {
@@ -1009,6 +1036,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
   },
-});
 
+  row: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    width: '45%',
+    height: 49,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  }
+});
 export default CreateApplicationMain;
