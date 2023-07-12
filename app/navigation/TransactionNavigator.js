@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Dashboard from "../screens/Dashboard";
-import Transaction from "../screens/Transaction";
+import PaymentsList from "../screens/PaymentsList";
 import PaymentScreen from "../screens/PaymentScreen";
 import CreateApplicationScreen from "../screens/CreateApplicationScreen";
 import ViewApplicationScreen from "../screens/ViewApplicationScreen";
@@ -9,7 +9,7 @@ import ProfileDetailsScreen from "../screens/ProfileDetailsScreen";
 
 const Stack = createStackNavigator();
 
-const TransactionNavigator = ({}) => (
+const TransactionNavigator = ({ }) => (
   <Stack.Navigator>
     <Stack.Screen
       name="Dashboard"
@@ -18,7 +18,7 @@ const TransactionNavigator = ({}) => (
     />
     <Stack.Screen
       name="Transaction"
-      component={Transaction}
+      component={PaymentsList}
       options={{ headerShown: false }}
     />
     <Stack.Screen
@@ -31,16 +31,16 @@ const TransactionNavigator = ({}) => (
       component={CreateApplicationScreen}
       options={{ headerShown: false }}
     />
-     <Stack.Screen
-        name="ViewApplications"
-        component={ViewApplicationScreen}
-        options={{ headerShown: false }}
-      />
-         <Stack.Screen
-        name="Profile"
-        component={ProfileDetailsScreen}
-        options={{ headerShown: false }}
-      />
+    <Stack.Screen
+      name="ViewApplications"
+      component={ViewApplicationScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Profile"
+      component={ProfileDetailsScreen}
+      options={{ headerShown: false }}
+    />
   </Stack.Navigator>
 );
 

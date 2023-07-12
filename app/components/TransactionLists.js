@@ -1,43 +1,23 @@
 import React from "react";
-import { View, Text, Image, FlatList, StyleSheet } from "react-native";
+import { View, Text, Image, FlatList, StyleSheet, Touchable } from "react-native";
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 import { CDN_URL } from '@env'
 import client from "../api/client";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 
 const TransactionLists = ({ data }) => {
   const navigation = useNavigation();
   // render item for FlatList
-  const renderItem = ({ item }) => {
-    let borderColor;
-
-    switch (item.status) {
-      case "rejected":
-        borderColor = colors.rejected;
-        break;
-      case "completed":
-        borderColor = colors.completed;
-        break;
-      case "draft":
-        borderColor = colors.draft;
-        break;
-      case "pending":
-      default:
-        borderColor = colors.pending;
-        break;
-    }
-    const imgFrontRightAsset = item.assets.find(
-      (asset) => asset.asset_type === "img_front_right"
-    );
-    const fileType = imgFrontRightAsset ? imgFrontRightAsset.file_type : "";
-
+  const RenderItem = ({ item }) => {
+    let borderColor = colors.pending;
     return (
       <View
         style={{
           ...styles.dashboardapplication,
           borderLeftWidth: 10,
-          borderStartColor: borderColor,
+          borderStartColor: borderColor
         }}
       >
 
@@ -45,8 +25,7 @@ const TransactionLists = ({ data }) => {
         <View style={{ flexDirection: "row", marginLeft: -13, }}>
           <Image
             source={{
-              uri: imgFrontRightAsset ? CDN_URL + '/assets/applications/' + imgFrontRightAsset.location : "",
-              type: `image/${fileType}`,
+              uri: item.image ? CDN_URL + '/assets/applications/' + item.image : ""
             }}
             style={[
               styles.dashboardboxicon,
@@ -64,16 +43,23 @@ const TransactionLists = ({ data }) => {
           <View style={{ paddingLeft: 10 }}>
             <View style={{ flexDirection: "row" }}>
               <View>
-                <View style={{ left: -3 }}>
+                <View style={{}}>
                   <Text style={{ maxWidth: 70, minHeight: 35 }}>Total:</Text>
                   <Text style={{ bottom: 4 }}>Paid</Text>
                   <Text>Balance</Text>
                 </View>
               </View>
-              <View style={{ left: -2 }}>
-                <Text style={{ maxWidth: 70, fontSize: 13, minHeight: 35, top: 2 }}>{item.make}</Text>
-                <Text style={{ bottom: 3, fontSize: 13, }}>{`${item.build_month}/${item.paid}`}</Text>
-                {/* <Text style={{ bottom: 6, fontSize: 13, top: 2 }}>{item.odo_meter}</Text> */}
+              <View style={{}}>
+                <Text style={{ maxWidth: 70, fontSize: 13, minHeight: 35, top: 2 }}>{item.amount_total}</Text>
+                <Text style={{ bottom: 3, fontSize: 13, }}>{item.amount_paid}</Text>
+                <Text style={{ bottom: 6, fontSize: 13, top: 2 }}>{item.amount_total - item.amount_paid}</Text>
+              </View>
+
+
+              <View>
+                <TouchableOpacity style={{ backgroundColor: 'red', width: '140%', borderRadius: 5 }}>
+                  <Text style={{ alignSelf: 'center', fontSize: 12 }}>Pay now</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -84,9 +70,9 @@ const TransactionLists = ({ data }) => {
 
   return (
     <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id.toString()}
+      data={data.bills}
+      renderItem={({ item }) => <RenderItem item={item}></RenderItem>}
+      keyExtractor={item => item.id}
       contentContainerStyle={{ paddingVertical: 10 }}
     />
   );

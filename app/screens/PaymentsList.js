@@ -66,13 +66,13 @@ function Transaction(props) {
     <View style={styles.container}>
       <TopUserControlBg>
         <View style={{ top: -12 }}>
-          <Text style={{ textAlign: 'center', color: '#FA3E3E', fontSize: 29, fontWeight: 'bold' }}>$2900</Text>
+          <Text style={{ textAlign: 'center', color: '#FA3E3E', fontSize: 29, fontWeight: 'bold' }}>${bills.total - bills.paid}</Text>
           <Text style={{ textAlign: 'center', color: '#C9C9C9', fontSize: 19, fontWeight: 'bold' }}>Total Remaining</Text>
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-          <Text style={{ color: '#FFFFFF', fontWeight: 'bold' }}>$9000</Text>
-          <Text style={{ color: '#FFFFFF', fontWeight: 'bold' }}>$700</Text>
+          <Text style={{ color: '#FFFFFF', fontWeight: 'bold' }}>${bills.total}</Text>
+          <Text style={{ color: '#FFFFFF', fontWeight: 'bold' }}>${bills.paid}</Text>
 
         </View>
 
