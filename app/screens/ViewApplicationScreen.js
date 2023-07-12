@@ -80,7 +80,7 @@ function ViewApplicationScreen(props) {
 
             <View style={{ width: '45%' }}>
               <Text>Est. date of arrival:</Text>
-              <Text style={styles.valueText}>{application?.arrival_date ?? null}</Text>
+              <Text style={styles.valueText}>{application?.arrival_date ? new Date(application.arrival_date).toLocaleDateString() : null}</Text>
             </View>
           </View>
 
