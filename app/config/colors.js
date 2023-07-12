@@ -11,6 +11,7 @@ export default {
   completed: "#57C590",
   draft: "#4B4B4B",
   pending: "#F7D060",
-  backgroundgreen:"#DDF4E9",
+  backgroundgreen: "#DDF4E9",
+  welcomegreen: "#66927E"
 
 };

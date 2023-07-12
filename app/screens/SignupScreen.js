@@ -75,7 +75,7 @@ const SignupScreen = (props) => {
       Alert.alert('Terms and Conditions', 'Please accept the terms and conditions to proceed.');
     }
   };
-  
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -177,12 +177,12 @@ const SignupScreen = (props) => {
             {termsAccepted && <Text style={styles.checkboxText}>&#10003;</Text>}
           </TouchableOpacity>
           <Text style={styles.acceptTermsText}>
-            I accept the terms and conditions
+            I accept the Terms of Use
           </Text>
         </View>
 
         <ExtSubmitButton
-          title="SIGNUP"
+          title="SIGN UP"
           onPress={submitForm}
           disabled={!termsAccepted}
         />
@@ -201,11 +201,11 @@ const SignupScreen = (props) => {
           </View>
           <View style={styles.footerContainer}>
             <Text style={styles.footerText}>Import Authority</Text>
-            <Text style={styles.footerText}>All rights reserved</Text>
+            <Text style={styles.footerText}>© 2023 ALL RIGHTS RESERVED</Text>
             <TouchableOpacity>
-            <Text style={styles.footerTextTerms}>
-              Terms of use | Privacy Policy
-            </Text>
+              <Text style={styles.footerTextTerms}>
+                Terms of use | Privacy Policy
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -329,7 +329,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   footerTextTerms: {
-    color: colors.tertiary,
+    color: colors.welcomegreen,
     fontSize: 10,
     textAlign: "center",
   },
@@ -344,14 +344,14 @@ const styles = StyleSheet.create({
   },
   checkboxChecked: {
     backgroundColor: colors.primary,
-    borderWidth: 0, 
+    borderWidth: 0,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxText: {
     fontSize: 11,
     color: colors.white,
-  },  
+  },
 });
 
 export default SignupScreen;

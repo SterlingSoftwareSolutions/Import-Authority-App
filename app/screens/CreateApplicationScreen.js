@@ -328,12 +328,12 @@ const CreateApplicationMain = () => {
               <Text style={styles.bottomText1}>SEVs / RAWs</Text>
               <View
                 style={[
-                  styles.backgroundColorWrapper1,
-                  approvalType == 0 && styles.switchItemSelected,
+                  styles.backgroundColorWrapper1, //defult
+                  approvalType === 0 && styles.switchItemSelected,
                 ]}
               >
                 <Image
-                  source={require("../assets/car1.png")}
+                  source={approvalType === 0 ? require("../assets/car2.png") : require("../assets/car2.png")}
                   style={styles.carIcon1}
                 />
               </View>
@@ -342,11 +342,11 @@ const CreateApplicationMain = () => {
               <View
                 style={[
                   styles.backgroundColorWrapper2,
-                  approvalType == 1 && styles.switchItemSelected,
+                  approvalType === 1 && styles.switchItemSelected,
                 ]}
               >
                 <Image
-                  source={require("../assets/car2.png")}
+                  source={approvalType === 1 ? require("../assets/car1.png") : require("../assets/car1.png")}
                   style={styles.carIcon2}
                 />
               </View>
@@ -910,19 +910,28 @@ const styles = StyleSheet.create({
   },
   bottomText1: {
     color: "#fff",
+    right: 4
   },
   bottomText2: {
     color: "#fff",
+    left: 4
   },
-  carIcon1: {},
+  carIcon1: {
+    marginRight: 15,
+    width: 20,
+    height: 20
+  },
+
   carIcon2: {
     marginRight: 15,
+    width: 20,
+    height: 20
   },
   backgroundColorWrapper: {
     backgroundColor: "#E5E5E5",
   },
   backgroundColorWrapper1: {
-    backgroundColor: "white",
+    backgroundColor: "lightgrey",
     padding: 8,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 0,
@@ -931,7 +940,7 @@ const styles = StyleSheet.create({
     width: 45,
   },
   backgroundColorWrapper2: {
-    backgroundColor: "white",
+    backgroundColor: "lightgrey",
     padding: 8,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 10,
@@ -950,7 +959,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
   },
   switchItemSelected: {
-    backgroundColor: colors.lightGrey,
+    backgroundColor: colors.white,
     borderColor: colors.primary,
     borderWidth: 2,
   },

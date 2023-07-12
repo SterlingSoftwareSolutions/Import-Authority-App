@@ -72,7 +72,7 @@ const LoginScreen = (props) => {
                 />
                 <AppFormField
                   name="username"
-                  placeholder="Username / Email"
+                  placeholder="Username, Email or Mobile Number"
                   autoCapitalize="none"
                   autoCorrect={false}
                 />
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     color: "black",
-    fontSize: 10,
+    fontSize: 12,
     textAlign: "center",
   },
   signupText: {
