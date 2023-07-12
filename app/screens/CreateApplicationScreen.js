@@ -159,8 +159,8 @@ const CreateApplicationMain = () => {
 
   const confirmDatePicker = (date, setFieldValue) => {
     const date_object = new Date(date);
-    setFieldValue("estimatedDateofArrival", date_object.toISOString().slice(0, 19).replace('T', ' '))
-
+    const formattedDate = date_object.toISOString().slice(0, 10); 
+    setFieldValue("estimatedDateofArrival", formattedDate)
     hideDatePicker();
   };
 
