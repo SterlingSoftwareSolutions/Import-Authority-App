@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useRoute } from '@react-navigation/native';
 import {
   StyleSheet,
-  SafeAreaView,
   TextInput,
   View,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   Text,
   Image,
   ScrollView,
@@ -34,7 +32,6 @@ import * as ImagePicker from "expo-image-picker";
 import mime from 'mime'
 
 function EditApplicationScreen(props) {
-  const endpoint = "/applications";
   const navigation = useNavigation();
   const route = useRoute();
   const applicationId = route.params?.applicationId;
@@ -43,16 +40,13 @@ function EditApplicationScreen(props) {
   const [imageSourceDialog, setImageSourceDialog] = useState(false);
   //Uploaded images
   const [images, setImages] = useState({});
-
   //Name of the image field
   const [key, setKey] = useState(null);
-
   //Open the Popup onPress
   const selectImage = (imageKey) => {
     setKey(imageKey);
     setImageSourceDialog(true);
   };
-
   //Opens the Camera or image Library
   const selectImageLaunch = async (camera = true) => {
     setImageSourceDialog(false);
@@ -88,6 +82,7 @@ function EditApplicationScreen(props) {
       try {
         const api = await client();
         const response = await api.get(`/applications/${applicationId}`);
+        console.log(application)
         if (response.data.success) {
           setApplication(response.data.data.application);
           response.data.data.assets.forEach((element) => {
@@ -104,12 +99,10 @@ function EditApplicationScreen(props) {
         console.error('Error fetching application:', error);
       }
     };
-
     if (applicationId) {
       fetchApplication();
     }
   }, [applicationId]);
-
 
   {
     /Make/;
@@ -249,8 +242,8 @@ function EditApplicationScreen(props) {
 
   const confirmDatePicker = (date, setFieldValue) => {
     const date_object = new Date(date);
-    setFieldValue("estimatedDateofArrival", date_object.toISOString().slice(0, 19).replace('T', ' '))
-
+    const formattedDate = date_object.toISOString().slice(0, 10);
+    setFieldValue("estimatedDateofArrival", formattedDate)
     hideDatePicker();
   };
 
@@ -269,35 +262,37 @@ function EditApplicationScreen(props) {
     return foundItem ? foundItem.key : null;
   }
 
-  const handleSubmit = async (values) => {
-    console.log(values);
-
+  const submitApplication = async (values) => {
     const applicationData = {
+      _method: 'put',
       chassis_no: values.chassisNumber,
       arrival_date: values.estimatedDateofArrival,
       make: values.make,
       model: values.model,
-      build_month: getKeyByValue(databuildmonth, values.buildMonth),
+      build_month: values.buildMonth,
       build_year: values.buildYear,
       fuel_type: values.fuelType,
       transmission: values.transmission,
       body_type: values.bodyType,
       drive_type: values.driveType,
       odo_meter: values.odo_meter,
-      approval_type: values.approvalType === 0 ? "SEV" : "Older Vehicles",
+      approval_type: values.approvalType == 0 ? "SEV" : "Older Vehicles",
     };
-    if (values.approvalType === 1) {
-      applicationData.vass_engineering = values.vass_engineering;
+    if (values.approvalType == 1) {
+      applicationData.vass_engineering = values.vassEngineering;
+      console.log(values.vassEngineering)
     }
-    console.log(applicationData);
     try {
       const api = await client();
       const formData = new FormData();
+      // Add application data 
+      Object.entries(applicationData).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
 
       // Add documents to formData
       Object.entries(docs).forEach(([key, uri]) => {
         const filename = uri.split("/").pop();
-        console.log(uri);
 
         formData.append(key, {
           uri,
@@ -309,7 +304,6 @@ function EditApplicationScreen(props) {
       // Add images to formData
       Object.entries(images).forEach(([key, uri]) => {
         const filename = uri.split("/").pop();
-        console.log(uri);
 
         formData.append(key, {
           uri,
@@ -317,25 +311,19 @@ function EditApplicationScreen(props) {
           type: mime.getType(uri),
         });
       });
-      Object.entries(applicationData).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
 
-      // Make API request to upload images and documents
-      const response = await api.put("/applications", formData, {
+      const response = await api.post("/applications/" + applicationId, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-
-      console.log("---------------------------------------------Next button clicked-------------------------------------");
-      console.log(formData);
-      console.log("---------------------------------------------Next button clicked-------------------------------------");
+      // Make API request to upload images and documents
 
       if (response.ok) {
         // Successful upload
+        console.log(response.data);
         console.log("Images and files uploaded successfully");
-        navigation.navigate("PaymentScreen");
+        // navigation.navigate("Dashboard");
       } else {
         // Error in API response
         console.error("Failed to upload images and files:", response.problem);
@@ -347,7 +335,7 @@ function EditApplicationScreen(props) {
       console.log(error);
       alert("Something went wrong");
     }
-  
+
   };
 
   //validations
@@ -371,12 +359,11 @@ function EditApplicationScreen(props) {
     vassEngineering: Yup.string().required("Vass engineering is required"),
   });
 
-
   return (
     <View style={styles.container}>
       <TopUserControlBg>
         <Text style={styles.statusText}>Edit Application</Text>
-        <View style={styles.viewstatus}>
+        <View>
           <Text style={{ ...styles.viewstatuslabel }}>{application?.status ? application.status.toUpperCase() : null}</Text>
         </View>
         <View style={{ ...styles.data_and_searchicon }}>
@@ -444,9 +431,9 @@ function EditApplicationScreen(props) {
               bodyType: application?.body_type ?? "",
               driveType: application?.drive_type ?? "",
               odo_meter: application?.odo_meter ?? "",
-              approvalType: application?.approval_type == 'Older Vehicles' ? '1' : '0'
+              approvalType: application?.approval_type == 'Older Vehicles' ? '1' : '0',
             }}
-            onSubmit={values => handleSubmit(values, approvalType)}
+            onSubmit={submitApplication}
             validationSchema={
               enableAdditionalValidations
                 ? validationSchema
@@ -455,8 +442,8 @@ function EditApplicationScreen(props) {
           >
             {({
               handleChange,
-              handleSubmit,
               setFieldValue,
+              handleSubmit,
               values,
               errors,
               touched,
@@ -466,6 +453,7 @@ function EditApplicationScreen(props) {
                 <View style={styles.formContainer}>
                   <Text style={{ color: colors.primary, fontWeight: 'bold' }}>Vehicle Info</Text>
                   <View>
+                    {/* Radio Button Options for SEV or Older - Approval Type */}
                     <RadioButton.Group onValueChange={(value) => {
                       handleApprovalTypeChange(value, setFieldValue);
                     }} value={values.approvalType} >
@@ -487,8 +475,9 @@ function EditApplicationScreen(props) {
                       </View>
                     </RadioButton.Group>
 
+                    {/* Radio Button for Vass Engineering */}
                     {values.approvalType == '1' ? (
-                      <RadioButton.Group onValueChange={handleChange} value={values.vassEngineering}>
+                      <RadioButton.Group onValueChange={handleChange('vassEngineering')} value={values.vassEngineering}>
                         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                           <RadioButton.Item label="Need an Engineer" value="ours" color={colors.primary} style={{
                             flexDirection: "row-reverse",
@@ -529,9 +518,6 @@ function EditApplicationScreen(props) {
                           confirmDatePicker(date, setFieldValue)
                         }
                         onCancel={hideDatePicker}
-                        onChange={() => {
-                          console.log("date changed");
-                        }}
                         color={colors.darkGrey}
                         value={values.estimatedDateofArrival}
 
@@ -1038,7 +1024,7 @@ function EditApplicationScreen(props) {
                     >
                       <TouchableOpacity
                         style={styles.submitButton}
-                        onPress={handleSubmit}
+                        onPress={() => { submitApplication(values) }}
                       >
                         <Text style={styles.buttonText}>Submit</Text>
                       </TouchableOpacity>
@@ -1053,7 +1039,6 @@ function EditApplicationScreen(props) {
     </View >
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -1071,7 +1056,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     backgroundColor: colors.darkGrey,
-    width: "25%",
+    width: "35%",
     justifyContent: "space-between",
     alignSelf: "center",
     borderRadius: 10,
@@ -1308,7 +1293,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#23A29F",
     borderRadius: 4,
     width: "20%",
-    textAlign: "center", // Center align the plus symbol
+    textAlign: "center", 
     top: 4,
   },
   arrowdown: {
@@ -1321,19 +1306,6 @@ const styles = StyleSheet.create({
     bottom: 10,
     textAlign: "center",
     fontWeight: "bold",
-  },
-  viewstatuslabel: {
-    color: "#ffffff",
-    fontSize: 15,
-    fontWeight: "bold",
-    textAlign: "center",
-    backgroundColor: colors.darkGrey,
-    width: "25%",
-    justifyContent: "space-between",
-    alignSelf: "center",
-    borderRadius: 10,
-    paddingHorizontal: 5,
-    paddingVertical: 5,
   },
   cameraText: {
     color: "#C9C9C9",
