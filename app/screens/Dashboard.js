@@ -109,7 +109,7 @@ function Dashboard({ children }) {
             <TouchableOpacity key={application.id} onPress={() => navigation.navigate("ViewApplications", { applicationId: application.id })}>
               <Image
                 source={{
-                  uri: imgFrontRightAsset ? `http://dkxw67x8n7ht.cloudfront.net/assets/applications/${imgFrontRightAsset.location}` : "",
+                  uri: CDN_URL + '/assets/applications/' + (imgFrontRightAsset ? imgFrontRightAsset?.location : 'default.png'),
                   type: `image/${fileType}`,
                 }}
                 style={styles.iconStyle}
@@ -154,9 +154,6 @@ const styles = StyleSheet.create({
   iconStyle: {
     marginLeft: 10,
     width: 60, height: 60, borderRadius: 30,
-    borderColor:"grey",
-    borderWidth:2
-
   },
   profileImage: {
     width: 60,

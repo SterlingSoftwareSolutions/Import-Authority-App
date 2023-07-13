@@ -749,13 +749,9 @@ function EditApplicationScreen(props) {
                           selectImage("img_front_right");
                         }}>
                         <View style={styles.cameraContainer}>
-                          <Image
-                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_front_right ?? 'default.png' }}
+                        <Image
+                            source={{ uri: images["img_front_right"] ?? CDN_URL + "/assets/applications/" + (assets?.img_front_right ?? 'default.png') }}
                             style={styles.cameraIcon}
-                          />
-                          <Image
-                            source={{ uri: images["img_front_right"] }}
-                            style={styles.imagePreview}
                           />
                           <Text style={styles.cameraText}>FR Corner</Text>
                         </View>
@@ -767,13 +763,9 @@ function EditApplicationScreen(props) {
                         }}
                       >
                         <View style={styles.cameraContainer}>
-                          <Image
-                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_rear_right ?? 'default.png' }}
+                        <Image
+                            source={{ uri: images["img_rear_right"] ?? CDN_URL + "/assets/applications/" + (assets?.img_rear_right ?? 'default.png') }}
                             style={styles.cameraIcon}
-                          />
-                          <Image
-                            source={{ uri: images["img_rear_right"] }}
-                            style={styles.imagePreview}
                           />
                           <Text style={styles.cameraText}>RR Corner</Text>
                         </View>
@@ -789,13 +781,9 @@ function EditApplicationScreen(props) {
                         }}
                       >
                         <View style={styles.cameraContainer}>
-                          <Image
-                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_front_left ?? 'default.png' }}
+                        <Image
+                            source={{ uri: images["img_front_left"] ?? CDN_URL + "/assets/applications/" + (assets?.img_front_left ?? 'default.png') }}
                             style={styles.cameraIcon}
-                          />
-                          <Image
-                            source={{ uri: images["img_front_left"] }}
-                            style={styles.imagePreview}
                           />
                           <Text style={styles.cameraText}>FL Corner</Text>
                         </View>
@@ -807,13 +795,9 @@ function EditApplicationScreen(props) {
                         }}
                       >
                         <View style={styles.cameraContainer}>
-                          <Image
-                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_rear_left ?? 'default.png' }}
+                        <Image
+                            source={{ uri: images["img_rear_left"] ?? CDN_URL + "/assets/applications/" + (assets?.img_rear_left ?? 'default.png') }}
                             style={styles.cameraIcon}
-                          />
-                          <Image
-                            source={{ uri: images["img_rear_left"] }}
-                            style={styles.imagePreview}
                           />
                           <Text style={styles.cameraText}>RL Corner</Text>
                         </View>
@@ -831,12 +815,8 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_1 ?? 'default.png' }}
+                            source={{ uri: images["img_interior_1"] ?? CDN_URL + "/assets/applications/" + (assets?.img_interior_1 ?? 'default.png') }}
                             style={styles.cameraIcon}
-                          />
-                          <Image
-                            source={{ uri: images["img_interior_1"] }}
-                            style={styles.imagePreview}
                           />
                           <Text style={styles.cameraText}>FR Corner</Text>
                         </View>
@@ -849,18 +829,13 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_2 ?? 'default.png' }}
+                            source={{ uri: images["img_interior_2"] ?? CDN_URL + "/assets/applications/" + (assets?.img_interior_2 ?? 'default.png') }}
                             style={styles.cameraIcon}
-                          />
-                          <Image
-                            source={{ uri: images["img_interior_2"] }}
-                            style={styles.imagePreview}
                           />
                           <Text style={styles.cameraText}>RR Corner</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
-
                     <View
                       style={{ flexDirection: "row", justifyContent: "space-around" }}
                     >
@@ -871,12 +846,8 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_3 ?? 'default.png' }}
+                            source={{ uri: images["img_interior_3"] ?? CDN_URL + "/assets/applications/" + (assets?.img_interior_3 ?? 'default.png') }}
                             style={styles.cameraIcon}
-                          />
-                          <Image
-                            source={{ uri: images["img_interior_3"] }}
-                            style={styles.imagePreview}
                           />
                           <Text style={styles.cameraText}>FL Corner</Text>
                         </View>
@@ -889,12 +860,8 @@ function EditApplicationScreen(props) {
                       >
                         <View style={styles.cameraContainer}>
                           <Image
-                            source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_interior_4 ?? 'default.png' }}
+                            source={{ uri: images["img_interior_4"] ?? CDN_URL + "/assets/applications/" + (assets?.img_interior_4 ?? 'default.png') }}
                             style={styles.cameraIcon}
-                          />
-                          <Image
-                            source={{ uri: images["img_interior_4"] }}
-                            style={styles.imagePreview}
                           />
                           <Text style={styles.cameraText}>RL Corner</Text>
                         </View>
@@ -902,7 +869,7 @@ function EditApplicationScreen(props) {
                     </View>
                   </View>
                   {/* Additional Images if approval type = Older Vehicles */}
-                  {application?.approval_type === 'Older Vehicles' && (
+                  {values.approvalType == '1' ? (
                     <>
                       <Text style={{ color: colors.primary, fontWeight: 'bold', marginTop: 10 }}>Additional Images</Text>
                       <View
@@ -912,14 +879,10 @@ function EditApplicationScreen(props) {
                             selectImage("img_engine");
                           }}>
                           <View style={styles.cameraContainer}>
-                            <Image
-                              source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_engine ?? 'default.png' }}
-                              style={styles.cameraIcon}
-                            />
-                            <Image
-                              source={{ uri: images["img_engine"] }}
-                              style={styles.imagePreview}
-                            />
+                          <Image
+                            source={{ uri: images["img_engine"] ?? CDN_URL + "/assets/applications/" + (assets?.img_engine ?? 'default.png') }}
+                            style={styles.cameraIcon}
+                          />
                             <Text style={styles.cameraText}>Engine</Text>
                           </View>
                         </TouchableOpacity>
@@ -930,10 +893,10 @@ function EditApplicationScreen(props) {
                           }}
                         >
                           <View style={styles.cameraContainer}>
-                            <Image
-                              source={{ uri: CDN_URL + "/assets/applications/" + assets?.img_chassis ?? 'default.png' }}
-                              style={styles.cameraIcon}
-                            />
+                          <Image
+                            source={{ uri: images["img_chassis"] ?? CDN_URL + "/assets/applications/" + (assets?.img_chassis ?? 'default.png') }}
+                            style={styles.cameraIcon}
+                          />
                             <Image
                               source={{ uri: images["img_chassis"] }}
                               style={styles.imagePreview}
@@ -943,7 +906,7 @@ function EditApplicationScreen(props) {
                         </TouchableOpacity>
                       </View>
                     </>
-                  )}
+                  ) : null}
 
                   {/* Documents Selector */}
                   <View>
@@ -1293,7 +1256,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#23A29F",
     borderRadius: 4,
     width: "20%",
-    textAlign: "center", 
+    textAlign: "center",
     top: 4,
   },
   arrowdown: {
