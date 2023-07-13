@@ -13,6 +13,7 @@ import client from "../api/client";
 import { CDN_URL } from '@env'
 import { SelectList } from "react-native-dropdown-select-list";
 import { Formik } from "formik";
+import { LinearGradient } from "expo-linear-gradient";
 
 function Transaction(props) {
   const navigation = useNavigation();
@@ -24,6 +25,7 @@ function Transaction(props) {
     /Paid Unpaid/;
   }
   const datasortby = [
+    { key: '0', value: 'All' },
     { key: '1', value: 'Paid' },
     { key: '2', value: 'Unpaid' },
   ];
@@ -114,13 +116,29 @@ function Transaction(props) {
               onSelect={() => { fetch_bills(values.sortby) }}
             />
 
+            <View style={{ width: '100%', left: 120, top: 5 }}>
+              <LinearGradient
+                colors={["#77B859", "#2DA596"]}
+                locations={[0, 1]}
+                start={{ x: 0.2, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.buttonTransaction}
+              >
+                <TouchableOpacity
 
-            <Text style={{ fontSize: 15, top: 10 }}>Remaining Payments  2/5</Text>
-
+                  onPress={() => navigation.navigate("ViewTransactions")}
+                >
+                  <Text style={{ color: 'white', fontWeight: '800' }}>Transaction</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            </View>
           </View>
+
 
         )}
       </Formik>
+
+
 
       <View>
         <TransactionLists data={bills} />
@@ -143,6 +161,19 @@ const styles = StyleSheet.create({
     bottom: 22,
     borderRadius: 10,
     borderColor: "white",
+  },
+
+  buttonTransaction: {
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    width: "38%",
+    alignItems: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+
   },
 })
 

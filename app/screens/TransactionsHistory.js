@@ -63,6 +63,9 @@ const transactions = [
 
 function PaymentHistory(props) {
   const renderTransactionItem = ({ item }) => (
+
+
+
     <View style={styles.transactionBox}>
       <View>
         <Text>{item.cardNumber}</Text>
