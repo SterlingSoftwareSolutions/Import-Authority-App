@@ -38,17 +38,17 @@ function WelcomeScreen({ navigation }) {
           import specialists.
         </Text>
       </LinearGradient>
-      
+
       <CustomButton title="LOGIN" alignSelf="center" onPress={() => navigation.navigate("Login")} />
-      <CustomButton title="SIGN UP" alignSelf="center" onPress={() => navigation.navigate("Signup")}/>
+      <CustomButton title="SIGN UP" alignSelf="center" onPress={() => navigation.navigate("Signup")} />
 
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>Import Authority</Text>
-        <Text style={styles.footerText}>All rights reserved</Text>
+        <Text style={styles.footerText}>© 2023. All RIGHTS RESERVED</Text>
         <TouchableOpacity>
-        <Text style={styles.footerTextTerms}>
-          Terms of use | Privacy Policy
-        </Text>
+          <Text style={styles.footerTextTerms}>
+            Terms of use | Privacy Policy
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   footerTextTerms: {
-    color: colors.tertiary,
+    color: colors.welcomegreen,
     fontSize: 10,
     textAlign: "center",
   },

@@ -58,13 +58,13 @@ const ApplicationLists = ({ data }) => {
                 borderColor: borderColor,
                 borderRadius: 10,
                 borderWidth: 2,
-                top: 2
+                alignSelf: 'center'
               },
             ]}
           />
           {/* Rendering chassis , build date , and Odometer */}
           <View style={{ paddingLeft: 10 }}>
-            <Text>{item.make}</Text>
+            <Text style={{ left: 25, bottom: 5, color: '#000', fontWeight: '700' }}>{item.make}</Text>
             <View style={{ flexDirection: "row" }}>
               <View>
                 <Image
@@ -88,7 +88,7 @@ const ApplicationLists = ({ data }) => {
                       width: 16,
                       height: 16,
                       tintColor: "#000",
-                      top: 16,
+                      top: 24,
                       right: 10,
                     },
                   ]}
@@ -101,7 +101,7 @@ const ApplicationLists = ({ data }) => {
                       width: 16,
                       height: 16,
                       tintColor: "#000",
-                      top: 25,
+                      top: 45,
                       right: 10,
 
                     },
@@ -109,27 +109,27 @@ const ApplicationLists = ({ data }) => {
                 />
               </View>
               <View>
-                <View style={{ left: -3 }}>
-                  <Text style={{ maxWidth: 70, minHeight: 35 }}>Chassis:</Text>
-                  <Text style={{ bottom: 4 }}>Build Date:</Text>
-                  <Text>ODO:</Text>
+                <View>
+                  <Text style={{ minHeight: 35 }}>Chassis:</Text>
+                  <Text style={{ width: 130, fontSize: 13, bottom: 15 }}>{item.chassis_no}</Text>
+                  <Text style={{ bottom: 15 }}>Build Date:</Text>
+                  <Text style={{ width: 130, fontSize: 13, bottom: 15 }}>{`${item.build_month}/${item.build_year}`}</Text>
+                  <Text style={{ bottom: 12 }}>ODO:</Text>
+                  <Text style={{ width: 130, fontSize: 13, bottom: 15 }}>{item.odo_meter}</Text>
                 </View>
               </View>
-              <View style={{ left: -2 }}>
-                <Text style={{ maxWidth: 70, fontSize: 13, minHeight: 35, top: 2 }}>{item.chassis_no}</Text>
-
-
-                <Text style={{ bottom: 3, fontSize: 13, }}>{`${item.build_month}/${item.build_year}`}</Text>
-                <Text style={{ bottom: 6, fontSize: 13, top: 2 }}>{item.odo_meter}</Text>
-              </View>
+              {/* <View style={{ right: 50, bottom: 26 }}>
+                <Text style={{ top: 67, fontSize: 13, }}>{`${item.build_month}/${item.build_year}`}</Text>
+                <Text style={{ top: 70, fontSize: 13, }}>{item.odo_meter}</Text>
+              </View> */}
             </View>
           </View>
         </View>
 
         {/* View, Edit, Download Buttons */}
-        <View style={{ marginTop: 10 }}>
+        <View style={{ marginTop: 10, }}>
           <ApplicationFunctionsGradientButton text="View" onPress={() => navigation.navigate("ViewApplications", { applicationId: item.id })} />
-          <ApplicationFunctionsGradientButton text="Edit" onPress={() => navigation.navigate("EditApplications", { applicationId: item.id })}/>
+          <ApplicationFunctionsGradientButton text="Edit" onPress={() => navigation.navigate("EditApplications", { applicationId: item.id })} />
           <ApplicationFunctionsGradientButton text="Download" />
         </View>
 
