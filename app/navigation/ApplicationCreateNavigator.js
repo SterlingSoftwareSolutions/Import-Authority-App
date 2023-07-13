@@ -5,7 +5,7 @@ import CreateApplicationImageScreen from "../screens/CreateApplicationImageScree
 import PaymentScreen from "../screens/PaymentScreen";
 import PaymentSuccessScreen from "../screens/PaymentSuccessScreen";
 import Dashboard from "../screens/Dashboard";
-import PaymentHistory from "../screens/PaymentHistory";
+import TransactionHistory from "../screens/TransactionsHistory";
 
 const Stack = createStackNavigator();
 
@@ -34,7 +34,7 @@ const ApplicationCreateNavigator = () => {
       />
       <Stack.Screen
         name="ViewTransactions"
-        component={PaymentHistory}
+        component={TransactionHistory}
         options={{ headerShown: false }}
       />
       <Stack.Screen
