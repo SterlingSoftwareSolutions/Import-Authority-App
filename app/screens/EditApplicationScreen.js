@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useRoute } from '@react-navigation/native';
 import {
   StyleSheet,
-  SafeAreaView,
   TextInput,
   View,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   Text,
   Image,
   ScrollView,
@@ -101,12 +99,10 @@ function EditApplicationScreen(props) {
         console.error('Error fetching application:', error);
       }
     };
-
     if (applicationId) {
       fetchApplication();
     }
   }, [applicationId]);
-
 
   {
     /Make/;
@@ -280,47 +276,48 @@ function EditApplicationScreen(props) {
       body_type: values.bodyType,
       drive_type: values.driveType,
       odo_meter: values.odo_meter,
-      approval_type: values.approvalType === 0 ? "SEV" : "Older Vehicles",
-      draft: true
+      approval_type: values.approvalType == 0 ? "SEV" : "Older Vehicles",
     };
-    if (values.approvalType === 1) {
-      applicationData.vass_engineering = values.vass_engineering;
+    if (values.approvalType == 1) {
+      applicationData.vass_engineering = values.vassEngineering;
+      console.log(values.vassEngineering)
     }
     try {
       const api = await client();
-      // const formData = new FormData();
+      const formData = new FormData();
+      // Add application data 
+      Object.entries(applicationData).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
 
-      // // Add documents to formData
-      // Object.entries(docs).forEach(([key, uri]) => {
-      //   const filename = uri.split("/").pop();
+      // Add documents to formData
+      Object.entries(docs).forEach(([key, uri]) => {
+        const filename = uri.split("/").pop();
 
-      //   formData.append(key, {
-      //     uri,
-      //     name: filename,
-      //     type: mime.getType(uri),
-      //   });
-      // });
+        formData.append(key, {
+          uri,
+          name: filename,
+          type: mime.getType(uri),
+        });
+      });
 
-      // // Add images to formData
-      // Object.entries(images).forEach(([key, uri]) => {
-      //   const filename = uri.split("/").pop();
-      //   console.log(uri);
+      // Add images to formData
+      Object.entries(images).forEach(([key, uri]) => {
+        const filename = uri.split("/").pop();
 
-      //   formData.append(key, {
-      //     uri,
-      //     name: filename,
-      //     type: mime.getType(uri),
-      //   });
-      // });
+        formData.append(key, {
+          uri,
+          name: filename,
+          type: mime.getType(uri),
+        });
+      });
 
-      // // Add application data 
-      // Object.entries(applicationData).forEach(([key, value]) => {
-      //   console.log()
-      //   formData.append(key, value);
-      // });
-
+      const response = await api.post("/applications/" + applicationId, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       // Make API request to upload images and documents
-      const response = await api.post("/applications/" + applicationId, applicationData);
 
       if (response.ok) {
         // Successful upload
@@ -362,12 +359,11 @@ function EditApplicationScreen(props) {
     vassEngineering: Yup.string().required("Vass engineering is required"),
   });
 
-
   return (
     <View style={styles.container}>
       <TopUserControlBg>
         <Text style={styles.statusText}>Edit Application</Text>
-        <View style={styles.viewstatus}>
+        <View>
           <Text style={{ ...styles.viewstatuslabel }}>{application?.status ? application.status.toUpperCase() : null}</Text>
         </View>
         <View style={{ ...styles.data_and_searchicon }}>
@@ -481,7 +477,7 @@ function EditApplicationScreen(props) {
 
                     {/* Radio Button for Vass Engineering */}
                     {values.approvalType == '1' ? (
-                      <RadioButton.Group onValueChange={handleChange} value={values.vassEngineering}>
+                      <RadioButton.Group onValueChange={handleChange('vassEngineering')} value={values.vassEngineering}>
                         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                           <RadioButton.Item label="Need an Engineer" value="ours" color={colors.primary} style={{
                             flexDirection: "row-reverse",
@@ -1044,7 +1040,6 @@ function EditApplicationScreen(props) {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -1061,7 +1056,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     backgroundColor: colors.darkGrey,
-    width: "25%",
+    width: "35%",
     justifyContent: "space-between",
     alignSelf: "center",
     borderRadius: 10,
@@ -1298,7 +1293,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#23A29F",
     borderRadius: 4,
     width: "20%",
-    textAlign: "center", // Center align the plus symbol
+    textAlign: "center", 
     top: 4,
   },
   arrowdown: {
@@ -1311,19 +1306,6 @@ const styles = StyleSheet.create({
     bottom: 10,
     textAlign: "center",
     fontWeight: "bold",
-  },
-  viewstatuslabel: {
-    color: "#ffffff",
-    fontSize: 15,
-    fontWeight: "bold",
-    textAlign: "center",
-    backgroundColor: colors.darkGrey,
-    width: "25%",
-    justifyContent: "space-between",
-    alignSelf: "center",
-    borderRadius: 10,
-    paddingHorizontal: 5,
-    paddingVertical: 5,
   },
   cameraText: {
     color: "#C9C9C9",
