@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { CDN_URL } from '@env'
 import client from "../api/client";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
+import { SelectList } from "react-native-dropdown-select-list";
 
 const TransactionLists = ({ data }) => {
   const navigation = useNavigation();
@@ -13,6 +13,9 @@ const TransactionLists = ({ data }) => {
   const RenderItem = ({ item }) => {
     let borderColor = colors.pending;
     return (
+
+
+
       <View
         style={{
           ...styles.dashboardapplication,
@@ -22,7 +25,7 @@ const TransactionLists = ({ data }) => {
       >
 
         {/*Rendering front right image */}
-        <View style={{ flexDirection: "row", marginLeft: -13, }}>
+        <View style={{ flexDirection: "row", }}>
           <Image
             source={{
               uri: item.image ? CDN_URL + '/assets/applications/' + item.image : ""
@@ -41,24 +44,25 @@ const TransactionLists = ({ data }) => {
           />
           {/* Rendering Total , paid , and Balance */}
           <View style={{ paddingLeft: 10 }}>
+            <Text>{item.chassis_no}</Text>
             <View style={{ flexDirection: "row" }}>
               <View>
-                <View style={{}}>
-                  <Text style={{ maxWidth: 70, minHeight: 35 }}>Total:</Text>
-                  <Text style={{ bottom: 4 }}>Paid</Text>
-                  <Text>Balance</Text>
+                <View style={{ top: 8 }}>
+                  <Text style={{ maxWidth: 70, }}>Total:</Text>
+                  <Text style={{ bottom: 1 }}>Paid:</Text>
+                  <Text style={{ color: 'red' }}>Balance:</Text>
                 </View>
               </View>
-              <View style={{}}>
-                <Text style={{ maxWidth: 70, fontSize: 13, minHeight: 35, top: 2 }}>{item.amount_total}</Text>
-                <Text style={{ bottom: 3, fontSize: 13, }}>{item.amount_paid}</Text>
-                <Text style={{ bottom: 6, fontSize: 13, top: 2 }}>{item.amount_total - item.amount_paid}</Text>
+              <View style={{ top: 8, left: 20 }}>
+                <Text>${item.amount_total}</Text>
+                <Text style={{ left: 7 }}>${item.amount_paid}</Text>
+                <Text style={{ color: 'red' }}>${item.amount_total - item.amount_paid}</Text>
               </View>
 
 
-              <View>
-                <TouchableOpacity style={{ backgroundColor: 'red', width: '140%', borderRadius: 5 }}>
-                  <Text style={{ alignSelf: 'center', fontSize: 12 }}>Pay now</Text>
+              <View style={{ top: 15, right: 15 }}>
+                <TouchableOpacity style={{ backgroundColor: '#FF6D60', paddingHorizontal: 10, borderRadius: 5, paddingVertical: 5, marginLeft: 90, }}>
+                  <Text style={{ fontSize: 12, color: 'white', fontWeight: '800', }}>Pay now</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -89,8 +93,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     justifyContent: "space-between",
     marginBottom: 10,
-    top: 20,
     left: 8,
+    top: 40
   },
   dashboardboxicon: {
     marginLeft: 10,

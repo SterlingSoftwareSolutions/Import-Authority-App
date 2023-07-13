@@ -11,41 +11,32 @@ import colors from "../config/colors";
 import useAuth from "../auth/useAuth";
 import client from "../api/client";
 import { CDN_URL } from '@env'
+import { SelectList } from "react-native-dropdown-select-list";
+import { Formik } from "formik";
 
 function Transaction(props) {
   const navigation = useNavigation();
   const { user, logOut } = useAuth();
   const [bills, setBills] = useState([]);
-  const data = [
-    {
-      id: 1,
-      chassis_no: "ABC123",
-      build_month: "07",
-      build_year: "2022",
-      odo_meter: "5000",
-      assets: [
-        {
-          asset_type: "img_front_right",
-          file_type: "png",
-          location: "carpay",
-        },
-      ],
-    },
-    {
-      id: 2,
-      chassis_no: "XYZ789",
-      build_month: "05",
-      build_year: "2021",
-      odo_meter: "8000",
-      assets: [
-        {
-          asset_type: "img_front_right",
-          file_type: "jpg",
-          location: "carpay.png",
-        },
-      ],
-    },
+
+
+  {
+    /Paid Unpaid/;
+  }
+  const datasortby = [
+    { key: '1', value: 'Paid' },
+    { key: '2', value: 'Unpaid' },
   ];
+
+
+
+  const fetch_bills = async (status) => {
+    const api = await client();
+    const response = await api.get('/bills?status=' + status.toLowerCase());
+    console.log(response.data.data);
+    setBills(response.data.data);
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +44,7 @@ function Transaction(props) {
         const api = await client();
         const response = await api.get("/bills");
         setBills(response.data.data);
-        console.log(response.data.data);
+        // console.log(response.data.data);
       } catch (error) {
         console.log(error);
       }
@@ -61,6 +52,16 @@ function Transaction(props) {
 
     fetchData();
   }, []);
+
+
+  const handleSubmit = (values) => {
+
+    const sortBydata = {
+      sortby: values.sortby,
+
+    }
+    console.log(sortBydata)
+  }
 
   return (
     <View style={styles.container}>
@@ -82,6 +83,45 @@ function Transaction(props) {
         </View>
       </TopUserControlBg>
 
+
+      <Formik
+
+        initialValues={{
+          sortby: "",
+        }}
+
+      >
+        {({ handleChange, values, handleSubmit
+
+
+        }) => (
+
+          <View style={{ flexDirection: 'row', top: 20, marginLeft: 15, justifyContent: 'space-between', width: '93%' }}>
+
+
+            <SelectList
+              placeholder="Sort by"
+              value={values.sortby}
+              setSelected={handleChange("sortby")}
+              data={datasortby}
+              save="value"
+              boxStyles={{ backgroundColor: 'white', borderColor: 'white' }}
+              inputStyles={{ color: colors.primary, fontSize: 15 }}
+              dropdownStyles={{ ...styles.dropDownListStyle2 }}
+              dropdownTextStyles={{ color: colors.primary }}
+              search={false}
+              options={datasortby}
+              onSelect={() => { fetch_bills(values.sortby) }}
+            />
+
+
+            <Text style={{ fontSize: 15, top: 10 }}>Remaining Payments  2/5</Text>
+
+          </View>
+
+        )}
+      </Formik>
+
       <View>
         <TransactionLists data={bills} />
       </View>
@@ -98,6 +138,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: '#DCF3E8',
   },
+  dropDownListStyle2: {
+    backgroundColor: "white",
+    bottom: 22,
+    borderRadius: 10,
+    borderColor: "white",
+  },
 })
+
 
 export default Transaction;
