@@ -7,11 +7,20 @@ import client from "../api/client";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SelectList } from "react-native-dropdown-select-list";
 
+
 const TransactionLists = ({ data }) => {
+
+
+
+
+
   const navigation = useNavigation();
   // render item for FlatList
   const RenderItem = ({ item }) => {
-    let borderColor = colors.pending;
+    const balance = item.amount_total - item.amount_paid;
+    let borderColor = colors.white;
+
+
     return (
 
 
@@ -35,40 +44,47 @@ const TransactionLists = ({ data }) => {
               {
                 width: 90,
                 height: 90,
-                borderColor: borderColor,
+                borderColor: balance ? 'red' : 'green',
                 borderRadius: 10,
                 borderWidth: 2,
                 top: 2
+
               },
             ]}
           />
           {/* Rendering Total , paid , and Balance */}
           <View style={{ paddingLeft: 10 }}>
-            <Text>{item.chassis_no}</Text>
+
+            <Text style={{ left: 15 }}>{item.chassis_no}</Text>
             <View style={{ flexDirection: "row" }}>
               <View>
-                <View style={{ top: 8 }}>
+                <View style={{ top: 8, left: 15 }}>
                   <Text style={{ maxWidth: 70, }}>Total:</Text>
                   <Text style={{ bottom: 1 }}>Paid:</Text>
-                  <Text style={{ color: 'red' }}>Balance:</Text>
+                  <Text style={{ color: balance ? 'red' : 'green' }}>Balance:</Text>
                 </View>
               </View>
-              <View style={{ top: 8, left: 20 }}>
+              <View style={{ top: 8, left: 35 }}>
                 <Text>${item.amount_total}</Text>
-                <Text style={{ left: 7 }}>${item.amount_paid}</Text>
-                <Text style={{ color: 'red' }}>${item.amount_total - item.amount_paid}</Text>
+                <Text>${item.amount_paid}</Text>
+                <Text style={{ color: balance ? 'red' : 'green' }}>${balance}</Text>
               </View>
 
 
-              <View style={{ top: 15, right: 15 }}>
-                <TouchableOpacity style={{ backgroundColor: '#FF6D60', paddingHorizontal: 10, borderRadius: 5, paddingVertical: 5, marginLeft: 90, }}>
-                  <Text style={{ fontSize: 12, color: 'white', fontWeight: '800', }}>Pay now</Text>
-                </TouchableOpacity>
-              </View>
+              {balance !== 0 && (
+                <View style={{ top: 15, right: 5 }}>
+                  <TouchableOpacity style={{ backgroundColor: '#FF6D60', paddingHorizontal: 10, borderRadius: 5, paddingVertical: 5, marginLeft: 90, }}>
+                    <Text style={{ fontSize: 12, color: 'white', fontWeight: '800', }}>Pay now</Text>
+                  </TouchableOpacity>
+                </View>
+
+              )}
+
+
             </View>
           </View>
         </View>
-      </View>
+      </View >
     );
   };
 
@@ -89,7 +105,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     alignItems: "center",
     width: "96%",
-    paddingHorizontal: 10,
     paddingVertical: 20,
     justifyContent: "space-between",
     marginBottom: 10,

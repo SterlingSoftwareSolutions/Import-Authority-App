@@ -7,6 +7,7 @@ import CreateApplicationScreen from "../screens/CreateApplicationScreen";
 import ViewApplicationScreen from "../screens/ViewApplicationScreen";
 import ProfileDetailsScreen from "../screens/ProfileDetailsScreen";
 import EditApplicationScreen from "../screens/EditApplicationScreen";
+import TransactionsHistory from "../screens/TransactionsHistory";
 
 const Stack = createStackNavigator();
 
@@ -32,21 +33,26 @@ const TransactionNavigator = ({ }) => (
       component={CreateApplicationScreen}
       options={{ headerShown: false }}
     />
-     <Stack.Screen
-        name="ViewApplications"
-        component={ViewApplicationScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Profile"
-        component={ProfileDetailsScreen}
-        options={{ headerShown: false }}
-      />
-       <Stack.Screen
-        name="EditApplications"
-        component={EditApplicationScreen}
-        options={{ headerShown: false }}
-      />
+    <Stack.Screen
+      name="ViewApplications"
+      component={ViewApplicationScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Profile"
+      component={ProfileDetailsScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="EditApplications"
+      component={EditApplicationScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="ViewTransactions"
+      component={TransactionsHistory}
+      options={{ headerShown: false }}
+    />
 
   </Stack.Navigator>
 );
