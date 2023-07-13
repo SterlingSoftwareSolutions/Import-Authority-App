@@ -151,12 +151,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
   },
-
   iconStyle: {
     marginLeft: 10,
     width: 60, height: 60, borderRadius: 30,
     borderColor:"grey",
     borderWidth:2
+
   },
   profileImage: {
     width: 60,
