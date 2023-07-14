@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
@@ -8,75 +8,31 @@ import {
 } from "react-native";
 import TopUserControlBg from "../components/TopUserControlBg";
 import colors from "../config/colors";
+import { useNavigation } from "@react-navigation/native";
+import TransactionHistoryLists from "../components/TransactionHistoryList";
+import client from "../api/client";
 
-const transactions = [
-  {
-    id: 1,
-    cardNumber: "4242 4242 4242 4242",
-    maskedCardNumber: "**** **** **** 4242",
-    amount: "$150",
-    timestamp: "Just Now",
-  },
-  {
-    id: 2,
-    cardNumber: "5555 5555 5555 5555",
-    maskedCardNumber: "**** **** **** 5555",
-    amount: "$75",
-    timestamp: "1 hour ago",
-  },
-  {
-    id: 3,
-    cardNumber: "1234 5678 9012 3456",
-    maskedCardNumber: "**** **** **** 3456",
-    amount: "$200",
-    timestamp: "2 days ago",
-  },
-  {
-    id: 4,
-    cardNumber: "9876 5432 1098 7654",
-    maskedCardNumber: "**** **** **** 7654",
-    amount: "$50",
-    timestamp: "1 week ago",
-  },
-  {
-    id: 5,
-    cardNumber: "5555 5555 5555 5555",
-    maskedCardNumber: "**** **** **** 5555",
-    amount: "$75",
-    timestamp: "1 hour ago",
-  },
-  {
-    id: 6,
-    cardNumber: "1234 5678 9012 3456",
-    maskedCardNumber: "**** **** **** 3456",
-    amount: "$200",
-    timestamp: "2 days ago",
-  },
-  {
-    id: 7,
-    cardNumber: "9876 5432 1098 7654",
-    maskedCardNumber: "**** **** **** 7654",
-    amount: "$50",
-    timestamp: "1 week ago",
-  },
-];
-
-function PaymentHistory(props) {
-  const renderTransactionItem = ({ item }) => (
+function PaymentHistory() {
+  const navigation = useNavigation();
+  const [transactions, setTransactions] = useState([]);
 
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const api = await client();
+        const response = await api.get("/transactions");
+        setTransactions(response.data.data);
+        console.log(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-    <View style={styles.transactionBox}>
-      <View>
-        <Text>{item.cardNumber}</Text>
-      </View>
-      <View style={styles.transactionDetails}>
-        <Text>{item.maskedCardNumber}</Text>
-        <Text style={styles.amountText}>{item.amount}</Text>
-      </View>
-      <Text style={styles.timestampText}>{item.timestamp}</Text>
-    </View>
-  );
+    fetchData();
+  }, []);
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -96,16 +52,10 @@ function PaymentHistory(props) {
         {/* Filtering-sort by date should be done */}
       </TopUserControlBg>
 
-      <FlatList
-        contentContainerStyle={styles.transactionBoxContainer}
-        ListHeaderComponent={
-          <Text style={styles.transactionCategory}>Today</Text>
-        }
-        data={transactions}
-        renderItem={renderTransactionItem}
-        keyExtractor={(item) => item.id.toString()}
-        style={styles.flatListContainer}
-      />
+
+      <View>
+        <TransactionHistoryLists data={transactions} />
+      </View>
     </SafeAreaView>
   );
 }
