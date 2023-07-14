@@ -195,9 +195,6 @@ const CreateApplicationMain = () => {
       odo_meter: values.odometer,
       approval_type: approvalType === 0 ? "SEV" : "Older Vehicles",
       seat_row_1: seats[0].toString()
-
-
-
     };
     if (approvalType === 1) {
       applicationData.vass_engineering = values.vassEngineering;
@@ -206,9 +203,6 @@ const CreateApplicationMain = () => {
       const key = `seat_row_${i + 1}`;
       applicationData[key] = seats[i].toString();
     }
-
-
-
     try {
       const api = await client();
       const response = await api.post(endpoint, applicationData);
@@ -217,10 +211,8 @@ const CreateApplicationMain = () => {
     } catch (error) {
       console.log("Error:", error);
     }
-
     console.log(applicationData);
   };
-
   const [value, setValue] = useState(0);
   // incrementing the value when the arrow up button is pressed
   const updateSeats = async (index, substract) => {
@@ -230,7 +222,6 @@ const CreateApplicationMain = () => {
     await setSeats(tempSeats);
     console.log(seats);
   };
-
   // State variable to hold an array of rows
   // const [rows, setRows] = useState([1]);
   // adding a new row when the "+" button is pressed
@@ -239,7 +230,6 @@ const CreateApplicationMain = () => {
     tempSeats.push(0);
     setSeats(tempSeats);
   };
-
   // removing a row when the "-" button is pressed
   const handleremoveRow = () => {
     let tempSeats = [...seats];
@@ -248,7 +238,6 @@ const CreateApplicationMain = () => {
       setSeats(tempSeats);
     }
   };
-
   //validations
   const validationSchema = Yup.object().shape({
     chassisNumber: Yup.string().required("Chassis/Frame Number is required"),
@@ -265,7 +254,6 @@ const CreateApplicationMain = () => {
     driveType: Yup.string().required("Drive Type is required"),
     odometer: Yup.string().required("Odometer is required"),
   });
-
   const additionalValidations = Yup.object().shape({
     vassEngineering: Yup.string().required("Vass engineering is required"),
   });
@@ -634,7 +622,6 @@ const CreateApplicationMain = () => {
                     <Text style={styles.errorText}>{errors.bodyType}</Text>
                   ) : null}
                 </View>
-
                 <View style={[styles.dropdown]}>
                   <SelectList
                     placeholder="Drive Type *"
@@ -651,7 +638,6 @@ const CreateApplicationMain = () => {
                     <Text style={styles.errorText}>{errors.driveType}</Text>
                   ) : null}
                 </View>
-
                 <View>
                   <TextInput
                     style={[styles.input, styles.usernameInput, {}]}
@@ -666,7 +652,6 @@ const CreateApplicationMain = () => {
                     <Text style={styles.errorText}>{errors.odometer}</Text>
                   ) : null}
                 </View>
-
                 {/* Seating Row starts */}
 
                 <View style={{ flexDirection: 'row', marginBottom: 10 }}>
@@ -676,29 +661,22 @@ const CreateApplicationMain = () => {
                       style={styles.minusbutton}
                       onPress={handleremoveRow}
                       disabled={seats.length === 1}
-
                     >
                       <Text style={styles.buttonText} >-</Text>
                     </TouchableOpacity>
-
                     <TouchableOpacity
                       style={styles.plusbutton}
                       onPress={handleAddRow}
-
                     >
                       <Text style={styles.buttonText}>+</Text>
                     </TouchableOpacity>
-
                   </View>
                 </View>
 
                 {seats.map((value, index) => (
                   <View key={index}>
-
                     <Text style={{ ...styles.seatingText, marginTop: -4 }}>Row {index + 1} </Text>
-
                     <View style={{ ...styles.row, marginTop: 10 }}>
-
                       <TouchableOpacity
                         style={[{ opacity: seats[index] === 0 ? 0.5 : 1 }]} // if the value is equal to 0 set opacity to 0.5 else keep 1 
                         onPress={() => {
@@ -708,15 +686,12 @@ const CreateApplicationMain = () => {
                       >
                         <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>-</Text>
                       </TouchableOpacity>
-
-
                       <TextInput
                         style={styles.inputseat}
                         placeholder={seats[index].toString()}
                         placeholderTextColor="black"
 
                       />
-
                       <TouchableOpacity
                         onPress={() => {
                           updateSeats(index);
@@ -725,9 +700,7 @@ const CreateApplicationMain = () => {
                       >
                         <Text style={{ fontSize: 20, backgroundColor: '#23A29F', width: 35, textAlign: 'center', borderRadius: 5 }}>+</Text>
                       </TouchableOpacity>
-
                     </View>
-
                   </View>
                 ))}
 
@@ -742,7 +715,6 @@ const CreateApplicationMain = () => {
                   >
                     <TouchableOpacity
                     >
-
                       <Text style={styles.buttonText}>Draft</Text>
                     </TouchableOpacity>
                   </LinearGradient>
@@ -901,7 +873,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 80,
-    marginBottom: 10,
   },
   bottomRow: {
     flexDirection: "row",

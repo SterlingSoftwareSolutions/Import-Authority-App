@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   View,
   Text,
-  FlatList,
 } from "react-native";
 import TopUserControlBg from "../components/TopUserControlBg";
 import colors from "../config/colors";
@@ -15,7 +14,6 @@ import client from "../api/client";
 function PaymentHistory() {
   const navigation = useNavigation();
   const [transactions, setTransactions] = useState([]);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,8 +30,6 @@ function PaymentHistory() {
     fetchData();
   }, []);
 
-
-
   return (
     <SafeAreaView style={styles.container}>
       <TopUserControlBg>
@@ -46,13 +42,11 @@ function PaymentHistory() {
               marginTop: 12,
             }}
           >
-            Payment History
+            Transaction History
           </Text>
         </View>
         {/* Filtering-sort by date should be done */}
       </TopUserControlBg>
-
-
       <View>
         <TransactionHistoryLists data={transactions} />
       </View>
