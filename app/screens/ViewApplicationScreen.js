@@ -62,9 +62,9 @@ function ViewApplicationScreen(props) {
         <View style={styles.viewstatus}>
           <Text style={{ ...styles.viewstatuslabel }}>{application?.status ? application.status.toUpperCase() : null}</Text>
         </View>
-        <View style={{ ...styles.data_and_searchicon }}>
-          <Text style={{ color: '#E3E2E2', textAlign: 'center' }}> Your Application is in {application?.status.toUpperCase() ?? null} Stage </Text>
-          <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: 'bold', marginTop: 10 }}>Approval Type: {application?.approval_type ?? null}  </Text>
+        <View>
+          <Text style={{ color: '#E3E2E2', textAlign: 'center',marginTop: 10  }}> Your Application is in {application?.status.toUpperCase() ?? null} Stage </Text>
+          <Text style={{ color: '#ffffff', textAlign: 'center', fontWeight: 'bold', marginTop: 5 }}>Approval Type: {application?.approval_type ?? null}  </Text>
         </View>
 
       </TopUserControlBg>
@@ -74,7 +74,7 @@ function ViewApplicationScreen(props) {
 
           <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
             <View style={{ width: '45%' }}>
-              <Text>Chassis/Frame Number</Text>
+              <Text>Chassis/Frame Number:</Text>
               <Text style={styles.valueText}>{application?.chassis_no ?? null}</Text>
             </View>
 
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     backgroundColor: colors.darkGrey,
-    width: "25%",
+    width: "35%",
     justifyContent: "space-between",
     alignSelf: "center",
     borderRadius: 10,
