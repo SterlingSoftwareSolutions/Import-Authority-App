@@ -47,9 +47,9 @@ function PaymentHistory() {
         </View>
         {/* Filtering-sort by date should be done */}
       </TopUserControlBg>
-      <View>
+    
         <TransactionHistoryLists data={transactions} />
-      </View>
+
     </SafeAreaView>
   );
 }

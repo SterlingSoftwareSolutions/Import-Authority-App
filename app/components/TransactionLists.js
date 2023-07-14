@@ -3,28 +3,15 @@ import { View, Text, Image, FlatList, StyleSheet, Touchable } from "react-native
 import colors from "../config/colors";
 import { useNavigation } from "@react-navigation/native";
 import { CDN_URL } from '@env'
-import client from "../api/client";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { SelectList } from "react-native-dropdown-select-list";
-
 
 const TransactionLists = ({ data }) => {
-
-
-
-
-
   const navigation = useNavigation();
   // render item for FlatList
   const RenderItem = ({ item }) => {
     const balance = item.amount_total - item.amount_paid;
     let borderColor = colors.white;
-
-
     return (
-
-
-
       <View
         style={{
           ...styles.dashboardapplication,
@@ -32,7 +19,6 @@ const TransactionLists = ({ data }) => {
           borderStartColor: borderColor
         }}
       >
-
         {/*Rendering front right image */}
         <View style={{ flexDirection: "row", }}>
           <Image
@@ -54,7 +40,6 @@ const TransactionLists = ({ data }) => {
           />
           {/* Rendering Total , paid , and Balance */}
           <View style={{ paddingLeft: 10 }}>
-
             <Text style={{ left: 15 }}>{item.chassis_no}</Text>
             <View style={{ flexDirection: "row" }}>
               <View>
@@ -73,14 +58,14 @@ const TransactionLists = ({ data }) => {
 
               {balance !== 0 && (
                 <View style={{ top: 15, right: 5 }}>
-                  <TouchableOpacity style={{ backgroundColor: '#FF6D60', paddingHorizontal: 10, borderRadius: 5, paddingVertical: 5, marginLeft: 90, }}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("CardPayment")}
+                    style={{ backgroundColor: '#FF6D60', paddingHorizontal: 10, borderRadius: 5, paddingVertical: 5, marginLeft: 90, }}>
                     <Text style={{ fontSize: 12, color: 'white', fontWeight: '800', }}>Pay now</Text>
                   </TouchableOpacity>
                 </View>
 
               )}
-
-
             </View>
           </View>
         </View>
