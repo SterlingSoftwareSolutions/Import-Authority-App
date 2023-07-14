@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, FlatList, StyleSheet } from "react-native";
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "../config/colors";
 import ApplicationFunctionsGradientButton from "./ApplicationFunctionsGradientButton";
 import { useNavigation } from "@react-navigation/native";
@@ -42,9 +42,9 @@ const ApplicationLists = ({ data }) => {
           borderStartColor: borderColor,
         }}
       >
-
         {/*Rendering front right image */}
         <View style={{ flexDirection: "row", marginLeft: -13, }}>
+        <TouchableOpacity onPress={() => navigation.navigate("ViewApplications", { applicationId: item.id })}>
           <Image
             source={{
               uri: CDN_URL + '/assets/applications/' + (imgFrontRightAsset ? imgFrontRightAsset?.location : 'default.png'),
@@ -58,10 +58,12 @@ const ApplicationLists = ({ data }) => {
                 borderColor: borderColor,
                 borderRadius: 10,
                 borderWidth: 2,
-                alignSelf: 'center'
+                alignSelf: 'center',
+                marginTop:15
               },
             ]}
           />
+          </TouchableOpacity>
           {/* Rendering chassis , build date , and Odometer */}
           <View style={{ paddingLeft: 10 }}>
             <Text style={{ bottom: 5, color: '#000', fontWeight: '700' }}>{item.make}</Text>
@@ -81,8 +83,8 @@ const ApplicationLists = ({ data }) => {
                       },
                     ]}
                   />
-                  <Text style={{ minHeight: 35 }}>Chassis:</Text>
-                  <Text style={{ left: 20, width: 130, fontSize: 13 }}>{item.chassis_no}</Text>
+                  <Text style={{ minHeight: 35 }}>Chassis</Text>
+                  <Text style={{ left: 20, width: 130, fontSize: 13 }}>: {item.chassis_no}</Text>
                 </View>
                 <View style={{ flexDirection: "row" }}>
                   <Image
@@ -98,8 +100,8 @@ const ApplicationLists = ({ data }) => {
                       },
                     ]}
                   />
-                  <Text style={{ bottom: 15 }}>Build Date:</Text>
-                  <Text style={{ fontSize: 13, bottom: 15, left: 8, }}>{`${item.build_month}/${item.build_year}`}</Text>
+                  <Text style={{ bottom: 15 }}>Build Date</Text>
+                  <Text style={{ fontSize: 13, bottom: 15, left: 8, }}>: {`${item.build_month}/${item.build_year}`}</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row' }}>
@@ -116,10 +118,10 @@ const ApplicationLists = ({ data }) => {
                       },
                     ]}
                   />
-                  <Text style={{ bottom: 12 }}>ODO:</Text>
-                  <Text style={{ fontSize: 13, bottom: 12, left: 45, }}>{item.odo_meter}</Text>
+                  <Text style={{ bottom: 12 }}>ODO</Text>
+                  <Text style={{ fontSize: 13, bottom: 12, left: 45, }}>: {item.odo_meter}</Text>
                 </View>
-
+                {/* View, Edit, Download Buttons */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   {/* <ApplicationFunctionsGradientButton text="View" onPress={() => navigation.navigate("ViewApplications", { applicationId: item.id })} /> */}
                   <ApplicationFunctionsGradientButton text="Edit" onPress={() => navigation.navigate("EditApplications", { applicationId: item.id })} />
@@ -131,10 +133,6 @@ const ApplicationLists = ({ data }) => {
             </View>
           </View>
         </View>
-
-        {/* View, Edit, Download Buttons */}
-
-
       </View>
     );
   };
@@ -144,7 +142,7 @@ const ApplicationLists = ({ data }) => {
       data={data}
       renderItem={renderItem}
       keyExtractor={(item) => item.id.toString()}
-      contentContainerStyle={{ paddingVertical: 10 }}
+      contentContainerStyle={{ paddingBottom: 20 }}
     />
   );
 };
