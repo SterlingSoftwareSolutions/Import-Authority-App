@@ -363,11 +363,11 @@ function EditApplicationScreen(props) {
     <View style={styles.container}>
       <TopUserControlBg>
         <Text style={styles.statusText}>Edit Application</Text>
-        <View>
+        <View style={{marginTop: 10  }}>
           <Text style={{ ...styles.viewstatuslabel }}>{application?.status ? application.status.toUpperCase() : null}</Text>
         </View>
-        <View style={{ ...styles.data_and_searchicon }}>
-          <Text style={{ color: '#E3E2E2', textAlign: 'center' }}> Your Application is in {application?.status.toUpperCase() ?? null} Stage </Text>
+        <View>
+          <Text style={{ color: '#E3E2E2', textAlign: 'center',marginTop:10 }}> Your Application is in {application?.status.toUpperCase() ?? null} Stage </Text>
         </View>
       </TopUserControlBg>
 
