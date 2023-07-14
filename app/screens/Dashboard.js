@@ -124,13 +124,13 @@ function Dashboard({ children }) {
         style={{
           backgroundColor: "#DBEDD7",
           borderRadius: 10,
-          width: "96%",
-          height: "54%",
-          marginLeft: 9,
+          width: "95%",
           marginTop: 15,
+          alignSelf:"center",
+          height:"100%"
+        
         }}
       >
-
         {/* Calling Application List  - FlatList  */}
         <ApplicationLists data={applications} />
       </View>
@@ -144,12 +144,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     backgroundColor: "#FFF",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingHorizontal: 20,
-    paddingTop: 20,
   },
   iconStyle: {
     marginLeft: 10,

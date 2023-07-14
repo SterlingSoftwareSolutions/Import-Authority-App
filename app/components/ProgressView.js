@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'; import colors from '../config/colors';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import client from '../api/client';
 
@@ -11,7 +11,7 @@ function ProgressView(props) {
             try {
                 const api = await client();
                 const response = await api.get("/applications");
-             
+
                 setApplicationCounts(response.data.data.count);
             } catch (error) {
                 console.error(error);
@@ -23,14 +23,14 @@ function ProgressView(props) {
 
     const renderApplication = (count, text) => (
         <View style={styles.singleApplication}>
-            <LinearGradient
-                style={{ borderRadius: 20 }}
-                colors={[colors.secondary, colors.primary]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-            >
-                <Text style={styles.countNumber}>{count}</Text>
-            </LinearGradient>
+                <LinearGradient
+                    style={{ borderRadius: 20 }}
+                    colors={[colors.secondary, colors.primary]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                >
+                    <Text style={styles.countNumber}>{count}</Text>
+                </LinearGradient>
             <Text style={styles.countText}>{text}</Text>
         </View>
     );
